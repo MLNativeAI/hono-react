@@ -3,7 +3,7 @@ import type { MiddlewareHandler } from "hono";
 
 // Cors middleware that only applies in development mode
 export const corsMiddleware: MiddlewareHandler = (c, next) => {
-    if (Bun.env.ENABLE_CORS === "true") {
+    if (Bun.env.ENVIRONMENT === "dev") {
         return cors({
             origin: "http://localhost:5173",
             allowHeaders: ["Content-Type", "Authorization"],
