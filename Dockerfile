@@ -38,7 +38,11 @@ COPY --from=backend-build /usr/src/app/ .
 # Copy frontend build output into backend/public
 COPY --from=frontend-build /usr/src/app/dist ./public
 
+# Make the startup script executable
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Run the app
 USER bun
 EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "start" ]
+ENTRYPOINT [ "./start.sh" ]
