@@ -16,7 +16,7 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true
     },
-    trustedOrigins: [Bun.env.ENABLE_CORS === "true" ? "http://localhost:5173" : ""]
+    trustedOrigins: [Bun.env.ENVIRONMENT === "dev" ? "http://localhost:5173" : ""]
 });
 
 // Helper function to check if a path matches a pattern with wildcards

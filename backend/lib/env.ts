@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-    ENABLE_CORS: z.string().optional(),
     BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
     DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
     MINIO_ENDPOINT: z.string().url("MINIO_ENDPOINT must be a valid URL"),
