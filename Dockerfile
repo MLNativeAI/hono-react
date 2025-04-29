@@ -39,7 +39,7 @@ COPY --from=backend-build /usr/src/app/ .
 COPY --from=frontend-build /usr/src/app/dist ./public
 
 # Make the startup script executable
-COPY start.sh .
+COPY backend/start.sh .
 RUN chmod +x start.sh
 
 # Run the app
