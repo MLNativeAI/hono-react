@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
-import todos from './routes/todos'
+import todos from './routes/files'
 
 
 const app = new Hono()
