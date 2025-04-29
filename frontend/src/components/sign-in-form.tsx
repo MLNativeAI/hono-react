@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export function SignInForm({
   className,
@@ -29,7 +30,7 @@ export function SignInForm({
     const password = formData.get("password") as string;
 
     try {
-      const { data, error } = await authClient.signIn.email({
+      const { error } = await authClient.signIn.email({
         email,
         password,
       });
@@ -39,9 +40,8 @@ export function SignInForm({
         return;
       }
 
-      if (data) {
-        navigate({ to: "/app" });
-      }
+      navigate({ to: "/app/files" });
+      toast.success("Signed in successfully");
     } catch (err) {
       setError("An unexpected error occurred");
     }

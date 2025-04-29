@@ -31,5 +31,3 @@ export const envVars = validateEnv();
 declare module "bun" {
     interface Env extends z.infer<typeof envSchema> { }
 }
-
-

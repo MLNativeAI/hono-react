@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export function NavUser({
   user,
@@ -42,6 +43,7 @@ export function NavUser({
       fetchOptions: {
         onSuccess: () => {
           router.navigate({ to: "/auth/sign-in" }); // redirect to login page
+          toast.success("Signed out successfully");
         },
       },
     });

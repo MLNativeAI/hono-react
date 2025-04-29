@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { s3 } from '@/lib/minio'
+import { s3 } from '@/lib/s3'
 import { db } from '@/db'
 import { file } from '@/db/schema'
 
