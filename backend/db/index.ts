@@ -1,4 +1,10 @@
-import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/node-postgres';
+// Make sure to install the 'postgres' package
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
-export const db = drizzle(process.env.DATABASE_URL!);
+console.log(Bun.env.DATABASE_URL)
+
+const queryClient = postgres(Bun.env.DATABASE_URL);
+export const db = drizzle({ client: queryClient });
+
+const result = await db.execute('select 1');
