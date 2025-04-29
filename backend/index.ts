@@ -17,7 +17,7 @@ const app = new Hono<{
 app.use(poweredBy())
 app.use(logger())
 // Cors middleware for local development
-app.use("*", corsMiddleware);
+app.use("/api/*", corsMiddleware);
 // Require authentication for all API routes
 app.use("/api/*", requireAuth);
 // BetterAuth handler
