@@ -8,6 +8,12 @@ const envSchema = z.object({
     MINIO_ACCESS_KEY: z.string().min(1, "MINIO_ACCESS_KEY is required"),
     MINIO_SECRET_KEY: z.string().min(1, "MINIO_SECRET_KEY is required"),
     MINIO_BUCKET: z.string().min(1, "MINIO_BUCKET is required"),
+    PORT: z
+        .string()
+        .regex(/^\d+$/, "Port must be a numeric string")
+        .default("3000")
+        .transform(Number),
+    ENVIRONMENT: z.enum(["dev", "prod"]).default("dev")
 });
 
 export const validateEnv = () => {

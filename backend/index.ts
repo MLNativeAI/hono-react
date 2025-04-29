@@ -5,7 +5,7 @@ import { auth, authHandler, requireAuth } from './lib/auth'
 import { corsMiddleware } from './lib/cors'
 import { logger } from 'hono/logger'
 import { poweredBy } from 'hono/powered-by'
-
+import { envVars } from './lib/env'
 
 const app = new Hono<{
     Variables: {
@@ -32,12 +32,18 @@ app.get('/api/health', async (c) => {
 
 export const apiRoutes = app.basePath('/api').route('/files', files)
 
-if (Bun.env.ENVIRONMENT === "prod") {
+if (envVars.ENVIRONMENT === "prod") {
     // Serve static files
     app.get('*', serveStatic({ root: './public' }))
     app.get('*', serveStatic({ path: './public/index.html' }))
 }
 
+const server = Bun.serve({
+    port: envVars.PORT,
+    hostname: "0.0.0.0",
+    fetch: app.fetch,
+});
 
-export default app
+console.log(`🚀 Server running on port ${server.port} in ${envVars.ENVIRONMENT} mode`);
+
 export type ApiRoutes = typeof apiRoutes
