@@ -1,10 +1,10 @@
 {
   "name": "hono-spa",
-  "module": "server/index.ts",
+  "module": "backend/index.ts",
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun server/index.ts --watch"
+    "dev": "bun backend/index.ts --hot"
   },
   "devDependencies": {
     "@types/bun": "^1.2.10"
