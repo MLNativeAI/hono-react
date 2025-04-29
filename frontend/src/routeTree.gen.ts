@@ -17,6 +17,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AuthSignUpImport } from './routes/auth/sign-up'
 import { Route as AuthSignInImport } from './routes/auth/sign-in'
+import { Route as AppUploadImport } from './routes/app/upload'
 import { Route as AppFilesImport } from './routes/app/files'
 import { Route as AppAboutImport } from './routes/app/about'
 
@@ -56,6 +57,12 @@ const AuthSignInRoute = AuthSignInImport.update({
   id: '/sign-in',
   path: '/sign-in',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AppUploadRoute = AppUploadImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 const AppFilesRoute = AppFilesImport.update({
@@ -109,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFilesImport
       parentRoute: typeof AppRouteImport
     }
+    '/app/upload': {
+      id: '/app/upload'
+      path: '/upload'
+      fullPath: '/app/upload'
+      preLoaderRoute: typeof AppUploadImport
+      parentRoute: typeof AppRouteImport
+    }
     '/auth/sign-in': {
       id: '/auth/sign-in'
       path: '/sign-in'
@@ -138,12 +152,14 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppAboutRoute: typeof AppAboutRoute
   AppFilesRoute: typeof AppFilesRoute
+  AppUploadRoute: typeof AppUploadRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAboutRoute: AppAboutRoute,
   AppFilesRoute: AppFilesRoute,
+  AppUploadRoute: AppUploadRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -171,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/app/about': typeof AppAboutRoute
   '/app/files': typeof AppFilesRoute
+  '/app/upload': typeof AppUploadRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
@@ -181,6 +198,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/app/about': typeof AppAboutRoute
   '/app/files': typeof AppFilesRoute
+  '/app/upload': typeof AppUploadRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app': typeof AppIndexRoute
@@ -193,6 +211,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/app/about': typeof AppAboutRoute
   '/app/files': typeof AppFilesRoute
+  '/app/upload': typeof AppUploadRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/app/': typeof AppIndexRoute
@@ -206,6 +225,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app/about'
     | '/app/files'
+    | '/app/upload'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/app/'
@@ -215,6 +235,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app/about'
     | '/app/files'
+    | '/app/upload'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/app'
@@ -225,6 +246,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/app/about'
     | '/app/files'
+    | '/app/upload'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/app/'
@@ -266,6 +288,7 @@ export const routeTree = rootRoute
       "children": [
         "/app/about",
         "/app/files",
+        "/app/upload",
         "/app/"
       ]
     },
@@ -284,6 +307,10 @@ export const routeTree = rootRoute
       "filePath": "app/files.tsx",
       "parent": "/app"
     },
+    "/app/upload": {
+      "filePath": "app/upload.tsx",
+      "parent": "/app"
+    },
     "/auth/sign-in": {
       "filePath": "auth/sign-in.tsx",
       "parent": "/auth"
@@ -293,7 +320,7 @@ export const routeTree = rootRoute
       "parent": "/auth"
     },
     "/app/": {
-      "filePath": "app/index.tsx",
+      "filePath": "app/index.ts",
       "parent": "/app"
     }
   }
