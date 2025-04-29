@@ -13,17 +13,20 @@ import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export function SignInForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
@@ -44,6 +47,8 @@ export function SignInForm({
       toast.success("Signed in successfully");
     } catch (err) {
       setError("An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,6 +72,7 @@ export function SignInForm({
                   type="email"
                   placeholder="m@example.com"
                   required
+                  disabled={isLoading}
                 />
               </div>
               <div className="grid gap-3">
@@ -76,14 +82,22 @@ export function SignInForm({
                   name="password"
                   type="password"
                   required
+                  disabled={isLoading}
                 />
               </div>
               {error && <div className="text-sm text-red-500">{error}</div>}
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
                   Sign in
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  disabled={isLoading}
+                >
                   Sign in with Google
                 </Button>
               </div>
