@@ -1,11 +1,30 @@
-declare module "bun" {
-    interface Env {
-        ENABLE_CORS: string | undefined;
-        BETTER_AUTH_SECRET: string;
-        DATABASE_URL: string;
-        MINIO_ENDPOINT: string;
-        MINIO_ACCESS_KEY: string;
-        MINIO_SECRET_KEY: string;
-        MINIO_BUCKET: string;
+import { z } from 'zod';
+
+const envSchema = z.object({
+    ENABLE_CORS: z.string().optional(),
+    BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
+    DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+    MINIO_ENDPOINT: z.string().url("MINIO_ENDPOINT must be a valid URL"),
+    MINIO_ACCESS_KEY: z.string().min(1, "MINIO_ACCESS_KEY is required"),
+    MINIO_SECRET_KEY: z.string().min(1, "MINIO_SECRET_KEY is required"),
+    MINIO_BUCKET: z.string().min(1, "MINIO_BUCKET is required"),
+});
+
+export const validateEnv = () => {
+    const env = envSchema.safeParse(process.env);
+    if (!env.success) {
+        console.error("❌ Invalid environment configuration:", env.error.format());
+        throw new Error("Invalid environment variables");
     }
+    console.log("✅ Environment configuration is valid");
+    return env.data;
 }
+
+export const envVars = validateEnv();
+
+// Type augmentation for Bun
+declare module "bun" {
+    interface Env extends z.infer<typeof envSchema> { }
+}
+
+
