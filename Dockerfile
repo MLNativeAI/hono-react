@@ -35,8 +35,8 @@ WORKDIR /usr/src/app/backend
 COPY --from=backend-deps /temp/prod/node_modules node_modules
 COPY --from=backend-build /usr/src/app/ .
 
-# Copy frontend build output to match backend/index.ts path
-COPY --from=frontend-build /usr/src/app/dist ../frontend/dist
+# Copy frontend build output into backend/public
+COPY --from=frontend-build /usr/src/app/dist ./public
 
 # Run the app
 USER bun

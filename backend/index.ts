@@ -33,8 +33,8 @@ app.get('/api/health', async (c) => {
 export const apiRoutes = app.basePath('/api').route('/files', files)
 
 // Serve static files
-app.get('*', serveStatic({ root: '../frontend/dist' }))
-app.get('*', serveStatic({ path: '../frontend/dist/index.html' }))
+app.get('*', serveStatic({ root: './public' }))
+app.get('*', serveStatic({ path: './public/index.html' }))
 
 export default app
 export type ApiRoutes = typeof apiRoutes
