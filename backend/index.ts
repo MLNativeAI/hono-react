@@ -18,8 +18,8 @@ app.use(poweredBy())
 app.use(logger())
 // Cors middleware for local development
 app.use("*", corsMiddleware);
-// Require authentication for all routes
-app.use("*", requireAuth);
+// Require authentication for all API routes
+app.use("/api/*", requireAuth);
 // BetterAuth handler
 app.on(["POST", "GET"], "/api/auth/*", authHandler);
 
@@ -33,7 +33,7 @@ app.get('/api/health', async (c) => {
 export const apiRoutes = app.basePath('/api').route('/files', files)
 
 // Serve static files
-app.use('/*', serveStatic({ root: '../frontend/dist' }))
+app.get('*', serveStatic({ root: '../frontend/dist' }))
 app.get('*', serveStatic({ path: '../frontend/dist/index.html' }))
 
 export default app

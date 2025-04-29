@@ -4,11 +4,11 @@ import { File, Loader2 } from "lucide-react";
 import { ChangeEvent, DragEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { type ApiRoutes } from "../../../backend";
-import { hc } from "hono/client";
+// import { type ApiRoutes } from "../../../backend";
+// import { hc } from "hono/client";
 import { useRouter } from "@tanstack/react-router";
 
-const client = hc<ApiRoutes>("/");
+// const client = hc<ApiRoutes>("/");
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
