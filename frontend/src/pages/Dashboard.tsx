@@ -1,4 +1,6 @@
 import { DataTable } from "@/components/data-table";
+import { getAllFilesQueryOptions } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 
 const mockFiles = [
     {
@@ -39,10 +41,12 @@ const mockFiles = [
 ];
 
 export default function Dashboard() {
+    const { data } = useQuery(getAllFilesQueryOptions);
+
     return (
         <div className="container mx-auto py-4">
             <h1 className="text-2xl font-bold mb-4">Files</h1>
-            <DataTable data={mockFiles} />
+            <DataTable data={data} />
         </div>
     );
 }

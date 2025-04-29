@@ -3,7 +3,6 @@ import {
   IconDashboard,
   IconFile,
   IconHelp,
-  IconInnerShadowTop,
   IconSearch,
   IconSettings,
   IconUpload,
@@ -74,8 +73,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link to={IndexRoute.to}>
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Bun Monorepo</span>
+                <img src="/logo.svg" alt="Bun Logo" className="w-5 h-5" />
+                <span className="text-base font-semibold">
+                  Hono React
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
