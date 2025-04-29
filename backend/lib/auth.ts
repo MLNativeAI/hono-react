@@ -16,7 +16,7 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true
     },
-    trustedOrigins: ["http://localhost:5173"]
+    trustedOrigins: [Bun.env.ENABLE_CORS === "true" ? "http://localhost:5173" : ""]
 });
 
 // Helper function to check if a path matches a pattern with wildcards
@@ -43,4 +43,8 @@ export const requireAuth = async (c: any, next: any) => {
     c.set("user", session.user);
     c.set("session", session.session);
     return next();
+};
+
+export const authHandler = async (c: any) => {
+    return auth.handler(c.req.raw);
 };

@@ -3,8 +3,11 @@
 import { File, Loader2 } from "lucide-react";
 import { ChangeEvent, DragEvent, useRef, useState } from "react";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
+import { type ApiRoutes } from "../../../backend";
+import { hc } from "hono/client";
+
+const client = hc<ApiRoutes>("/");
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
@@ -42,8 +45,7 @@ export default function FileUpload() {
             formData.append("file", file);
             formData.append("name", file.name);
 
-            const response = await fetch("/api/files", {
-                method: "POST",
+            const response = await client.api.files.$post({
                 body: formData,
             });
 

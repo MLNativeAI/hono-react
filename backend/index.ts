@@ -1,10 +1,11 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 import files from './routes/files'
-import { auth, requireAuth } from './lib/auth'
+import { auth, authHandler, requireAuth } from './lib/auth'
 import { corsMiddleware } from './lib/cors'
 import { logger } from 'hono/logger'
 import { poweredBy } from 'hono/powered-by'
+
 
 const app = new Hono<{
     Variables: {
@@ -14,29 +15,26 @@ const app = new Hono<{
 }>();
 
 app.use(poweredBy())
-
 app.use(logger())
-
+// Cors middleware for local development
 app.use("*", corsMiddleware);
-
-// Apply authentication middleware
+// Require authentication for all routes
 app.use("*", requireAuth);
+// BetterAuth handler
+app.on(["POST", "GET"], "/api/auth/*", authHandler);
 
-
-
-app.on(["POST", "GET"], "/api/auth/*", (c) => {
-    return auth.handler(c.req.raw);
-});
-
+// Health check
 app.get('/api/health', async (c) => {
     return c.json({
         status: 'ok'
     })
 })
 
-app.route('/api/files', files)
+export const apiRoutes = app.basePath('/api').route('/files', files)
 
+// Serve static files
 app.use('/*', serveStatic({ root: '../frontend/dist' }))
 app.get('*', serveStatic({ path: '../frontend/dist/index.html' }))
 
 export default app
+export type ApiRoutes = typeof apiRoutes
