@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun --watch backend/index.ts"
+    "dev": "bun --watch index.ts",
+    "db:migrate": "drizzle-kit migrate"
   },
   "devDependencies": {
     "@types/bun": "^1.2.10",
