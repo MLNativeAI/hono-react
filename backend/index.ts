@@ -14,7 +14,7 @@ const app = new Hono<{
     }
 }>();
 
-app.use(poweredBy())
+app.use(poweredBy({ serverName: "mlnative.com" }))
 app.use(logger())
 // Cors middleware for local development
 app.use("/api/*", corsMiddleware);

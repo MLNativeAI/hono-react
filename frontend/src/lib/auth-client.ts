@@ -1,6 +1,6 @@
 import { createAuthClient } from "better-auth/react"
 
 export const authClient = createAuthClient({
-    /** The base URL of the server (optional if you're using the same domain) */
+    /** We only specify the baseURL if we're running locally */
     ...(import.meta.env.DEV ? { baseURL: "http://localhost:3000" } : {})
 })
