@@ -7,13 +7,20 @@
     "dev": "bun --watch backend/index.ts"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.10"
+    "@types/bun": "^1.2.10",
+    "@types/pg": "^8.11.14",
+    "drizzle-kit": "^0.31.0",
+    "tsx": "^4.19.3"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
     "@tanstack/react-router-devtools": "^1.117.1",
-    "hono": "^4.7.8"
+    "better-auth": "^1.2.7",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.43.1",
+    "hono": "^4.7.8",
+    "pg": "^8.15.6"
   }
 }
