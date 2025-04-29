@@ -17,12 +17,14 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.5.0",
     "@tanstack/react-router-devtools": "^1.117.1",
     "better-auth": "^1.2.7",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "hono": "^4.7.8",
     "pg": "^8.15.6",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "zod": "^3.24.3"
   }
 }
