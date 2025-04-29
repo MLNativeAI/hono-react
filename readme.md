@@ -1,123 +1,124 @@
-
 # Fullstack Hono + React Template
 
-This is an opinionated template for people who are looking for a Next.js alternative, that:
+[![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh)
+[![React](https://img.shields.io/badge/React-61DAFB.svg?style=for-the-badge&logo=React&logoColor=black)](https://react.dev)
+[![Hono](https://img.shields.io/badge/Hono-E36002.svg?style=for-the-badge&logo=hono&logoColor=white)](https://hono.dev)
+[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 
-- is lightning fast for developing SPA's
-- has ZERO cloud-based vendor dependencies
-- is self-hostable with ease
-- is as configurable as possible
-- has all the annoying problems already sorted out, while not being bloated with *every-dependency-under-the-sun*
-- re-deploys in < 1 minute
+A lightning-fast, self-hostable template for building modern Single Page Applications with Hono and React.
 
-## Demo
+## 🚀 Demo
 
-Check it out for yourself:
+Check it out for yourself: [hono-fullstack-template.mlnative.com](https://hono-fullstack-template.mlnative.com)
 
-hono-fullstack-template.mlnative.com
+## 💡 Why?
 
-## Why?
+This template bridges the gap between using a do-it-all framework and having to configure everything on your own. Despite the SSR/ISR/RSC trends, sometimes what you really need is a simple, efficient way to build SPA + backend applications.
 
-This is a template I've built primarly for my own use. What I've found is that despite all the SSR/ISR/RSC craze, what I really need is a way to build simple SPA + backend applications. This template was created to bridge the gap between using a do-it-all framework and having to configure everything on your own. 
+### Key Benefits
 
-## Technical Features
+- ⚡ Lightning fast for developing SPAs
+- 🏠 Zero cloud-based vendor dependencies
+- 🛠 Self-hostable with ease
+- ⚙️ Highly configurable
+- 🎯 Pre-configured essentials without bloat
+- 🚄 Re-deploys in < 1 minute
 
-- Fullstack type safety with Hono RPC
-- Unified Docker image build for simple deployments
-- Built-in auth handling with BetterAuth (fully local)
-- Type-safe environment variables (not needed at build time...)
-- Type-safe client-side navigation
+## 🔥 Technical Features
 
-## Template features
+- 📘 Fullstack type safety with Hono RPC
+- 🐳 Unified Docker image build for simple deployments
+- 🔒 Built-in auth handling with BetterAuth (fully local)
+- 🔐 Type-safe environment variables (not needed at build time)
+- 🧭 Type-safe client-side navigation
 
-- Sign up & Sign in (extendible with additional BetterAuth providers)
-- Dashboard Layout
-- File handling (upload, storage & retrieval)
+## 📦 Template Features
 
-File handling can be particularly annoying to set up, so I've purposefully decided to implement this in a "base" template.
+- 🔑 Sign up & Sign in (extendible with additional BetterAuth providers)
+- 📊 Dashboard Layout
+- 📁 File handling (upload, storage & retrieval)
 
-## Tech Stack
+> File handling can be particularly annoying to set up, so we've purposefully included this in the "base" template.
 
-### Backend:
+## 🛠 Tech Stack
 
+### Backend
+
+- 🏃 Bun
+- 🚀 Hono
+- 🗃️ DrizzleORM
+- 🔐 BetterAuth
+- ✅ Zod
+
+### Frontend
+
+- ⚛️ React 19
+- ⚡ Vite
+- 🎨 TailwindCSS 4
+- 🎯 Shadcn UI
+- 🔄 Tanstack Router
+- 📊 Tanstack Query
+
+## 🏗 Project Structure
+
+The project structure is straightforward with two Bun projects: `backend` and `frontend`.
+
+- In development mode, run them side by side
+- In production, frontend gets bundled and served by the backend
+
+### Runtime Dependencies
+
+1. **Postgres** - easily swappable with another DB provider (see Drizzle docs)
+2. **Minio** - for file storage (self-hostable on Coolify or use any S3 provider like Cloudflare R2)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Docker or similar OCI runtime (e.g., [Orbstack](https://orbstack.dev/))
 - Bun
-- Hono
-- DrizzleORM
-- BetterAuth
-- Zod
 
-### Frontend:
+### Local Development
 
-- React 19
-- Vite
-- TailwindCSS 4
-- Shadcn UI
-- Tanstack Router
-- Tanstack Query
+1. Start the DB and Minio instance:
+```bash
+docker compose up -d
+```
 
-# Project structure and architecture
-
-It's pretty simple - we have two bun projects, `backend` and `frontend`. 
-
-In development mode, you run them side by side. In production, frontend gets bundled and served by the backend. Everything is preconfigured to work out of the box. 
-
-We have two runtime depencies:
-
-- Postgres - you can easily swap this out for another DB provider, see Drizzle docs for details
-- Minio - for handling file storage - you can either self-host this on Coolify or use any other s3 provider (Cloudflare R2 etc.)
-
-## Local setup & dev workflow
-
-Requirements:
-
-- Docker or similar OCI runtime (ex. [Orbstack](https://orbstack.dev/))
-- Bun
-
-1. Start the DB and Minio instance
-
-`docker compose up -d`
-
-### Start the backend
-
-```sh
+2. Set up the backend:
+```bash
 cd backend
-cp .env.example .env # populate the env vars. No modifications are required
+cp .env.example .env  # No modifications required
 bun install
-bunx drizzle-kit migrate # run the DB migrations
+bunx drizzle-kit migrate
 bun dev
 ```
 
-Open up a second terminal
-
-### Start the frontend
-
-```sh
+3. Set up the frontend (in a new terminal):
+```bash
 cd frontend
 bun install
 bun dev
 ```
 
-The frontend runs on localhost:5173
-The backend runs on localhost:3000. 
+Your application will be available at:
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3000`
 
-In development mode, we automatically proxy all API requests to the backend. CORS is already configured. 
+> In development mode, all API requests are automatically proxied to the backend with CORS configured.
 
-## Deployment
+## 🚢 Deployment
 
-I personally deploy this to Coolify, however since this builds into a single docker image you can probably one-click deploy this to any provider (DigitalOcean, Fly.io etc)
+The project can be deployed to any platform that supports Docker containers (Coolify, DigitalOcean, Fly.io, etc.).
 
-### Docker image
+### Building the Docker Image
 
-The docker build contains both the frontend and the backend. Once the image is built, we automatically run the DB migrations on startup. 
-
-Building the image:
-
-```
+```bash
 docker build -t hono-spa .
 ```
 
-The application runs on port 3000 by default.
+The application runs on port 3000 by default. The Docker build contains both frontend and backend, with automatic DB migrations on startup.
 
-## Acknoledgements
+## 👏 Acknowledgements
 
-This project was largely inspired by https://github.com/meech-ward/Bun-Hono-React-Expense-Tracker
+This project was largely inspired by [Bun-Hono-React-Expense-Tracker](https://github.com/meech-ward/Bun-Hono-React-Expense-Tracker)
