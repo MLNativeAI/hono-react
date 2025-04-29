@@ -29,14 +29,14 @@ COPY backend/ .
 
 # Final production image
 FROM base AS release
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/backend
 
 # Copy backend production dependencies and source
 COPY --from=backend-deps /temp/prod/node_modules node_modules
 COPY --from=backend-build /usr/src/app/ .
 
-# Copy frontend build output
-COPY --from=frontend-build /usr/src/app/dist ./public
+# Copy frontend build output to match backend/index.ts path
+COPY --from=frontend-build /usr/src/app/dist ../frontend/dist
 
 # Run the app
 USER bun
