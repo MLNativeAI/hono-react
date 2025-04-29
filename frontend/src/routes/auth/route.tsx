@@ -5,9 +5,9 @@ import { authClient } from "@/lib/auth-client";
 export const Route = createFileRoute("/auth")({
   beforeLoad: async ({ location }) => {
     const { data: session } = await authClient.getSession();
-    if (!session) {
+    if (session) {
       throw redirect({
-        to: "/files",
+        to: "/app",
         search: {
           redirect: location.href,
         },
@@ -18,5 +18,11 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthLayout() {
-  return <Outlet />;
+  return (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <Outlet />
+      </div>
+    </div>
+  );
 }

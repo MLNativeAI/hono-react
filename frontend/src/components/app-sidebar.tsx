@@ -22,7 +22,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Route as FilesRoute } from "@/routes/app/files";
-import { Route as UploadFileRoute } from "@/routes/app/upload";
+import { Route as UploadFileRoute } from "@/routes/app";
 import { Route as IndexRoute } from "@/routes/index";
 import { Link } from "@tanstack/react-router";
 
