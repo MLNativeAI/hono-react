@@ -2,6 +2,8 @@ import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 import files from './routes/files'
 import { auth } from './auth'
+import { cors } from "hono/cors";
+import { logger } from 'hono/logger'
 
 
 const app = new Hono<{
@@ -10,6 +12,9 @@ const app = new Hono<{
         session: typeof auth.$Infer.Session.session | null
     }
 }>();
+
+app.use(logger())
+
 
 app.use("*", async (c, next) => {
     const session = await auth.api.getSession({ headers: c.req.raw.headers });
@@ -35,6 +40,18 @@ app.get("/api/auth/me", (c) => {
         session: c.get("session")
     });
 });
+
+app.use(
+    "/api/auth/*", // or replace with "*" to enable cors for all routes
+    cors({
+        origin: "http://localhost:5173", // replace with your origin
+        allowHeaders: ["Content-Type", "Authorization"],
+        allowMethods: ["POST", "GET", "OPTIONS"],
+        exposeHeaders: ["Content-Length"],
+        maxAge: 600,
+        credentials: true,
+    }),
+);
 
 app.get('/api/health', (c) => c.text('OK'))
 

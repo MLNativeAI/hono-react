@@ -11,22 +11,25 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
-import { Route as LayoutImport } from './routes/_layout'
+import { Route as AuthRouteImport } from './routes/auth/route'
+import { Route as AppRouteImport } from './routes/app/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as LayoutUploadImport } from './routes/_layout.upload'
-import { Route as LayoutFilesImport } from './routes/_layout.files'
+import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AppUploadImport } from './routes/app/upload'
+import { Route as AppFilesImport } from './routes/app/files'
+import { Route as AppAboutImport } from './routes/app/about'
 
 // Create/Update Routes
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutRoute = LayoutImport.update({
-  id: '/_layout',
+const AppRouteRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -36,16 +39,28 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutUploadRoute = LayoutUploadImport.update({
-  id: '/upload',
-  path: '/upload',
-  getParentRoute: () => LayoutRoute,
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const LayoutFilesRoute = LayoutFilesImport.update({
+const AppUploadRoute = AppUploadImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppFilesRoute = AppFilesImport.update({
   id: '/files',
   path: '/files',
-  getParentRoute: () => LayoutRoute,
+  getParentRoute: () => AppRouteRoute,
+} as any)
+
+const AppAboutRoute = AppAboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -59,102 +74,153 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_layout': {
-      id: '/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LayoutImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/app/about': {
+      id: '/app/about'
       path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
+      fullPath: '/app/about'
+      preLoaderRoute: typeof AppAboutImport
+      parentRoute: typeof AppRouteImport
     }
-    '/_layout/files': {
-      id: '/_layout/files'
+    '/app/files': {
+      id: '/app/files'
       path: '/files'
-      fullPath: '/files'
-      preLoaderRoute: typeof LayoutFilesImport
-      parentRoute: typeof LayoutImport
+      fullPath: '/app/files'
+      preLoaderRoute: typeof AppFilesImport
+      parentRoute: typeof AppRouteImport
     }
-    '/_layout/upload': {
-      id: '/_layout/upload'
+    '/app/upload': {
+      id: '/app/upload'
       path: '/upload'
-      fullPath: '/upload'
-      preLoaderRoute: typeof LayoutUploadImport
-      parentRoute: typeof LayoutImport
+      fullPath: '/app/upload'
+      preLoaderRoute: typeof AppUploadImport
+      parentRoute: typeof AppRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof AuthRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface LayoutRouteChildren {
-  LayoutFilesRoute: typeof LayoutFilesRoute
-  LayoutUploadRoute: typeof LayoutUploadRoute
+interface AppRouteRouteChildren {
+  AppAboutRoute: typeof AppAboutRoute
+  AppFilesRoute: typeof AppFilesRoute
+  AppUploadRoute: typeof AppUploadRoute
 }
 
-const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutFilesRoute: LayoutFilesRoute,
-  LayoutUploadRoute: LayoutUploadRoute,
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppAboutRoute: AppAboutRoute,
+  AppFilesRoute: AppFilesRoute,
+  AppUploadRoute: AppUploadRoute,
 }
 
-const LayoutRouteWithChildren =
-  LayoutRoute._addFileChildren(LayoutRouteChildren)
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/about': typeof AboutRoute
-  '/files': typeof LayoutFilesRoute
-  '/upload': typeof LayoutUploadRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/app/about': typeof AppAboutRoute
+  '/app/files': typeof AppFilesRoute
+  '/app/upload': typeof AppUploadRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/about': typeof AboutRoute
-  '/files': typeof LayoutFilesRoute
-  '/upload': typeof LayoutUploadRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/app/about': typeof AppAboutRoute
+  '/app/files': typeof AppFilesRoute
+  '/app/upload': typeof AppUploadRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_layout': typeof LayoutRouteWithChildren
-  '/about': typeof AboutRoute
-  '/_layout/files': typeof LayoutFilesRoute
-  '/_layout/upload': typeof LayoutUploadRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/app/about': typeof AppAboutRoute
+  '/app/files': typeof AppFilesRoute
+  '/app/upload': typeof AppUploadRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/about' | '/files' | '/upload'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/auth'
+    | '/app/about'
+    | '/app/files'
+    | '/app/upload'
+    | '/auth/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/about' | '/files' | '/upload'
+  to:
+    | '/'
+    | '/app'
+    | '/auth'
+    | '/app/about'
+    | '/app/files'
+    | '/app/upload'
+    | '/auth/login'
   id:
-  | '__root__'
-  | '/'
-  | '/_layout'
-  | '/about'
-  | '/_layout/files'
-  | '/_layout/upload'
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/auth'
+    | '/app/about'
+    | '/app/files'
+    | '/app/upload'
+    | '/auth/login'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LayoutRoute: typeof LayoutRouteWithChildren
-  AboutRoute: typeof AboutRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LayoutRoute: LayoutRouteWithChildren,
-  AboutRoute: AboutRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -168,30 +234,42 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_layout",
-        "/about"
+        "/app",
+        "/auth"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/_layout": {
-      "filePath": "_layout.tsx",
+    "/app": {
+      "filePath": "app/route.tsx",
       "children": [
-        "/_layout/files",
-        "/_layout/upload"
+        "/app/about",
+        "/app/files",
+        "/app/upload"
       ]
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/auth": {
+      "filePath": "auth/route.tsx",
+      "children": [
+        "/auth/login"
+      ]
     },
-    "/_layout/files": {
-      "filePath": "_layout.files.tsx",
-      "parent": "/_layout"
+    "/app/about": {
+      "filePath": "app/about.tsx",
+      "parent": "/app"
     },
-    "/_layout/upload": {
-      "filePath": "_layout.upload.tsx",
-      "parent": "/_layout"
+    "/app/files": {
+      "filePath": "app/files.tsx",
+      "parent": "/app"
+    },
+    "/app/upload": {
+      "filePath": "app/upload.tsx",
+      "parent": "/app"
+    },
+    "/auth/login": {
+      "filePath": "auth/login.tsx",
+      "parent": "/auth"
     }
   }
 }
