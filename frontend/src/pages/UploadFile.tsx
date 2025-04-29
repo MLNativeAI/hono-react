@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { type ApiRoutes } from "../../../backend";
 import { hc } from "hono/client";
+import { useRouter } from "@tanstack/react-router";
 
 const client = hc<ApiRoutes>("/");
 
@@ -13,7 +14,7 @@ export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
+    const router = useRouter();
     const validFileTypes = [
         "text/csv",
         "application/vnd.ms-excel",
@@ -45,7 +46,9 @@ export default function FileUpload() {
             formData.append("file", file);
             formData.append("name", file.name);
 
-            const response = await client.api.files.$post({
+            // hono RPC does not work with FormData so just use raw fetch here
+            const response = await fetch("/api/files", {
+                method: "POST",
                 body: formData,
             });
 
@@ -58,6 +61,7 @@ export default function FileUpload() {
                 duration: 3000,
             });
             resetFile();
+            router.navigate({ to: "/app/files" });
         } catch (error) {
             console.error("Upload error:", error);
             toast.error("Failed to upload file. Please try again.", {

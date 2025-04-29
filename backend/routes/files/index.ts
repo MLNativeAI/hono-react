@@ -9,11 +9,14 @@ const uploadFileSchema = z.object({
     name: z.string(),
 })
 
-const router = new Hono()
+const app = new Hono()
+
+const router = app
     .get('/', async (c) => {
         const files = await db.select().from(file)
         return c.json(files)
-    }).post('/', async (c) => {
+    })
+    .post('/', async (c) => {
         try {
             const body = await c.req.formData()
             const fileParam = body.get('file') as File
