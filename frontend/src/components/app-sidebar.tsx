@@ -22,7 +22,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Route as FilesRoute } from "@/routes/_layout.files";
-import { Route as UploadFileRoute } from "@/routes/_layout.index";
+import { Route as UploadFileRoute } from "@/routes/_layout.upload";
+import { Route as IndexRoute } from "@/routes/index";
+import { Link } from "@tanstack/react-router";
 
 const data = {
   user: {
@@ -71,10 +73,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <Link to={IndexRoute.to}>
                 <IconInnerShadowTop className="!size-5" />
                 <span className="text-base font-semibold">Bun Monorepo</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
