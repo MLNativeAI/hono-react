@@ -3,35 +3,21 @@ import { z } from 'zod'
 import { s3 } from '@/lib/s3'
 import { db } from '@/db'
 import { file } from '@/db/schema'
-
-const uploadFileSchema = z.object({
-    file: z.instanceof(File),
-    name: z.string(),
-})
-
-const fileListSchema = z.array(z.object({
-    id: z.string(),
-    filename: z.string(),
-    path: z.string(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-    presignedUrl: z.string(),
-}))
-
-type FileList = z.infer<typeof fileListSchema>
+import { uploadFileSchema, type FileDataWithPresignedUrl } from '@/db/types'
 
 const app = new Hono()
 
 const router = app
     .get('/', async (c) => {
         const files = await db.select().from(file)
-        const filesWithPresignedUrl: FileList = await Promise.all(files.map(async (file) => {
+        const filesWithPresignedUrl: FileDataWithPresignedUrl[] = await Promise.all(files.map(async (file) => {
             const presignedUrl = await s3.presign(file.path)
             return {
                 ...file,
                 presignedUrl
             }
         }))
+        console.log(filesWithPresignedUrl);
         return c.json(filesWithPresignedUrl)
     })
     .post('/', async (c) => {

@@ -94,7 +94,12 @@ bunx drizzle-kit migrate
 bun dev
 ```
 
-3. Set up the frontend (in a new terminal):
+3. Run migrations:
+```bash
+bunx drizzle-kit migrate
+```
+
+4. Set up the frontend (in a new terminal):
 ```bash
 cd frontend
 bun install
