@@ -12,13 +12,12 @@ const router = app
     .get('/', async (c) => {
         const files = await db.select().from(file)
         const filesWithPresignedUrl: FileDataWithPresignedUrl[] = await Promise.all(files.map(async (file) => {
-            const presignedUrl = await s3.presign(file.path)
+            const presignedUrl = await s3.presign(`${file.filename}`)
             return {
                 ...file,
                 presignedUrl
             }
         }))
-        console.log(filesWithPresignedUrl);
         return c.json(filesWithPresignedUrl)
     })
     .post('/', async (c) => {
@@ -41,14 +40,12 @@ const router = app
             await db.insert(file).values({
                 id,
                 filename: validatedData.name,
-                path: validatedData.file.name,
                 createdAt: new Date(),
-                updatedAt: new Date(),
             })
 
             const fileBuffer = await fileParam.arrayBuffer()
 
-            await s3.file(`files/${id}`).write(fileBuffer)
+            await s3.file(`${validatedData.name}`).write(fileBuffer)
 
             return c.json({
                 message: 'File uploaded successfully',

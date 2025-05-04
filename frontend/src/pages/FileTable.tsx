@@ -4,7 +4,8 @@ import {
   IconChevronDown,
   IconChevronLeft,
   IconChevronRight,
-  IconDotsVertical,
+  IconDownload,
+  IconTrash,
 } from "@tabler/icons-react";
 import {
   ColumnDef,
@@ -21,7 +22,6 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -45,103 +45,6 @@ import {
 import { type FileDataWithPresignedUrl } from "@backend/db/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteFilesMutation, getAllFilesQueryOptions } from "@/lib/api";
-
-const columns: ColumnDef<FileDataWithPresignedUrl>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "filename",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Filename
-          <IconArrowsUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div>{row.original.filename}</div>,
-  },
-  {
-    accessorKey: "path",
-    header: "Path",
-    cell: ({ row }) => (
-      <div className="w-full">
-        <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.path}
-        </Badge>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Created At
-          <IconArrowsUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => row.original.createdAt,
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated At",
-    cell: ({ row }) => row.original.updatedAt,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const file = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0"
-            >
-              <span className="sr-only">Open menu</span>
-              <IconDotsVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Download</DropdownMenuItem>
-            <DropdownMenuItem>Share</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
 
 export function FileTable() {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -176,7 +79,9 @@ export function FileTable() {
     const selectedRowIds = Object.keys(rowSelection);
     const selectedFileIds = selectedRowIds
       .map((rowId) => {
-        const fileData = data.find((file) => file.id.toString() === rowId);
+        const fileData = data.find((file: FileDataWithPresignedUrl) =>
+          file.id.toString() === rowId
+        );
         return fileData?.id;
       })
       .filter((id): id is string => id !== undefined);
@@ -185,6 +90,102 @@ export function FileTable() {
 
     deleteMutation.mutate(selectedFileIds);
   };
+
+  // Define columns inside the component to have access to the mutation
+  const columns = React.useMemo<ColumnDef<FileDataWithPresignedUrl>[]>(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        accessorKey: "filename",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              Filename
+              <IconArrowsUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => <div>{row.original.filename}</div>,
+      },
+      {
+        accessorKey: "createdAt",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              Created At
+              <IconArrowsUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => row.original.createdAt,
+      },
+      {
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => {
+          const file = row.original;
+
+          return (
+            <div className="flex space-x-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => window.open(file.presignedUrl, "_blank")}
+              >
+                <IconDownload className="h-4 w-4" />
+                <span className="sr-only">Download</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-destructive hover:text-destructive"
+                onClick={() => {
+                  if (
+                    confirm(`Are you sure you want to delete ${file.filename}?`)
+                  ) {
+                    deleteMutation.mutate([file.id]);
+                  }
+                }}
+              >
+                <IconTrash className="h-4 w-4" />
+                <span className="sr-only">Delete</span>
+              </Button>
+            </div>
+          );
+        },
+      },
+    ],
+    [deleteMutation],
+  );
 
   const table = useReactTable({
     data: data ?? [],

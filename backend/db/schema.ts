@@ -3,9 +3,7 @@ import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 export const file = pgTable("file", {
 	id: text('id').primaryKey(),
 	filename: text('filename').notNull(),
-	path: text('path').notNull(),
-	createdAt: timestamp('created_at').notNull(),
-	updatedAt: timestamp('updated_at').notNull()
+	createdAt: timestamp('created_at').notNull()
 });
 
 export const user = pgTable("user", {
