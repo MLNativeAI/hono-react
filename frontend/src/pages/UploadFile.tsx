@@ -7,20 +7,42 @@ import { Button } from "@/components/ui/button";
 // import { type ApiRoutes } from "../../../backend";
 // import { hc } from "hono/client";
 import { useRouter } from "@tanstack/react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { uploadFile } from "@/lib/api";
 
 // const client = hc<ApiRoutes>("/");
 
 export default function FileUpload() {
     const [file, setFile] = useState<File | null>(null);
-    const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
+    const queryClient = useQueryClient();
     const validFileTypes = [
         "text/csv",
         "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "application/pdf",
     ];
+
+    const mutation = useMutation({
+        mutationFn: uploadFile,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["files"] });
+            toast.success("File uploaded successfully!", {
+                position: "bottom-right",
+                duration: 3000,
+            });
+            resetFile();
+            router.navigate({ to: "/app/files" });
+        },
+        onError: (error) => {
+            console.error("Upload error:", error);
+            toast.error("Failed to upload file. Please try again.", {
+                position: "bottom-right",
+                duration: 3000,
+            });
+        },
+    });
 
     const handleFile = (file: File | undefined) => {
         if (!file) return;
@@ -38,39 +60,7 @@ export default function FileUpload() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) return;
-
-        try {
-            setUploading(true);
-
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("name", file.name);
-
-            // hono RPC does not work with FormData so just use raw fetch here
-            const response = await fetch("/api/files", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error("Upload failed");
-            }
-
-            toast.success("File uploaded successfully!", {
-                position: "bottom-right",
-                duration: 3000,
-            });
-            resetFile();
-            router.navigate({ to: "/app/files" });
-        } catch (error) {
-            console.error("Upload error:", error);
-            toast.error("Failed to upload file. Please try again.", {
-                position: "bottom-right",
-                duration: 3000,
-            });
-        } finally {
-            setUploading(false);
-        }
+        mutation.mutate(file);
     };
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -148,9 +138,9 @@ export default function FileUpload() {
                     </Button>
                     <Button
                         type="submit"
-                        disabled={!file || uploading}
+                        disabled={!file || mutation.isPending}
                     >
-                        {uploading
+                        {mutation.isPending
                             ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

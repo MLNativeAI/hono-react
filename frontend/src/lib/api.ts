@@ -6,20 +6,44 @@ const client = hc<ApiRoutes>("/");
 
 export const api = client.api;
 
+export const getAllFilesQueryOptions = queryOptions({
+    queryKey: ["files"],
+    queryFn: getAllFiles,
+});
+
+export const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("name", file.name);
+
+    // hono RPC does not work with FormData so just use raw fetch here
+    const response = await fetch("/api/files", {
+        method: "POST",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("Upload failed");
+    }
+
+    return response.json();
+};
 
 export async function getAllFiles() {
     const res = await api.files.$get();
-    console.log(res);
     if (!res.ok) {
         throw new Error("server error");
     }
     const data = await res.json();
-    console.log(data);
     return data;
 }
 
-export const getAllFilesQueryOptions = queryOptions({
-    queryKey: ["get-all-files"],
-    queryFn: getAllFiles,
-    staleTime: 1000 * 60 * 5,
-});
+export const deleteFilesMutation = async (fileIds: string[]) => {
+    const res = await api.files.$delete({
+        query: { ids: fileIds.join(',') },
+    });
+    if (!res.ok) {
+        throw new Error("Delete failed");
+    }
+    return res.json();
+}

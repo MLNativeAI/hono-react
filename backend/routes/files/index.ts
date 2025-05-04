@@ -4,6 +4,7 @@ import { s3 } from '@/lib/s3'
 import { db } from '@/db'
 import { file } from '@/db/schema'
 import { uploadFileSchema, type FileDataWithPresignedUrl } from '@/db/types'
+import { inArray } from 'drizzle-orm'
 
 const app = new Hono()
 
@@ -58,6 +59,22 @@ const router = app
             if (error instanceof z.ZodError) {
                 return c.json({ error: 'Invalid file data' }, 400)
             }
+            return c.json({ error: 'Internal server error' }, 500)
+        }
+    })
+    .delete('/', async (c) => {
+        try {
+            const fileIds = c.req.query('ids')?.split(',')
+
+            if (!fileIds || fileIds.length === 0) {
+                return c.json({ error: 'File IDs are required' }, 400)
+            }
+
+            console.log('Deleting files:', fileIds)
+            await db.delete(file).where(inArray(file.id, fileIds))
+            return c.json({ message: 'Files deleted successfully' }, 200)
+        } catch (error) {
+            console.error('Delete error:', error)
             return c.json({ error: 'Internal server error' }, 500)
         }
     })
