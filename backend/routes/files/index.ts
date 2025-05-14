@@ -4,13 +4,15 @@ import { s3 } from '@/lib/s3'
 import { db } from '@/db'
 import { file } from '@/db/schema'
 import { uploadFileSchema, type FileDataWithPresignedUrl } from '@/db/types'
-import { inArray } from 'drizzle-orm'
+import { inArray, eq } from 'drizzle-orm'
+import { getUser } from '@/lib/auth'
 
 const app = new Hono()
 
 const router = app
     .get('/', async (c) => {
-        const files = await db.select().from(file)
+        const user = await getUser(c)
+        const files = await db.select().from(file).where(eq(file.ownerId, user.id))
         const filesWithPresignedUrl: FileDataWithPresignedUrl[] = await Promise.all(files.map(async (file) => {
             const presignedUrl = await s3.presign(`${file.filename}`)
             return {
@@ -22,6 +24,7 @@ const router = app
     })
     .post('/', async (c) => {
         try {
+            const user = await getUser(c)
             const body = await c.req.formData()
             const fileParam = body.get('file') as File
             const nameParam = body.get('name') as string
@@ -41,6 +44,7 @@ const router = app
                 id,
                 filename: validatedData.name,
                 createdAt: new Date(),
+                ownerId: user.id
             })
 
             const fileBuffer = await fileParam.arrayBuffer()

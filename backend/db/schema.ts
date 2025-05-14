@@ -3,7 +3,8 @@ import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 export const file = pgTable("file", {
 	id: text('id').primaryKey(),
 	filename: text('filename').notNull(),
-	createdAt: timestamp('created_at').notNull()
+	createdAt: timestamp('created_at').notNull(),
+	ownerId: text('owner_id').notNull().references(() => user.id, { onDelete: 'cascade' })
 });
 
 export const user = pgTable("user", {

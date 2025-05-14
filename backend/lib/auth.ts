@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, type User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../db";
 import * as schema from "../db/schema";
@@ -47,4 +47,12 @@ export const requireAuth = async (c: any, next: any) => {
 
 export const authHandler = async (c: any) => {
     return auth.handler(c.req.raw);
+};
+
+export const getUser = async (c: any): Promise<User> => {
+    const session = await auth.api.getSession({ headers: c.req.raw.headers });
+    if (!session) {
+        throw new Error('Unauthorized')
+    }
+    return session.user;
 };
