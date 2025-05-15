@@ -1,11 +1,12 @@
-# Fullstack Hono + React Template
+# Fullstack Hono + React Template with Turborepo
 
 [![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh)
 [![React](https://img.shields.io/badge/React-61DAFB.svg?style=for-the-badge&logo=React&logoColor=black)](https://react.dev)
 [![Hono](https://img.shields.io/badge/Hono-E36002.svg?style=for-the-badge&logo=hono&logoColor=white)](https://hono.dev)
 [![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Turborepo](https://img.shields.io/badge/Turborepo-EF4444.svg?style=for-the-badge&logo=turborepo&logoColor=white)](https://turbo.build/repo)
 
-A lightning-fast, self-hostable template for building modern Single Page Applications with Hono and React.
+A lightning-fast, self-hostable template for building modern Single Page Applications with Hono and React, powered by Turborepo for efficient monorepo management.
 
 ## 🚀 Demo
 
@@ -17,12 +18,13 @@ This template bridges the gap between using a do-it-all framework and having to 
 
 ### Key Benefits
 
-- Lightning fast for developing SPAs
+- Lightning fast for developing SPAs with Turborepo's caching
 - Zero cloud-based vendor dependencies
 - Self-hostable with ease
-- Highly configurable
+- Highly configurable monorepo structure
 - Pre-configured essentials without bloat
 - Re-deploys in < 1 minute
+- Shared code between packages
 
 ## ⚡ Technical Features
 
@@ -31,16 +33,23 @@ This template bridges the gap between using a do-it-all framework and having to 
 - Built-in auth handling with [BetterAuth](https://github.com/betterstack-community/better-auth) (fully local)
 - Type-safe environment variables (not needed at build time)
 - Type-safe client-side navigation
+- Efficient dependencies management with Turborepo
 
 ## 📦 Template Features
 
 - Sign up & Sign in (extendible with additional BetterAuth providers)
 - Dashboard Layout with [Shadcn UI](https://ui.shadcn.com/)
 - File handling (upload, storage & retrieval)
+- Shared types between frontend and backend
 
 > File handling can be particularly annoying to set up, so we've purposefully included this in the "base" template.
 
 ## 🛠 Tech Stack
+
+### Monorepo
+
+- [Turborepo](https://turbo.build/repo) - High-performance monorepo build system
+- [Bun](https://bun.sh) - Fast JavaScript runtime with built-in package manager
 
 ### Backend
 
@@ -61,9 +70,18 @@ This template bridges the gap between using a do-it-all framework and having to 
 
 ## 🏗 Project Structure
 
-The project structure is straightforward with two Bun projects: `backend` and `frontend`.
+The project is organized as a Turborepo monorepo with the following structure:
 
-- In development mode, run them side by side
+```
+├── apps/
+│   ├── frontend/  # React application
+│   └── backend/   # Hono API server
+├── packages/
+│   └── shared/    # Shared types and utilities
+└── package.json   # Root workspace configuration
+```
+
+- In development mode, run them concurrently with Turborepo
 - In production, frontend gets bundled and served by the backend
 
 ### Runtime Dependencies
@@ -76,7 +94,7 @@ The project structure is straightforward with two Bun projects: `backend` and `f
 ### Prerequisites
 
 - [Docker](https://www.docker.com/) or similar OCI runtime (e.g., [Orbstack](https://orbstack.dev/))
-- [Bun](https://bun.sh)
+- [Bun](https://bun.sh) (v1.2.0 or later)
 
 ### Local Development
 
@@ -85,25 +103,27 @@ The project structure is straightforward with two Bun projects: `backend` and `f
 docker compose up -d
 ```
 
-2. Set up the backend:
+2. Install dependencies:
 ```bash
-cd backend
+bun install
+```
+
+3. Set up environment variables:
+```bash
+cd apps/backend
 cp .env.example .env  # No modifications required
-bun install
-bunx drizzle-kit migrate
-bun dev
 ```
 
-3. Run migrations:
+4. Run migrations:
 ```bash
+cd apps/backend
 bunx drizzle-kit migrate
 ```
 
-4. Set up the frontend (in a new terminal):
+5. Start the development environment:
 ```bash
-cd frontend
-bun install
-bun dev
+# From project root
+bun turbo dev
 ```
 
 Your application will be available at:
@@ -123,6 +143,16 @@ docker build -t hono-spa .
 ```
 
 The application runs on port 3000 by default. The Docker build contains both frontend and backend, with automatic DB migrations on startup.
+
+## Remote Caching
+
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following command:
+
+```bash
+bunx turbo link
+```
 
 ## 👏 Acknowledgements
 

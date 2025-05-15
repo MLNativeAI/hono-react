@@ -1,17 +1,20 @@
 {
-  "name": "hono-spa",
-  "module": "backend/index.ts",
+  "name": "backend",
+  "module": "index.ts",
   "type": "module",
   "private": true,
   "scripts": {
     "dev": "bun --watch index.ts",
     "start": "bun index.ts",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "build": "bun build --target=bun index.ts --outdir=dist",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0"
   },
   "devDependencies": {
     "@types/bun": "^1.2.11",
     "@types/pg": "^8.11.14",
     "drizzle-kit": "^0.31.0",
+    "eslint": "^9.22.0",
     "tsx": "^4.19.3"
   },
   "peerDependencies": {
@@ -26,6 +29,7 @@
     "hono": "^4.7.8",
     "pg": "^8.15.6",
     "postgres": "^3.4.5",
+    "shared": "workspace:*",
     "zod": "^3.24.3"
   }
 }
