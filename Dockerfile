@@ -3,43 +3,36 @@
 FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
-# Install backend dependencies
-FROM base AS backend-deps
-RUN mkdir -p /temp/dev
-COPY backend/package.json backend/bun.lock /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+# Install dependencies and build all packages
+FROM base AS build
+# Copy package.json files for all workspaces
+COPY package.json turbo.json ./
+COPY apps/backend/package.json apps/backend/bun.lock ./apps/backend/
+COPY apps/frontend/package.json apps/frontend/bun.lock ./apps/frontend/
+COPY packages/shared/package.json ./packages/shared/
 
-RUN mkdir -p /temp/prod
-COPY backend/package.json backend/bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
-
-# Install frontend dependencies and build
-FROM base AS frontend-build
-WORKDIR /usr/src/app
-COPY frontend/package.json frontend/bun.lock ./
+# Install all dependencies
 RUN bun install --frozen-lockfile
-COPY frontend/ .
-RUN bun run build
 
-# Setup backend with dev dependencies for building
-FROM base AS backend-build
-WORKDIR /usr/src/app
-COPY --from=backend-deps /temp/dev/node_modules node_modules
-COPY backend/ .
+# Copy source code
+COPY . .
+
+# Build all packages with Turborepo
+RUN bun turbo build
 
 # Final production image
 FROM base AS release
-WORKDIR /usr/src/app/backend
+WORKDIR /usr/src/app
 
-# Copy backend production dependencies and source
-COPY --from=backend-deps /temp/prod/node_modules node_modules
-COPY --from=backend-build /usr/src/app/ .
-
-# Copy frontend build output into backend/public
-COPY --from=frontend-build /usr/src/app/dist ./public
+# Copy necessary files for production
+# Copy root node_modules and workspace files
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/apps/backend ./apps/backend
+COPY --from=build /usr/src/app/apps/frontend/dist ./apps/backend/public
+COPY --from=build /usr/src/app/packages/shared/dist ./packages/shared/dist
 
 # Make the startup script executable
-COPY backend/start.sh .
+COPY apps/backend/start.sh .
 RUN chmod +x start.sh
 
 # Run the app
