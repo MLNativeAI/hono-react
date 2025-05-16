@@ -7,6 +7,8 @@ const envSchema = z.object({
     MINIO_ACCESS_KEY: z.string().min(1, "MINIO_ACCESS_KEY is required"),
     MINIO_SECRET_KEY: z.string().min(1, "MINIO_SECRET_KEY is required"),
     MINIO_BUCKET: z.string().min(1, "MINIO_BUCKET is required"),
+    GOOGLE_CLIENT_ID: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string(),
     PORT: z
         .string()
         .regex(/^\d+$/, "Port must be a numeric string")

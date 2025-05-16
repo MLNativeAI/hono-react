@@ -13,7 +13,7 @@ A lightning-fast, self-hostable template for building modern Single Page Applica
 Check it out for yourself: [hono-react.mlnative.com](https://hono-react.mlnative.com)
 
 ## 💡 Why?
-
+****
 This template bridges the gap between using a do-it-all framework and having to configure everything on your own. Despite the SSR/ISR/RSC trends, sometimes what you really need is a simple, efficient way to build SPA + backend applications.
 
 ### Key Benefits

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -22,6 +22,7 @@ export function SignInForm({
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { redirect } = useSearch({ strict: false });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,7 +44,13 @@ export function SignInForm({
         return;
       }
 
-      navigate({ to: "/app/files" });
+      // Navigate to the redirect URL if available, otherwise to files
+      if (redirect && typeof redirect === "string") {
+        navigate({ to: redirect as any });
+      } else {
+        navigate({ to: "/app/files" });
+      }
+
       toast.success("Signed in successfully");
     } catch (err) {
       setError("An unexpected error occurred");
@@ -94,9 +101,16 @@ export function SignInForm({
                   Sign in
                 </Button>
                 <Button
+                  type="button"
                   variant="outline"
                   className="w-full"
                   disabled={isLoading}
+                  onClick={async () => {
+                    await authClient.signIn.social({
+                      provider: "google",
+                      callbackURL: "/files",
+                    });
+                  }}
                 >
                   Sign in with Google
                 </Button>

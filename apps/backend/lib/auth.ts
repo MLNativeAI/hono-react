@@ -2,6 +2,7 @@ import { betterAuth, type User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../db";
 import * as schema from "../db/schema";
+import { env } from "bun";
 
 const publicRoutes = [
     '/api/health',
@@ -15,6 +16,15 @@ export const auth = betterAuth({
     }),
     emailAndPassword: {
         enabled: true
+    },
+    socialProviders: {
+        google: {
+            prompt: "select_account",
+            enabled: env.GOOGLE_CLIENT_ID !== undefined && env.GOOGLE_CLIENT_SECRET !== undefined,
+            clientId: env.GOOGLE_CLIENT_ID,
+            clientSecret: env.GOOGLE_CLIENT_SECRET,
+            redirectUri: Bun.env.ENVIRONMENT === "dev" ? "http://localhost:5173/files" : "https://hono-react.mlnative.com/files",
+        },
     },
     trustedOrigins: [Bun.env.ENVIRONMENT === "dev" ? "http://localhost:5173" : ""]
 });

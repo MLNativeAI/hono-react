@@ -36,6 +36,10 @@ if (envVars.ENVIRONMENT === "prod") {
     // Serve static files
     app.get('*', serveStatic({ root: './public' }))
     app.get('*', serveStatic({ path: './public/index.html' }))
+} else {
+    app.get('*', (c) => {
+        return c.redirect('http://localhost:5173')
+    })
 }
 
 const server = Bun.serve({
