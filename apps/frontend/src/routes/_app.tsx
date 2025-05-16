@@ -1,12 +1,11 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
-import { SidebarInset } from "@/components/ui/sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/app")({
+export const Route = createFileRoute("/_app")({
+  component: PathlessLayoutComponent,
   beforeLoad: async ({ location }) => {
     const { data: session } = await authClient.getSession();
     if (!session) {
@@ -18,10 +17,9 @@ export const Route = createFileRoute("/app")({
       });
     }
   },
-  component: RouteComponent,
 });
 
-function RouteComponent() {
+function PathlessLayoutComponent() {
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />

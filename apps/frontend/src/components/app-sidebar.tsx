@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  IconDashboard,
   IconFile,
   IconHelp,
   IconSearch,
@@ -20,11 +19,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Route as FilesRoute } from "@/routes/app/files";
-import { Route as UploadFileRoute } from "@/routes/app/upload";
-import { Route as IndexRoute } from "@/routes/index";
+import { Route as UploadFileRoute } from "@/routes/_app.upload";
 import { Link } from "@tanstack/react-router";
-
+import { Route as IndexRoute } from "@/routes/_app.index";
 const data = {
   user: {
     name: "shadcn",
@@ -39,7 +36,7 @@ const data = {
     },
     {
       title: "All files",
-      url: FilesRoute.to,
+      url: IndexRoute.to,
       icon: IconFile,
     },
   ],
@@ -74,9 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link to={IndexRoute.to}>
                 <img src="/logo.svg" alt="Bun Logo" className="w-5 h-5" />
-                <span className="text-base font-semibold">
-                  Hono React
-                </span>
+                <span className="text-base font-semibold">Hono React</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
