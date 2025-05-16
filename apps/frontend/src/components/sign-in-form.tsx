@@ -48,7 +48,7 @@ export function SignInForm({
       if (redirect && typeof redirect === "string") {
         navigate({ to: redirect as any });
       } else {
-        navigate({ to: "/app/files" });
+        navigate({ to: "/" });
       }
 
       toast.success("Signed in successfully");
@@ -108,7 +108,6 @@ export function SignInForm({
                   onClick={async () => {
                     await authClient.signIn.social({
                       provider: "google",
-                      callbackURL: "/files",
                     });
                   }}
                 >

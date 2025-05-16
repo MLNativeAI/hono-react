@@ -44,7 +44,7 @@ export function SignUpForm({
         return;
       }
 
-      navigate({ to: "/app/files" });
+      navigate({ to: "/" });
       toast.success("Account created successfully");
     } catch (err) {
       setError("An unexpected error occurred");

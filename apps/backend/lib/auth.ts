@@ -23,7 +23,7 @@ export const auth = betterAuth({
             enabled: env.GOOGLE_CLIENT_ID !== undefined && env.GOOGLE_CLIENT_SECRET !== undefined,
             clientId: env.GOOGLE_CLIENT_ID,
             clientSecret: env.GOOGLE_CLIENT_SECRET,
-            redirectUri: Bun.env.ENVIRONMENT === "dev" ? "http://localhost:5173/files" : "https://hono-react.mlnative.com/files",
+            redirectUri: Bun.env.ENVIRONMENT === "dev" ? "http://localhost:5173/" : "https://hono-react.mlnative.com/",
         },
     },
     trustedOrigins: [Bun.env.ENVIRONMENT === "dev" ? "http://localhost:5173" : ""]
