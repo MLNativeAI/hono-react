@@ -1,28 +1,29 @@
 import { Section, Text } from "@react-email/components";
 import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
+import { emailConfig } from "../email-config";
 
 export interface InvitationEmailProps {
   url: string;
-  inviter: string;
+  inviterName: string;
   organizationName: string;
   role: string;
 }
 
-export const InvitationEmail = ({ url, inviter, organizationName, role }: InvitationEmailProps) => {
-  const previewText = `You've been invited to join ${organizationName} on PaperJet`;
+export const InvitationEmail = ({ url, inviterName: inviterName, organizationName, role }: InvitationEmailProps) => {
+  const previewText = `You've been invited to join ${organizationName} on ${emailConfig.serviceName}`;
 
   return (
     <EmailLayout previewText={previewText}>
       <LogoSection />
 
       <EmailHeading>
-        You're invited to <strong>PaperJet</strong>! 🎉
+        You're invited to <strong>{emailConfig.serviceName}</strong>! 🎉
       </EmailHeading>
 
       <Text className="text-black text-[14px] leading-[24px]">Hi there,</Text>
 
       <Text className="text-black text-[14px] leading-[24px]">
-        <strong>{inviter}</strong> has invited you to join <strong>{organizationName}</strong> on PaperJet as a{" "}
+        <strong>{inviterName}</strong> has invited you to join <strong>{organizationName}</strong> on {emailConfig.serviceName} as a{" "}
         <strong>{role}</strong>.
       </Text>
 
@@ -46,8 +47,8 @@ export const InvitationEmail = ({ url, inviter, organizationName, role }: Invita
 };
 
 InvitationEmail.PreviewProps = {
-  url: "https://paperjet.ai/invite/abc123",
-  inviter: "John Doe",
+  url: `https://${emailConfig.appUrl}/invite/abc123`,
+  inviterName: "John Doe",
   organizationName: "Acme Corp",
   role: "admin",
 } as InvitationEmailProps;

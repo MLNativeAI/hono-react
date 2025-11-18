@@ -1,19 +1,20 @@
 import { Text } from "@react-email/components";
 import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
+import { emailConfig } from "../email-config";
 
 export const FeedbackEmail = () => {
-  const previewText = "How's your PaperJet journey so far?";
+  const previewText = `How's your ${emailConfig.serviceName} journey so far?`;
 
   return (
     <EmailLayout previewText={previewText}>
       <LogoSection />
 
-      <EmailHeading>PaperJet</EmailHeading>
+      <EmailHeading>{emailConfig.serviceName}</EmailHeading>
 
       <Text className="text-black text-[14px] leading-[24px]">Hey there!</Text>
 
       <Text className="text-black text-[14px] leading-[24px]">
-        How's PaperJet treating you so far? I hope you've had a chance to explore and run some document workflows.
+        How's {emailConfig.serviceName} treating you so far? I hope you've had a chance to explore and run some document workflows.
       </Text>
 
       <Text className="text-black text-[14px] leading-[24px]">I'd love to know:</Text>
@@ -29,7 +30,7 @@ export const FeedbackEmail = () => {
 
       <Text className="text-black text-[14px] leading-[24px]">
         Best regards, <br />
-        Łukasz
+        {emailConfig.emailPerson}
       </Text>
 
       <FooterSection />

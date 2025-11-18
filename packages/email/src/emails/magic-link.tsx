@@ -1,5 +1,6 @@
 import { Text } from "@react-email/components";
 import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
+import { emailConfig } from "../email-config";
 
 export interface MagicLinkEmailProps {
   url: string;
@@ -7,18 +8,18 @@ export interface MagicLinkEmailProps {
 }
 
 export const MagicLinkEmail = ({ url }: MagicLinkEmailProps) => {
-  const previewText = "Sign in to PaperJet";
+  const previewText = `Sign in to ${emailConfig.serviceName}`;
 
   return (
     <EmailLayout previewText={previewText}>
       <LogoSection />
       <EmailHeading>
-        Sign in to <strong>PaperJet</strong>
+        Sign in to <strong>{emailConfig.serviceName}</strong>
       </EmailHeading>
       <Text className="text-black text-[14px] leading-[24px]">
-        Click the button below to sign in to your PaperJet account. This link will expire in 10 minutes.
+        Click the button below to sign in to your {emailConfig.serviceName} account. This link will expire in 10 minutes.
       </Text>
-      <ActionButton href={url}>Sign in to PaperJet</ActionButton>
+      <ActionButton href={url}>Sign in to {emailConfig.serviceName}</ActionButton>
       <Text className="text-[#666666] text-[12px] leading-[24px]">
         If the button doesn't work, copy and paste this link into your browser:
       </Text>

@@ -1,0 +1,43 @@
+name: Branch Build & Deploy
+
+# Parameters
+env:
+  DOCKER_REGISTRY: docker.io
+  CORE_DEV_IMAGE: mlnative/paperjet-dev
+
+permissions:
+  packages: write
+  id-token: write
+  contents: read
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  lint-typecheck:
+    uses: ./.github/workflows/lint-typecheck.yml
+
+  build-core:
+    name: Build Core Application
+    uses: ./.github/workflows/build-core.yml
+    needs: lint-typecheck
+    with:
+      registry: ${{ env.DOCKER_REGISTRY }}
+      image_name: ${{ env.CORE_DEV_IMAGE }}
+    secrets: inherit
+
+  deploy-core:
+    name: Deploy Core Application
+    needs: build-core
+    uses: ./.github/workflows/deploy.yml
+    with:
+      registry: ${{ env.DOCKER_REGISTRY }}
+      image_name: ${{ env.CORE_DEV_IMAGE }}
+      image_tag: sha-${{ github.sha }}
+      environment: development
+    secrets:
+      coolify_url: ${{ secrets.COOLIFY_DEV_URL }}
+      coolify_app_uuid: ${{ secrets.COOLIFY_DEV_APP_UUID }}
+      coolify_token: ${{ secrets.COOLIFY_DEV_TOKEN }}

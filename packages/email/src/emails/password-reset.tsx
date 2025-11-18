@@ -1,5 +1,6 @@
 import { Text } from "@react-email/components";
 import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
+import { emailConfig } from "../email-config";
 
 export interface ResetPasswordEmailTemplateProps {
   resetUrl: string;
@@ -7,20 +8,20 @@ export interface ResetPasswordEmailTemplateProps {
 }
 
 export const ResetPasswordEmailTemplate = ({ username, resetUrl }: ResetPasswordEmailTemplateProps) => {
-  const previewText = "Reset your password on PaperJet";
+  const previewText = `Reset your password on ${emailConfig.serviceName}`;
 
   return (
     <EmailLayout previewText={previewText}>
       <LogoSection />
 
       <EmailHeading>
-        Reset your password on <strong>PaperJet</strong>
+        Reset your password on <strong>{emailConfig.serviceName}</strong>
       </EmailHeading>
 
       <Text className="text-black text-[14px] leading-[24px]">Hi {username},</Text>
 
       <Text className="text-black text-[14px] leading-[24px]">
-        We received a request to reset your PaperJet password. Click the button below to create a new password. This
+        We received a request to reset your {emailConfig.serviceName} password. Click the button below to create a new password. This
         link will expire in 1 hour for security.
       </Text>
 
@@ -40,7 +41,7 @@ export const ResetPasswordEmailTemplate = ({ username, resetUrl }: ResetPassword
 };
 
 ResetPasswordEmailTemplate.PreviewProps = {
-  resetUrl: "https://paperjet.ai/reset/abc123",
+  resetUrl: `https://${emailConfig.appUrl}/reset/abc123`,
   username: "Jane Doe",
 } as ResetPasswordEmailTemplateProps;
 

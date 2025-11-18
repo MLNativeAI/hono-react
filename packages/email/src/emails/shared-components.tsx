@@ -12,6 +12,7 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import { emailConfig } from "../email-config";
 
 interface EmailLayoutProps {
   children: React.ReactNode;
@@ -34,12 +35,12 @@ export const EmailLayout = ({ children, previewText }: EmailLayoutProps) => (
 
 export const LogoSection = () => (
   <Section className="mt-[32px]">
-    <a href="https://getpaperjet.com" target="_blank" rel="noopener">
+    <a href={emailConfig.landingUrl} target="_blank" rel="noopener">
       <Img
         width={100}
         height="auto"
-        src={"https://getpaperjet.com/android-chrome-192x192.png"}
-        alt="PaperJet logo"
+        src={emailConfig.logo}
+        alt={`${emailConfig.serviceName} logo`}
         className="my-0 mx-auto"
       />
     </a>
@@ -77,24 +78,27 @@ export const FooterSection = () => (
     <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
     <div className="flex justify-between w-full items-center">
       <div className="flex flex-col gap-2">
-        <div className="text-md">PaperJet</div>
-        <div className="text-sm text-[#999999]">Privacy-first document processing</div>
+        <div className="text-md">{emailConfig.serviceName}</div>
+        <div className="text-sm text-[#999999]">{emailConfig.tagLine}</div>
       </div>
-      <a href="https://getpaperjet.com" target="_blank" rel="noopener">
+      <a href={emailConfig.landingUrl} target="_blank" rel="noopener">
         <Img
           width={40}
           height={40}
-          src={"https://getpaperjet.com/android-chrome-192x192.png"}
-          alt="PaperJet logo"
+          src={emailConfig.logo}
+          alt={`${emailConfig.serviceName} logo`}
           className=""
         />
       </a>
     </div>
     <Section className="mt-[12px]">
       <Text className="text-[#999999] text-[8px] leading-[16px]">
-        MLNative sp. z o.o <br />
-        Batorego 33/19 <br />
-        80-251 Gdańsk, Poland
+        {emailConfig.companyAddress.map((line, index) => (
+          <span key={index}>
+            {line}
+            {index < emailConfig.companyAddress.length - 1 && <br />}
+          </span>
+        ))}
       </Text>
     </Section>
   </>
