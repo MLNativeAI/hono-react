@@ -15,6 +15,8 @@ export const envSchema = z.object({
 		.transform(Number),
 	ENVIRONMENT: z.enum(["dev", "staging", "prod"]).default("dev"),
 
+	AUTH_MODE: z.enum(["magic-link", "password"]).default("password"),
+
 	// auth
 	GOOGLE_CLIENT_ID: z.string().optional(),
 	GOOGLE_CLIENT_SECRET: z.string().optional(),

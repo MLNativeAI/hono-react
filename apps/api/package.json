@@ -7,8 +7,10 @@
   "scripts": {
     "dev": "bun --watch index.ts",
     "start": "bun index.ts",
-    "db:migrate": "drizzle-kit migrate",
-    "build": "bun build --target=bun index.ts --outdir=dist"
+    "openapi": "http localhost:3000/openapi",
+    "lint": "biome check --write",
+    "typecheck": "tsc --noEmit",
+    "build": "bun build --target=bun ./src/index.ts --outdir=dist"
   },
   "devDependencies": {
     "@types/bun": "^1.2.11",
