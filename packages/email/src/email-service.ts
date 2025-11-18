@@ -3,8 +3,8 @@ import { Resend } from "resend";
 import { getApiBaseUrl } from "./util";
 import { render } from "@react-email/render";
 import InvitationEmail from "./emails/invitation";
-import { emailConfig } from "./email-config";
 import ResetPasswordEmailTemplate from "./emails/password-reset";
+import { emailConfig } from "./email-config";
 
 const resend = envVars.RESEND_API_KEY ? new Resend(envVars.RESEND_API_KEY) : null;
 

@@ -2,7 +2,6 @@ import { logger } from "@repo/shared";
 import { emailWorker } from "./jobs/email";
 
 export { emailQueue } from "./jobs/email";
-export { workflowExecutionQueue } from "./workflows/extraction";
 
 export const allWorkers = [emailWorker];
 
