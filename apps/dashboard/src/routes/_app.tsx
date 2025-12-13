@@ -25,11 +25,6 @@ export const Route = createFileRoute("/_app")({
   },
   component: PathlessLayoutComponent,
   beforeLoad: async ({ context }) => {
-    if (!context.serverInfo.adminAccountExists) {
-      throw redirect({
-        to: "/admin/setup",
-      });
-    }
     if (!context.session) {
       throw redirect({
         to: "/auth/sign-in",
