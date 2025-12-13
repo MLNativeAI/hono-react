@@ -1,5 +1,5 @@
-import { cors } from "hono/cors";
 import type { MiddlewareHandler } from "hono";
+import { cors } from "hono/cors";
 
 // Cors middleware that only applies in development mode
 export const corsMiddleware: MiddlewareHandler = (c, next) => {

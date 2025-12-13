@@ -1,5 +1,5 @@
-import { getOrganizationsByIds, getUserByEmail, getUserInvitations } from "@paperjet/db";
-import { envVars, logger } from "@paperjet/shared";
+import { getOrganizationsByIds, getUserByEmail, getUserInvitations } from "@repo/db";
+import { envVars, logger } from "@repo/shared";
 import type { Context } from "hono";
 import type { BlankEnv, BlankInput } from "hono/types";
 import { auth } from "../index";

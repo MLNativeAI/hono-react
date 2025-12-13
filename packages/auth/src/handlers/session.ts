@@ -1,6 +1,6 @@
-import { createOrganization, createOrganizationMember, getUserById, getUserOrganizations } from "@paperjet/db";
-import { logger } from "@paperjet/shared";
-import type { AuthContext } from "@paperjet/shared/types";
+import { createOrganization, createOrganizationMember, getUserById, getUserOrganizations } from "@repo/db";
+import { logger } from "@repo/shared";
+import type { AuthContext } from "@repo/shared/types";
 import type { Context } from "hono";
 import { auth } from "../auth";
 import { detectOrgNameFromEmail } from "../util/email";

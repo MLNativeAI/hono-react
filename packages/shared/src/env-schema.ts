@@ -27,7 +27,7 @@ export const envSchema = z.object({
 	FROM_EMAIL: z
 		.string()
 		.email("FROM_EMAIL must be a valid email address")
-		.default("noreply@getpaperjet.com"),
+		.default("noreply@getrepo.com"),
 	AXIOM_TOKEN: z.string().optional(),
 	AXIOM_DATASET: z.string().optional(),
 	// posthog

@@ -1,4 +1,4 @@
-import { logger } from "@paperjet/shared";
+import { logger } from "@repo/shared";
 import { COMMON_EMAIL_PROVIDERS } from "./const";
 
 export const detectOrgNameFromEmail = async (email: string): Promise<string> => {

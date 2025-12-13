@@ -1,15 +1,15 @@
 import { Section, Text } from "@react-email/components";
-import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
 import { emailConfig } from "../email-config";
+import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
 
 export interface InvitationEmailProps {
   url: string;
-  inviterName: string;
+  inviter: string;
   organizationName: string;
   role: string;
 }
 
-export const InvitationEmail = ({ url, inviterName: inviterName, organizationName, role }: InvitationEmailProps) => {
+export const InvitationEmail = ({ url, inviter, organizationName, role }: InvitationEmailProps) => {
   const previewText = `You've been invited to join ${organizationName} on ${emailConfig.serviceName}`;
 
   return (
@@ -23,7 +23,7 @@ export const InvitationEmail = ({ url, inviterName: inviterName, organizationNam
       <Text className="text-black text-[14px] leading-[24px]">Hi there,</Text>
 
       <Text className="text-black text-[14px] leading-[24px]">
-        <strong>{inviterName}</strong> has invited you to join <strong>{organizationName}</strong> on {emailConfig.serviceName} as a{" "}
+        <strong>{inviter}</strong> has invited you to join <strong>{organizationName}</strong> on {emailConfig.serviceName} as a{" "}
         <strong>{role}</strong>.
       </Text>
 
@@ -48,7 +48,7 @@ export const InvitationEmail = ({ url, inviterName: inviterName, organizationNam
 
 InvitationEmail.PreviewProps = {
   url: `https://${emailConfig.appUrl}/invite/abc123`,
-  inviterName: "John Doe",
+  inviter: "John Doe",
   organizationName: "Acme Corp",
   role: "admin",
 } as InvitationEmailProps;

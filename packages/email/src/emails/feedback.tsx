@@ -1,6 +1,6 @@
 import { Text } from "@react-email/components";
-import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
 import { emailConfig } from "../email-config";
+import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
 
 export const FeedbackEmail = () => {
   const previewText = `How's your ${emailConfig.serviceName} journey so far?`;
@@ -26,7 +26,7 @@ export const FeedbackEmail = () => {
         You can check out our public board to leave your feedback, vote for features and share your thoughts:
       </Text>
 
-      <ActionButton href="https://paperjet.userjot.com/">Visit our feedback board</ActionButton>
+      <ActionButton href="https://hono-react.userjot.com/">Visit our feedback board</ActionButton>
 
       <Text className="text-black text-[14px] leading-[24px]">
         Best regards, <br />

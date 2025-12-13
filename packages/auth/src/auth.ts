@@ -1,21 +1,18 @@
-import { handleCustomerDeletion } from "@paperjet/billing";
-import { doesAdminAccountExist } from "@paperjet/db";
-import { db } from "@paperjet/db/db";
-import * as schema from "@paperjet/db/schema";
+import { db } from "@repo/db/db";
+import * as schema from "@repo/db/schema";
 import {
   scheduleFeedbackEmail,
   sendInvitationEmail,
   sendMagicLink,
   sendPasswordResetEmail,
   sendWelcomeEmail,
-} from "@paperjet/engine";
-import { envVars, logger } from "@paperjet/shared";
-import { generateId, ID_PREFIXES } from "@paperjet/shared/id";
-import { betterAuth, type User } from "better-auth";
+} from "@repo/engine";
+import { envVars, logger } from "@repo/shared";
+import { generateId, ID_PREFIXES } from "@repo/shared/id";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { admin, apiKey, magicLink, organization } from "better-auth/plugins";
 import { getDefaultOrgOrCreate } from "./handlers/session";
-import { getPolarPlugin } from "./polar";
 
 export const auth = betterAuth({
   session: {
@@ -39,7 +36,6 @@ export const auth = betterAuth({
   user: {
     deleteUser: {
       enabled: true,
-      afterDelete: async (user) => handleCustomerDeletion(user.id),
     },
     additionalFields: {
       role: {
@@ -55,7 +51,6 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        before: beforeUserCreateHandler,
         after: async (user) => {
           await sendWelcomeEmail(user.email);
           await scheduleFeedbackEmail(user.email);
@@ -106,7 +101,6 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    getPolarPlugin(),
     admin({
       adminRoles: ["superadmin"],
     }),
@@ -147,26 +141,3 @@ export const auth = betterAuth({
   trustedOrigins: [envVars.BASE_URL],
 });
 
-export async function beforeUserCreateHandler(user: User) {
-  const adminAccountExists = await doesAdminAccountExist();
-  if (!adminAccountExists) {
-    // the first user registration will be the superadmin
-    return {
-      data: {
-        ...user,
-        id: generateId(ID_PREFIXES.user),
-        role: "superadmin",
-        emailVerified: true,
-        onboardingCompleted: false,
-      },
-    };
-  } else {
-    return {
-      data: {
-        ...user,
-        id: generateId(ID_PREFIXES.user),
-        onboardingCompleted: false,
-      },
-    };
-  }
-}
