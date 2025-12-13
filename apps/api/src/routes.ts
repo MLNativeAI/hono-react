@@ -4,7 +4,7 @@ import {
 	type auth,
 	authHandler,
 	userAuthMiddleware,
-} from "@paperjet/auth";
+} from "@repo/auth";
 import { envVars, logger } from "@repo/shared";
 import { Hono } from "hono";
 import { serveStatic } from "hono/bun";
