@@ -42,9 +42,7 @@ app.get("/api/health", async (c) => {
 	});
 });
 
-app
-	.basePath("/api")
-	.route("/internal", internalRouter)
+app.basePath("/api").route("/internal", internalRouter);
 
 app.get(
 	"/openapi",
@@ -91,6 +89,4 @@ if (process.env.NODE_ENV === "production") {
 	});
 }
 
-export type {
-	InternalRoutes,
-};
+export type { InternalRoutes };

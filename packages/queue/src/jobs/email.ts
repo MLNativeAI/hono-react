@@ -9,7 +9,7 @@ export const emailQueue = new Queue(QUEUE_NAMES.EMAIL, {
 	defaultJobOptions: {
 		removeOnComplete: 10,
 		removeOnFail: 5,
-		attempts: 2, // Expensive AI operations, limited retries
+		attempts: 2, 
 		backoff: {
 			type: "exponential" as const,
 			delay: 2000,
