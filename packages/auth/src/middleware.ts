@@ -1,4 +1,4 @@
-import { getAuthFromApiKey, getOrganizationActivePlan } from "@paperjet/db";
+import { getAuthFromApiKey, getOrganizationActivePlan } from "@repo/db";
 import { logger } from "@repo/shared";
 import type { AuthContext } from "@repo/shared/types";
 import type { Context, Next } from "hono";
