@@ -1,29 +1,54 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useRouterState } from "@tanstack/react-router";
+import { Fragment } from "react/jsx-runtime";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
+  const context = useRouterState({
+    select: (state) => {
+      const lastMatch = state.matches[state.matches.length - 1];
+      return lastMatch?.context || {};
+    },
+  });
+
+  const { breadcrumbs, useFullWidth } = context;
+  const root =
+    breadcrumbs.length > 0
+      ? breadcrumbs[0]
+      : {
+          label: "Default",
+          link: "/",
+        };
+  const elements = breadcrumbs.slice(1, undefined);
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
-      <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        <SidebarTrigger className="-ml-1" />
-        <Separator
-          orientation="vertical"
-          className="mx-2 data-[orientation=vertical]:h-4"
-        />
-        <h1 className="text-base font-medium">Files</h1>
-        <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="https://github.com/MLNativeAI/hono-react"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="dark:text-foreground"
-            >
-              GitHub
-            </a>
-          </Button>
-        </div>
+    <header
+      className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12
+        border-b"
+    >
+      <div className={cn("flex w-full items-center gap-1 px-4", !useFullWidth && "max-w-7xl mx-auto")}>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem className="hidden md:block">
+              <BreadcrumbLink href={root.link}>{root.label}</BreadcrumbLink>
+            </BreadcrumbItem>
+            {elements.map((elem) => {
+              return (
+                <Fragment key={elem.label}>
+                  <BreadcrumbSeparator className="hidden md:block" />
+                  <BreadcrumbItem key={elem.label}>
+                    <BreadcrumbLink href={elem.link}>{elem.label}</BreadcrumbLink>
+                  </BreadcrumbItem>
+                </Fragment>
+              );
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
     </header>
   );

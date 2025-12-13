@@ -1,38 +1,71 @@
+import { createFileRoute, Outlet, redirect, useRouterState } from "@tanstack/react-router";
+import z from "zod";
 import { AppSidebar } from "@/components/app-sidebar";
+import { OnboardingProvider } from "@/components/onboarding-provider";
+import TelemetryProvider from "@/components/providers/telemetry-provider";
 import { SiteHeader } from "@/components/site-header";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { authClient } from "@/lib/auth-client";
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { useQueryNotifications } from "@/hooks/use-query-notifications";
 
 export const Route = createFileRoute("/_app")({
+  validateSearch: z.object({
+    signedIn: z.boolean().optional(),
+    newUser: z.boolean().optional(),
+    invitationId: z.string().optional(),
+  }),
+  loaderDeps: ({ search: { invitationId } }) => ({ invitationId }),
+  loader: ({ deps: { invitationId } }) => {
+    if (invitationId) {
+      console.log("redirecting");
+      // TODO: we can either redirect to dedicated accept invite page or just handle that implicitly in the auth callback to create the org membership
+      throw redirect({
+        to: `/settings/organization`,
+      });
+    }
+  },
   component: PathlessLayoutComponent,
-  beforeLoad: async ({ location }) => {
-    const { data: session } = await authClient.getSession();
-    if (!session) {
+  beforeLoad: async ({ context }) => {
+    if (!context.serverInfo.adminAccountExists) {
+      throw redirect({
+        to: "/admin/setup",
+      });
+    }
+    if (!context.session) {
       throw redirect({
         to: "/auth/sign-in",
-        search: {
-          redirect: location.href,
-        },
       });
     }
   },
 });
 
 function PathlessLayoutComponent() {
+  useQueryNotifications();
+  const routerState = useRouterState();
+  const matches = routerState.matches as any[];
+
+  // Find the first route that has useFullWidth context
+  const fullWidthMatch = matches.find((match: any) => match.context?.useFullWidth === true);
+  const useFullWidth = fullWidthMatch?.context?.useFullWidth ?? false;
+
   return (
-    <SidebarProvider>
-      <AppSidebar variant="inset" />
-      <SidebarInset>
-        <SiteHeader />
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 items-center justify-center">
-              <Outlet />
+    <TelemetryProvider>
+      <OnboardingProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+              <SiteHeader />
+              {useFullWidth ? (
+                <Outlet />
+              ) : (
+                <div className="max-w-7xl mx-auto w-full">
+                  <Outlet />
+                </div>
+              )}
             </div>
-          </div>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+          </SidebarInset>
+        </SidebarProvider>
+      </OnboardingProvider>
+    </TelemetryProvider>
   );
 }

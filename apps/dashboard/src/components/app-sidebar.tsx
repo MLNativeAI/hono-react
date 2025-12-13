@@ -1,88 +1,101 @@
-import * as React from "react";
-import {
-  IconFile,
-  IconHelp,
-  IconSearch,
-  IconSettings,
-  IconUpload,
-} from "@tabler/icons-react";
-
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { Link } from "@tanstack/react-router";
+import { BookOpen, FileText, Play, Settings, Shield } from "lucide-react";
+import type * as React from "react";
+import { OrgSwitcher } from "@/components/org-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar";
-import { Route as UploadFileRoute } from "@/routes/_app.upload";
-import { Link } from "@tanstack/react-router";
-import { Route as IndexRoute } from "@/routes/_app.index";
+import { useAuthenticatedUser } from "@/hooks/use-user";
+import { NavUser } from "./nav-user";
+
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
-      title: "Upload file",
-      url: UploadFileRoute.to,
-      icon: IconUpload,
+      title: "Workflows",
+      url: "/",
+      icon: FileText,
+      tourId: "workflows",
     },
     {
-      title: "All files",
-      url: IndexRoute.to,
-      icon: IconFile,
+      title: "Executions",
+      url: "/executions",
+      icon: Play,
+      tourId: "executions",
     },
-  ],
-  navSecondary: [
     {
       title: "Settings",
-      url: "#",
-      icon: IconSettings,
+      url: "/settings/api-keys",
+      icon: Settings,
+      tourId: "settings",
     },
     {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
+      title: "Documentation",
+      url: "https://docs.hono-react.com/",
+      icon: BookOpen,
+      tourId: "docs",
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuthenticatedUser();
+
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <Link to={IndexRoute.to}>
-                <img src="/logo.svg" alt="Bun Logo" className="w-5 h-5" />
-                <span className="text-base font-semibold">Hono React</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+    <Sidebar {...props}>
+      <SidebarHeader></SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <OrgSwitcher />
+        <SidebarGroup>
+          <SidebarMenu>
+            {data.navMain.map((item) => {
+              const isExternal = item.url.startsWith("http");
+              const Icon = item.icon;
+              return (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    {isExternal ? (
+                      <a
+                        href={item.url}
+                        className="font-medium flex items-center gap-2"
+                        target="_blank"
+                        rel="noreferrer"
+                        {...(item.tourId ? { "data-tour": item.tourId } : {})}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </a>
+                    ) : (
+                      <Link
+                        to={item.url}
+                        activeProps={{
+                          className: "bg-sidebar-accent text-sidebar-accent-foreground",
+                        }}
+                        className="font-medium flex items-center gap-2"
+                        viewTransition={{ types: ["cross-fade"] }}
+                        {...(item.tourId ? { "data-tour": item.tourId } : {})}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    )}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
       </SidebarContent>
+      <SidebarRail />
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

@@ -140,4 +140,3 @@ export const auth = betterAuth({
   },
   trustedOrigins: [envVars.BASE_URL],
 });
-

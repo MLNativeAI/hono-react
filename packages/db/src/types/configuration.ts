@@ -1,3 +1,3 @@
 export type ServerInfo = {
-	authMode: string;
+  authMode: string;
 };

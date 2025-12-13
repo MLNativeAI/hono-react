@@ -1,8 +1,8 @@
 export type AuthContext = {
-	userId: string;
+  userId: string;
   organizationId: string;
-  activePlan: SubscriptionPlan
+  activePlan: SubscriptionPlan;
   scope: "user" | "superadmin";
 };
 
-export type SubscriptionPlan = 'free' | 'basic' | 'pro'
+export type SubscriptionPlan = "free" | "basic" | "pro";
