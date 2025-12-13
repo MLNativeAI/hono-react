@@ -1,6 +1,5 @@
 import { allWorkers } from "@repo/queue";
 import { envVars, flushPosthog, logger } from "@repo/shared";
-import "./instrumentation";
 import { app } from "./routes";
 
 const server = Bun.serve({

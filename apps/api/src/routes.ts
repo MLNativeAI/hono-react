@@ -37,7 +37,6 @@ app.on(["POST", "GET"], "/api/auth/*", authHandler);
 app.route("/ph", posthogProxy);
 
 app.get("/api/health", async (c) => {
-	logger.info({ endpoint: "/api/health", method: "GET" }, "health check");
 	return c.json({
 		status: "ok",
 	});
@@ -46,11 +45,6 @@ app.get("/api/health", async (c) => {
 app
 	.basePath("/api")
 	.route("/internal", internalRouter)
-	.route("/v1/admin", v1AdminRouter)
-	.route("/v1/billing", v1BillingRouter)
-	.route("/v1/api-keys", v1ApiKeyRouter)
-	.route("/v1/workflows", v1WorkflowRouter)
-	.route("/v1/executions", v1ExecutionRouter);
 
 app.get(
 	"/openapi",
@@ -98,10 +92,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export type {
-	AdminRoutes,
-	ApiKeysRoutes,
-	BillingRoutes,
-	ExecutionRoutes,
 	InternalRoutes,
-	WorkflowRoutes,
 };

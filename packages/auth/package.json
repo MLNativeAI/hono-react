@@ -13,7 +13,6 @@
   "dependencies": {
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
-    "@repo/billing": "workspace:*",
     "@repo/queue": "workspace:*",
     "@repo/shared": "workspace:*",
     "@polar-sh/better-auth": "^1.1.11",
