@@ -1,4 +1,4 @@
-import type { InternalRoutes } from "@paperjet/api/routes";
+import type { InternalRoutes } from "@repo/api/routes";
 import { queryOptions } from "@tanstack/react-query";
 import { hc } from "hono/client";
 
