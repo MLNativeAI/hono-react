@@ -36,6 +36,10 @@ This template bridges the gap between using a do-it-all framework and having to 
 - Efficient dependencies management with Turborepo
 - [Semantic release](https://github.com/semantic-release/semantic-release) pipeline with pull request support
 
+### Built-in job processor
+
+This template uses [BullMQ](https://docs.bullmq.io/) and [Redis](https://redis.io/) for handling long-running and scheduled operations. You  can use this for any workflows, long running tasks or scheduled tasks (ex. sending delayed emails)
+
 ## Other features
 
 - Pre-configured telemetry with Posthog and internal proxy for maximum delivarability
