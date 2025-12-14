@@ -1,0 +1,19 @@
+name: Branch Build & Deploy
+
+env:
+  DOCKER_REGISTRY: docker.io
+  CORE_DEV_IMAGE: mlnative/paperjet-dev
+
+permissions:
+  packages: write
+  id-token: write
+  contents: read
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  lint-typecheck:
+    uses: ./.github/workflows/lint-typecheck.yml

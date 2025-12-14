@@ -34,15 +34,27 @@ This template bridges the gap between using a do-it-all framework and having to 
 - Type-safe environment variables (not needed at build time)
 - Type-safe client-side navigation
 - Efficient dependencies management with Turborepo
+- [Semantic release](https://github.com/semantic-release/semantic-release) pipeline with pull request support
 
-## 📦 Template Features
+### Built-in job processor
 
-- Sign up & Sign in (extendible with additional BetterAuth providers)
-- Dashboard Layout with [Shadcn UI](https://ui.shadcn.com/)
-- File handling (upload, storage & retrieval)
-- Shared types between frontend and backend
+This template uses [BullMQ](https://docs.bullmq.io/) and [Redis](https://redis.io/) for handling long-running and scheduled operations. You  can use this for any workflows, long running tasks or scheduled tasks (ex. sending delayed emails)
 
-> File handling can be particularly annoying to set up, so we've purposefully included this in the "base" template.
+## Other features
+
+- Pre-configured telemetry with Posthog and internal proxy for maximum delivarability
+- Linting & Typechecking
+
+### Organization support
+
+The app handles multi-tenancy by default, including:
+
+- Org-level API Keys
+- Automatic invite handling
+- Invitation emails
+- Role support
+- Automatic org creation based on domain
+
 
 ## 🛠 Tech Stack
 
@@ -74,8 +86,8 @@ The project is organized as a Turborepo monorepo with the following structure:
 
 ```
 ├── apps/
-│   ├── frontend/  # React application
-│   └── backend/   # Hono API server
+│   ├── dashboard/  # React Vite application
+│   └── api/   # Hono API server
 ├── packages/
 │   └── shared/    # Shared types and utilities
 └── package.json   # Root workspace configuration

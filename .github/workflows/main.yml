@@ -1,0 +1,59 @@
+name: Main Branch Build & Deploy
+
+# Parameters
+env:
+  DOCKER_REGISTRY: docker.io
+  CORE_PROD_IMAGE: mlnative/hono-react
+
+permissions:
+  packages: write
+  id-token: write
+  contents: write
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-typecheck:
+    uses: ./.github/workflows/lint-typecheck.yml
+
+  release:
+    name: Semantic Release
+    needs: lint-typecheck
+    runs-on: ubuntu-latest
+    outputs:
+      new_release_version: ${{ steps.release.outputs.new_release_version }}
+      new_release_published: ${{ steps.release.outputs.new_release_published }} 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22 
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Semantic release
+        id: release
+        uses: cycjimmy/semantic-release-action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-core:
+    needs: release
+    uses: ./.github/workflows/build-core.yml
+    with:
+      registry: ${{ env.DOCKER_REGISTRY }}
+      image_name: ${{ env.CORE_PROD_IMAGE }}
+      image_tag: ${{ needs.release.outputs.new_release_version }}
+    secrets: inherit
+

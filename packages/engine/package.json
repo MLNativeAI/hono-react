@@ -1,0 +1,23 @@
+{
+  "name": "@repo/engine",
+  "exports": {
+    ".": "./index.ts",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "lint": "biome check --write",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@repo/db": "workspace:*",
+    "@repo/shared": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "zod": "^4.0.0"
+  }
+}
