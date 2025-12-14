@@ -42,7 +42,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useRevokeApiKey } from "@/hooks/use-api-keys";
-import { formatDate } from "@/lib/utils/date";
+import { formatDate } from "@/lib/date";
 
 interface ApiKeysListProps {
   apiKeys: ApiKey[];
