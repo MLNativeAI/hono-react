@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useUserInvitations } from "@/hooks/use-user-invitations";
-import { renderTimestamp } from "@/lib/utils/date";
+import { renderTimestamp } from "@/lib/date";
 
 export default function UserInvitations() {
   const { invitations, isLoading, acceptInvitation, rejectInvitation } = useUserInvitations();

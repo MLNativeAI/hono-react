@@ -1,4 +1,4 @@
-import type { BillingRoutes } from "@paperjet/api/routes";
+import type { BillingRoutes } from "@repo/api/routes";
 import { useQuery } from "@tanstack/react-query";
 import { useRouteContext } from "@tanstack/react-router";
 import { hc } from "hono/client";

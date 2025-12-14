@@ -19,16 +19,10 @@ import { NavUser } from "./nav-user";
 const data = {
   navMain: [
     {
-      title: "Workflows",
+      title: "Home",
       url: "/",
       icon: FileText,
-      tourId: "workflows",
-    },
-    {
-      title: "Executions",
-      url: "/executions",
-      icon: Play,
-      tourId: "executions",
+      tourId: "home",
     },
     {
       title: "Settings",

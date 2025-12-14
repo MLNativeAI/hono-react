@@ -69,9 +69,9 @@ export async function sendFeedbackEmail(email: string) {
   const emailHtml = await render(FeedbackEmail());
   await sendEmailHandler({
     to: [email],
-    subject: "How's your PaperJet experience so far?",
+    subject: "How's your Hono-React experience so far?",
     html: emailHtml,
-    replyTo: "lukasz@getpaperjet.com",
+    replyTo: "lukasz@mlnative.com",
   });
 }
 

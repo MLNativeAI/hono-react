@@ -1,5 +1,5 @@
-import type { ExecutionRoutes } from "@paperjet/api/routes";
-import type { ExecutionStatusResponse } from "@paperjet/engine/types";
+import type { ExecutionRoutes } from "@repo/api/routes";
+import type { ExecutionStatusResponse } from "@repo/engine/types";
 import { useQuery } from "@tanstack/react-query";
 import { hc } from "hono/client";
 import { useState } from "react";

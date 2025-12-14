@@ -9,6 +9,7 @@ import { openAPIRouteHandler } from "hono-openapi";
 import { corsMiddleware } from "./lib/cors";
 import { posthogProxy } from "./lib/posthog-proxy";
 import { type InternalRoutes, internalRouter } from "./routes/internal";
+import { type ApiKeysRoutes, v1ApiKeyRouter } from "./routes/v1/api-keys";
 
 export const app = new Hono<{
   Variables: {
@@ -37,7 +38,7 @@ app.get("/api/health", async (c) => {
   });
 });
 
-app.basePath("/api").route("/internal", internalRouter);
+app.basePath("/api").route("/internal", internalRouter).route("/v1/api-keys", v1ApiKeyRouter);
 
 app.get(
   "/openapi",
@@ -85,3 +86,4 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export type { InternalRoutes };
+export type { ApiKeysRoutes };

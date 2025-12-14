@@ -8,6 +8,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { capitalizeFirstLetter } from "better-auth";
 import { formatRelative } from "date-fns";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +22,6 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { isOrgInvitation, isOrgMember, type OrgMemberInvitation } from "@/hooks/use-org-members";
 import { authClient } from "@/lib/auth-client";
-import { capitalizeFirstLetter } from "@/lib/utils/string";
 
 function InviteOrJoinDate({ invOrMember }: { invOrMember: OrgMemberInvitation }) {
   if (isOrgMember(invOrMember)) {

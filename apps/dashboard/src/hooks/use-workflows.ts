@@ -1,5 +1,5 @@
-import type { WorkflowRoutes } from "@paperjet/api/routes";
-import type { Workflow } from "@paperjet/engine/types";
+import type { WorkflowRoutes } from "@repo/api/routes";
+import type { Workflow } from "@repo/engine/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";
 import { toast } from "sonner";

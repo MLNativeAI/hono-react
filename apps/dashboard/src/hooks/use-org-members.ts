@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import type { InvitationStatus } from "better-auth/plugins/organization";
 import { authClient } from "@/lib/auth-client";
-import { getInvitationSendDate } from "@/lib/utils/date";
+import { getInvitationSendDate } from "@/lib/date";
 
 export type OrgMember = {
   id: string;

@@ -1,4 +1,4 @@
-import type { WorkflowExecutionData } from "@paperjet/db/types";
+import type { WorkflowExecutionData } from "@repo/db/types";
 import { useQuery } from "@tanstack/react-query";
 import { getExecutionById } from "@/lib/api/executions";
 

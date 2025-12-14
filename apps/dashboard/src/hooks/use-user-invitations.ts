@@ -1,5 +1,5 @@
-import type { InternalRoutes } from "@paperjet/api/routes";
-import type { UserInvitation } from "@paperjet/auth/types";
+import type { InternalRoutes } from "@repo/api/routes";
+import type { UserInvitation } from "@repo/auth/types";
 import { usePostHog } from "@posthog/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";

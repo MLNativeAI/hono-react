@@ -1,5 +1,5 @@
-import type { AdminRoutes } from "@paperjet/api/routes";
-import type { ConnectionValidationResult, ModelConfigParams } from "@paperjet/engine/types";
+import type { AdminRoutes } from "@repo/api/routes";
+import type { ConnectionValidationResult, ModelConfigParams } from "@repo/engine/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";
 
