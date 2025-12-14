@@ -1,11 +1,11 @@
 
 # Use the official Bun image
-FROM oven/bun:1.3.0 AS base
+FROM oven/bun:1.3.4 AS base
 WORKDIR /usr/src/app
 
 # Install turbo globally with cache mount
 RUN --mount=type=cache,target=/root/.bun/install/cache \
-  bun install -g turbo@2.6.1
+  bun install -g turbo@2.6.3
 
 # Pruner stage - create minimal workspace for API, dashboard, and engine
 FROM base AS pruner

@@ -14,13 +14,13 @@
     "db:push": "turbo db:push"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.1",
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@biomejs/biome": "^2.3.8",
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
-    "turbo": "^2.6.1"
+    "turbo": "^2.6.3"
   },
   "config": {
     "commitizen": {
