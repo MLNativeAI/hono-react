@@ -1,5 +1,5 @@
 import type { ApiKeysRoutes } from "@repo/api/routes";
-import type { ApiKey } from "@repo/engine/types";
+import type { ApiKey } from "@repo/db/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";
 

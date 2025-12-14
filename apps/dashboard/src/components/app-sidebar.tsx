@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, FileText, Play, Settings, Shield } from "lucide-react";
+import { BookOpen, FileText, Settings } from "lucide-react";
 import type * as React from "react";
 import { OrgSwitcher } from "@/components/org-switcher";
 import {
@@ -13,7 +13,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { useAuthenticatedUser } from "@/hooks/use-user";
 import { NavUser } from "./nav-user";
 
 const data = {
@@ -40,8 +39,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useAuthenticatedUser();
-
   return (
     <Sidebar {...props}>
       <SidebarHeader></SidebarHeader>
