@@ -35,12 +35,23 @@ This template bridges the gap between using a do-it-all framework and having to 
 - Type-safe client-side navigation
 - Efficient dependencies management with Turborepo
 
-## 📦 Template Features
+## All Features
 
 - Sign up & Sign in (extendible with additional BetterAuth providers)
 - Dashboard Layout with [Shadcn UI](https://ui.shadcn.com/)
-- File handling (upload, storage & retrieval)
 - Shared types between frontend and backend
+- Pre-configured telemetry with Posthog and internal proxy for maximum delivarability
+- Linting & Typechecking
+
+### Organization support
+
+The app handles multi-tenancy by default, including:
+
+- Org-level API Keys
+- Automatic invite handling
+- Invitation emails
+- Role support
+- Automatic org creation based on domain
 
 > File handling can be particularly annoying to set up, so we've purposefully included this in the "base" template.
 
