@@ -1,6 +1,6 @@
+import { usePostHog } from "@posthog/react";
 import type { InternalRoutes } from "@repo/api/routes";
 import type { UserInvitation } from "@repo/auth/types";
-import { usePostHog } from "@posthog/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { hc } from "hono/client";
 import { toast } from "sonner";

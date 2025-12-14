@@ -8,261 +8,261 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as AppRouteImport } from './routes/_app'
-import { Route as AuthRouteRouteImport } from './routes/auth/route'
-import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
-import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
-import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
-import { Route as AuthFinishPasswordResetRouteImport } from './routes/auth/finish-password-reset'
-import { Route as AppSettingsRouteImport } from './routes/_app/settings'
-import { Route as AppAccountRouteImport } from './routes/_app/account'
-import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
-import { Route as AppSettingsOrganizationRouteImport } from './routes/_app/settings/organization'
-import { Route as AppSettingsApiKeysRouteImport } from './routes/_app/settings/api-keys'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as AppRouteImport } from "./routes/_app";
+import { Route as AppAccountRouteImport } from "./routes/_app/account";
+import { Route as AppIndexRouteImport } from "./routes/_app/index";
+import { Route as AppSettingsRouteImport } from "./routes/_app/settings";
+import { Route as AppSettingsApiKeysRouteImport } from "./routes/_app/settings/api-keys";
+import { Route as AppSettingsIndexRouteImport } from "./routes/_app/settings/index";
+import { Route as AppSettingsOrganizationRouteImport } from "./routes/_app/settings/organization";
+import { Route as AuthFinishPasswordResetRouteImport } from "./routes/auth/finish-password-reset";
+import { Route as AuthResetPasswordRouteImport } from "./routes/auth/reset-password";
+import { Route as AuthRouteRouteImport } from "./routes/auth/route";
+import { Route as AuthSignInRouteImport } from "./routes/auth/sign-in";
+import { Route as AuthSignUpRouteImport } from "./routes/auth/sign-up";
 
 const AppRoute = AppRouteImport.update({
-  id: '/_app',
+  id: "/_app",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+  id: "/auth",
+  path: "/auth",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AppIndexRoute = AppIndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => AppRoute,
-} as any)
+} as any);
 const AuthSignUpRoute = AuthSignUpRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
+  id: "/sign-up",
+  path: "/sign-up",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthSignInRoute = AuthSignInRouteImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
+  id: "/sign-in",
+  path: "/sign-in",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
+  id: "/reset-password",
+  path: "/reset-password",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AuthFinishPasswordResetRoute = AuthFinishPasswordResetRouteImport.update({
-  id: '/finish-password-reset',
-  path: '/finish-password-reset',
+  id: "/finish-password-reset",
+  path: "/finish-password-reset",
   getParentRoute: () => AuthRouteRoute,
-} as any)
+} as any);
 const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+  id: "/settings",
+  path: "/settings",
   getParentRoute: () => AppRoute,
-} as any)
+} as any);
 const AppAccountRoute = AppAccountRouteImport.update({
-  id: '/account',
-  path: '/account',
+  id: "/account",
+  path: "/account",
   getParentRoute: () => AppRoute,
-} as any)
+} as any);
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => AppSettingsRoute,
-} as any)
+} as any);
 const AppSettingsOrganizationRoute = AppSettingsOrganizationRouteImport.update({
-  id: '/organization',
-  path: '/organization',
+  id: "/organization",
+  path: "/organization",
   getParentRoute: () => AppSettingsRoute,
-} as any)
+} as any);
 const AppSettingsApiKeysRoute = AppSettingsApiKeysRouteImport.update({
-  id: '/api-keys',
-  path: '/api-keys',
+  id: "/api-keys",
+  path: "/api-keys",
   getParentRoute: () => AppSettingsRoute,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/auth': typeof AuthRouteRouteWithChildren
-  '/account': typeof AppAccountRoute
-  '/settings': typeof AppSettingsRouteWithChildren
-  '/auth/finish-password-reset': typeof AuthFinishPasswordResetRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/auth/sign-up': typeof AuthSignUpRoute
-  '/': typeof AppIndexRoute
-  '/settings/api-keys': typeof AppSettingsApiKeysRoute
-  '/settings/organization': typeof AppSettingsOrganizationRoute
-  '/settings/': typeof AppSettingsIndexRoute
+  "/auth": typeof AuthRouteRouteWithChildren;
+  "/account": typeof AppAccountRoute;
+  "/settings": typeof AppSettingsRouteWithChildren;
+  "/auth/finish-password-reset": typeof AuthFinishPasswordResetRoute;
+  "/auth/reset-password": typeof AuthResetPasswordRoute;
+  "/auth/sign-in": typeof AuthSignInRoute;
+  "/auth/sign-up": typeof AuthSignUpRoute;
+  "/": typeof AppIndexRoute;
+  "/settings/api-keys": typeof AppSettingsApiKeysRoute;
+  "/settings/organization": typeof AppSettingsOrganizationRoute;
+  "/settings/": typeof AppSettingsIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/auth': typeof AuthRouteRouteWithChildren
-  '/account': typeof AppAccountRoute
-  '/auth/finish-password-reset': typeof AuthFinishPasswordResetRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/auth/sign-up': typeof AuthSignUpRoute
-  '/': typeof AppIndexRoute
-  '/settings/api-keys': typeof AppSettingsApiKeysRoute
-  '/settings/organization': typeof AppSettingsOrganizationRoute
-  '/settings': typeof AppSettingsIndexRoute
+  "/auth": typeof AuthRouteRouteWithChildren;
+  "/account": typeof AppAccountRoute;
+  "/auth/finish-password-reset": typeof AuthFinishPasswordResetRoute;
+  "/auth/reset-password": typeof AuthResetPasswordRoute;
+  "/auth/sign-in": typeof AuthSignInRoute;
+  "/auth/sign-up": typeof AuthSignUpRoute;
+  "/": typeof AppIndexRoute;
+  "/settings/api-keys": typeof AppSettingsApiKeysRoute;
+  "/settings/organization": typeof AppSettingsOrganizationRoute;
+  "/settings": typeof AppSettingsIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/auth': typeof AuthRouteRouteWithChildren
-  '/_app': typeof AppRouteWithChildren
-  '/_app/account': typeof AppAccountRoute
-  '/_app/settings': typeof AppSettingsRouteWithChildren
-  '/auth/finish-password-reset': typeof AuthFinishPasswordResetRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
-  '/auth/sign-in': typeof AuthSignInRoute
-  '/auth/sign-up': typeof AuthSignUpRoute
-  '/_app/': typeof AppIndexRoute
-  '/_app/settings/api-keys': typeof AppSettingsApiKeysRoute
-  '/_app/settings/organization': typeof AppSettingsOrganizationRoute
-  '/_app/settings/': typeof AppSettingsIndexRoute
+  __root__: typeof rootRouteImport;
+  "/auth": typeof AuthRouteRouteWithChildren;
+  "/_app": typeof AppRouteWithChildren;
+  "/_app/account": typeof AppAccountRoute;
+  "/_app/settings": typeof AppSettingsRouteWithChildren;
+  "/auth/finish-password-reset": typeof AuthFinishPasswordResetRoute;
+  "/auth/reset-password": typeof AuthResetPasswordRoute;
+  "/auth/sign-in": typeof AuthSignInRoute;
+  "/auth/sign-up": typeof AuthSignUpRoute;
+  "/_app/": typeof AppIndexRoute;
+  "/_app/settings/api-keys": typeof AppSettingsApiKeysRoute;
+  "/_app/settings/organization": typeof AppSettingsOrganizationRoute;
+  "/_app/settings/": typeof AppSettingsIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/auth'
-    | '/account'
-    | '/settings'
-    | '/auth/finish-password-reset'
-    | '/auth/reset-password'
-    | '/auth/sign-in'
-    | '/auth/sign-up'
-    | '/'
-    | '/settings/api-keys'
-    | '/settings/organization'
-    | '/settings/'
-  fileRoutesByTo: FileRoutesByTo
+    | "/auth"
+    | "/account"
+    | "/settings"
+    | "/auth/finish-password-reset"
+    | "/auth/reset-password"
+    | "/auth/sign-in"
+    | "/auth/sign-up"
+    | "/"
+    | "/settings/api-keys"
+    | "/settings/organization"
+    | "/settings/";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/auth'
-    | '/account'
-    | '/auth/finish-password-reset'
-    | '/auth/reset-password'
-    | '/auth/sign-in'
-    | '/auth/sign-up'
-    | '/'
-    | '/settings/api-keys'
-    | '/settings/organization'
-    | '/settings'
+    | "/auth"
+    | "/account"
+    | "/auth/finish-password-reset"
+    | "/auth/reset-password"
+    | "/auth/sign-in"
+    | "/auth/sign-up"
+    | "/"
+    | "/settings/api-keys"
+    | "/settings/organization"
+    | "/settings";
   id:
-    | '__root__'
-    | '/auth'
-    | '/_app'
-    | '/_app/account'
-    | '/_app/settings'
-    | '/auth/finish-password-reset'
-    | '/auth/reset-password'
-    | '/auth/sign-in'
-    | '/auth/sign-up'
-    | '/_app/'
-    | '/_app/settings/api-keys'
-    | '/_app/settings/organization'
-    | '/_app/settings/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/auth"
+    | "/_app"
+    | "/_app/account"
+    | "/_app/settings"
+    | "/auth/finish-password-reset"
+    | "/auth/reset-password"
+    | "/auth/sign-in"
+    | "/auth/sign-up"
+    | "/_app/"
+    | "/_app/settings/api-keys"
+    | "/_app/settings/organization"
+    | "/_app/settings/";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  AppRoute: typeof AppRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren;
+  AppRoute: typeof AppRouteWithChildren;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/_app': {
-      id: '/_app'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_app/': {
-      id: '/_app/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/auth/sign-up': {
-      id: '/auth/sign-up'
-      path: '/sign-up'
-      fullPath: '/auth/sign-up'
-      preLoaderRoute: typeof AuthSignUpRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/sign-in': {
-      id: '/auth/sign-in'
-      path: '/sign-in'
-      fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof AuthSignInRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/reset-password': {
-      id: '/auth/reset-password'
-      path: '/reset-password'
-      fullPath: '/auth/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/finish-password-reset': {
-      id: '/auth/finish-password-reset'
-      path: '/finish-password-reset'
-      fullPath: '/auth/finish-password-reset'
-      preLoaderRoute: typeof AuthFinishPasswordResetRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_app/settings': {
-      id: '/_app/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/account': {
-      id: '/_app/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AppAccountRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/settings/': {
-      id: '/_app/settings/'
-      path: '/'
-      fullPath: '/settings/'
-      preLoaderRoute: typeof AppSettingsIndexRouteImport
-      parentRoute: typeof AppSettingsRoute
-    }
-    '/_app/settings/organization': {
-      id: '/_app/settings/organization'
-      path: '/organization'
-      fullPath: '/settings/organization'
-      preLoaderRoute: typeof AppSettingsOrganizationRouteImport
-      parentRoute: typeof AppSettingsRoute
-    }
-    '/_app/settings/api-keys': {
-      id: '/_app/settings/api-keys'
-      path: '/api-keys'
-      fullPath: '/settings/api-keys'
-      preLoaderRoute: typeof AppSettingsApiKeysRouteImport
-      parentRoute: typeof AppSettingsRoute
-    }
+    "/_app": {
+      id: "/_app";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof AppRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/auth": {
+      id: "/auth";
+      path: "/auth";
+      fullPath: "/auth";
+      preLoaderRoute: typeof AuthRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_app/": {
+      id: "/_app/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof AppIndexRouteImport;
+      parentRoute: typeof AppRoute;
+    };
+    "/auth/sign-up": {
+      id: "/auth/sign-up";
+      path: "/sign-up";
+      fullPath: "/auth/sign-up";
+      preLoaderRoute: typeof AuthSignUpRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/sign-in": {
+      id: "/auth/sign-in";
+      path: "/sign-in";
+      fullPath: "/auth/sign-in";
+      preLoaderRoute: typeof AuthSignInRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/reset-password": {
+      id: "/auth/reset-password";
+      path: "/reset-password";
+      fullPath: "/auth/reset-password";
+      preLoaderRoute: typeof AuthResetPasswordRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/auth/finish-password-reset": {
+      id: "/auth/finish-password-reset";
+      path: "/finish-password-reset";
+      fullPath: "/auth/finish-password-reset";
+      preLoaderRoute: typeof AuthFinishPasswordResetRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
+    "/_app/settings": {
+      id: "/_app/settings";
+      path: "/settings";
+      fullPath: "/settings";
+      preLoaderRoute: typeof AppSettingsRouteImport;
+      parentRoute: typeof AppRoute;
+    };
+    "/_app/account": {
+      id: "/_app/account";
+      path: "/account";
+      fullPath: "/account";
+      preLoaderRoute: typeof AppAccountRouteImport;
+      parentRoute: typeof AppRoute;
+    };
+    "/_app/settings/": {
+      id: "/_app/settings/";
+      path: "/";
+      fullPath: "/settings/";
+      preLoaderRoute: typeof AppSettingsIndexRouteImport;
+      parentRoute: typeof AppSettingsRoute;
+    };
+    "/_app/settings/organization": {
+      id: "/_app/settings/organization";
+      path: "/organization";
+      fullPath: "/settings/organization";
+      preLoaderRoute: typeof AppSettingsOrganizationRouteImport;
+      parentRoute: typeof AppSettingsRoute;
+    };
+    "/_app/settings/api-keys": {
+      id: "/_app/settings/api-keys";
+      path: "/api-keys";
+      fullPath: "/settings/api-keys";
+      preLoaderRoute: typeof AppSettingsApiKeysRouteImport;
+      parentRoute: typeof AppSettingsRoute;
+    };
   }
 }
 
 interface AuthRouteRouteChildren {
-  AuthFinishPasswordResetRoute: typeof AuthFinishPasswordResetRoute
-  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
-  AuthSignInRoute: typeof AuthSignInRoute
-  AuthSignUpRoute: typeof AuthSignUpRoute
+  AuthFinishPasswordResetRoute: typeof AuthFinishPasswordResetRoute;
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute;
+  AuthSignInRoute: typeof AuthSignInRoute;
+  AuthSignUpRoute: typeof AuthSignUpRoute;
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -270,46 +270,40 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
-}
+};
 
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(AuthRouteRouteChildren);
 
 interface AppSettingsRouteChildren {
-  AppSettingsApiKeysRoute: typeof AppSettingsApiKeysRoute
-  AppSettingsOrganizationRoute: typeof AppSettingsOrganizationRoute
-  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
+  AppSettingsApiKeysRoute: typeof AppSettingsApiKeysRoute;
+  AppSettingsOrganizationRoute: typeof AppSettingsOrganizationRoute;
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute;
 }
 
 const AppSettingsRouteChildren: AppSettingsRouteChildren = {
   AppSettingsApiKeysRoute: AppSettingsApiKeysRoute,
   AppSettingsOrganizationRoute: AppSettingsOrganizationRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
-}
+};
 
-const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
-  AppSettingsRouteChildren,
-)
+const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(AppSettingsRouteChildren);
 
 interface AppRouteChildren {
-  AppAccountRoute: typeof AppAccountRoute
-  AppSettingsRoute: typeof AppSettingsRouteWithChildren
-  AppIndexRoute: typeof AppIndexRoute
+  AppAccountRoute: typeof AppAccountRoute;
+  AppSettingsRoute: typeof AppSettingsRouteWithChildren;
+  AppIndexRoute: typeof AppIndexRoute;
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAccountRoute: AppAccountRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
-}
+};
 
-const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AppRoute: AppRouteWithChildren,
-}
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+};
+export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>();
