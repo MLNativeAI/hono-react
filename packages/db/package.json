@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "drizzle-kit": "^0.31.4",
-    "drizzle-orm": "^0.44.5",
+    "drizzle-orm": "catalog:",
     "pg": "^8.15.6",
     "postgres": "^3.4.5",
-    "zod": "^4.0.0"
+    "zod": "catalog:"
   }
 }
