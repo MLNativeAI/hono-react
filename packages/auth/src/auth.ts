@@ -60,12 +60,12 @@ export const auth = betterAuth({
     session: {
       create: {
         before: async (session) => {
-          logger.info(`Creating session for user ${session.userId}`);
+          logger.debug(`Creating session for user ${session.userId}`);
           const organizationId = await getDefaultOrgOrCreate(session.userId);
           if (!organizationId) {
             throw new Error("Organization not found");
           }
-          logger.info(`Setting activeOrganizationId to ${organizationId} for user ${session.userId}`);
+          logger.debug(`Setting activeOrganizationId to ${organizationId} for user ${session.userId}`);
           return {
             data: {
               ...session,
