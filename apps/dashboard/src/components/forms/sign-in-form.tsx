@@ -1,10 +1,10 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
+import { EmailPasswordForm } from "@/components/forms/email-password-form";
+import MagicLinkForm from "@/components/forms/magic-link-form";
+import { SocialForm } from "@/components/forms/social-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { EmailPasswordForm } from "./forms/email-password-form";
-import MagicLinkForm from "./forms/magic-link-form";
-import { SocialForm } from "./forms/social-form";
 
 export function SignInForm({
   className,
