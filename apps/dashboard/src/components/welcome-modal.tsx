@@ -14,22 +14,16 @@ interface WelcomeModalProps {
   isOpen: boolean;
   onClose: () => void;
   onStartTour: () => void;
-  user: any; // Using any for now due to type sync issues
 }
 
-export function WelcomeModal({ isOpen, onClose, onStartTour, user }: WelcomeModalProps) {
-  const isAdmin = user?.role === "superadmin" || user?.role === "admin";
-  const tourType = isAdmin ? "Admin Tour" : "User Tour";
-
+export function WelcomeModal({ isOpen, onClose, onStartTour }: WelcomeModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Welcome to PaperJet! 🎉</DialogTitle>
+          <DialogTitle>Welcome to Hono-React! 🎉</DialogTitle>
           <DialogDescription>
-            {isAdmin
-              ? "You're all set up as an admin! Let's walk you through your workspace and show you how to manage your team and workflows."
-              : "You're all set up! Let's walk you through your workspace and show you how to create and manage your workflows."}
+            "You're all set up! Let's walk you through your workspace and show you how you can do stuff in the app"
           </DialogDescription>
         </DialogHeader>
 
@@ -54,7 +48,7 @@ export function WelcomeModal({ isOpen, onClose, onStartTour, user }: WelcomeModa
           <Button variant="outline" onClick={onClose}>
             Skip
           </Button>
-          <Button onClick={onStartTour}>Start {tourType}</Button>
+          <Button onClick={onStartTour}>Start tour</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

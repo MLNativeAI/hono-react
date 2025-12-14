@@ -1,9 +1,8 @@
-import { createFileRoute, Outlet, redirect, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import z from "zod";
 import { AppSidebar } from "@/components/app-sidebar";
 import { OnboardingProvider } from "@/components/onboarding-provider";
 import TelemetryProvider from "@/components/providers/telemetry-provider";
-import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useQueryNotifications } from "@/hooks/use-query-notifications";
 
@@ -35,12 +34,6 @@ export const Route = createFileRoute("/_app")({
 
 function PathlessLayoutComponent() {
   useQueryNotifications();
-  const routerState = useRouterState();
-  const matches = routerState.matches as any[];
-
-  // Find the first route that has useFullWidth context
-  const fullWidthMatch = matches.find((match: any) => match.context?.useFullWidth === true);
-  const useFullWidth = fullWidthMatch?.context?.useFullWidth ?? false;
 
   return (
     <TelemetryProvider>
@@ -49,14 +42,9 @@ function PathlessLayoutComponent() {
           <AppSidebar />
           <SidebarInset>
             <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-              <SiteHeader />
-              {useFullWidth ? (
+              <div className="max-w-7xl mx-auto w-full">
                 <Outlet />
-              ) : (
-                <div className="max-w-7xl mx-auto w-full">
-                  <Outlet />
-                </div>
-              )}
+              </div>
             </div>
           </SidebarInset>
         </SidebarProvider>
