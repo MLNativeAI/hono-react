@@ -16,7 +16,7 @@ export function Onboarding({ run, onTourComplete }: OnboardingProps) {
     {
       target: "body",
       content: "Would you like an express tour of the app? It literally takes 1 minute.",
-      title: "Welcome to PaperJet!",
+      title: "Welcome to Hono-React!",
       placement: "center",
       // disableBeacon: true,
     },

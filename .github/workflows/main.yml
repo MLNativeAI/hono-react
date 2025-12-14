@@ -3,7 +3,7 @@ name: Main Branch Build & Deploy
 # Parameters
 env:
   DOCKER_REGISTRY: docker.io
-  CORE_PROD_IMAGE: mlnative/paperjet
+  CORE_PROD_IMAGE: mlnative/hono-react
 
 permissions:
   packages: write
@@ -57,17 +57,3 @@ jobs:
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets: inherit
 
-  deploy-core:
-    name: Deploy Core to Production
-    needs: [build-core, release]
-    if: needs.release.outputs.new_release_published == 'true'
-    uses: ./.github/workflows/deploy.yml
-    with:
-      registry: ${{ env.DOCKER_REGISTRY }}
-      image_name: ${{ env.CORE_PROD_IMAGE }}
-      image_tag: ${{ needs.release.outputs.new_release_version }}
-      environment: production
-    secrets:
-      coolify_url: ${{ secrets.COOLIFY_PROD_URL }}
-      coolify_app_uuid: ${{ secrets.COOLIFY_PROD_APP_UUID }}
-      coolify_token: ${{ secrets.COOLIFY_PROD_TOKEN }}

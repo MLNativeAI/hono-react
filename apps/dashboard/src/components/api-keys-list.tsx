@@ -1,4 +1,4 @@
-import type { ApiKey } from "@paperjet/engine/types";
+import type { ApiKey } from "@repo/db/types";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -184,7 +184,7 @@ export function ApiKeysList({ apiKeys, onRefresh }: ApiKeysListProps) {
             <div className="text-center">
               <h3 className="text-lg font-semibold">No API Keys</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Create your first API key to start using the PaperJet API
+                Create your first API key to start using the Hono-React API
               </p>
             </div>
             <Button onClick={() => setCreateDialogOpen(true)}>
@@ -329,7 +329,6 @@ export function ApiKeysList({ apiKeys, onRefresh }: ApiKeysListProps) {
         </div>
       </div>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>

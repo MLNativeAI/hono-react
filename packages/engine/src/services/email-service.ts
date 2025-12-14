@@ -97,7 +97,7 @@ export async function sendMagicLink({ email, url }: { email: string; url: string
 
   await sendEmailHandler({
     to: email,
-    subject: "Sign in to PaperJet",
+    subject: "Sign in to Hono-React",
     html: emailHtml,
   });
 }
@@ -135,7 +135,7 @@ export async function sendInvitationEmail({
 
   await sendEmailHandler({
     to: email,
-    subject: `You've been invited to join ${organization.name} on PaperJet`,
+    subject: `You've been invited to join ${organization.name} on Hono-React`,
     html: emailHtml,
   });
 }

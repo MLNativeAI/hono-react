@@ -58,7 +58,7 @@ export function CreateApiKeyDialog({ open, onOpenChange, onSuccess }: CreateApiK
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create API Key</DialogTitle>
-          <DialogDescription>Create a new API key to access the PaperJet API programmatically.</DialogDescription>
+          <DialogDescription>Create a new API key to access the Hono-React API programmatically.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">

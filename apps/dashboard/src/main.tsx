@@ -23,13 +23,6 @@ const router = createRouter({
     session: undefined,
     user: undefined,
     serverInfo: undefined,
-    breadcrumbs: [
-      {
-        label: "PaperJet",
-        link: "/",
-      },
-    ],
-    useFullWidth: false,
   },
   scrollRestoration: true,
   defaultPreload: "intent",
