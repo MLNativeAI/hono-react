@@ -8,18 +8,30 @@ import { getApiBaseUrl } from "./util";
 
 const resend = envVars.RESEND_API_KEY ? new Resend(envVars.RESEND_API_KEY) : null;
 
-export async function sendInvitationEmail({ email, inviterName, organizationName, role, invitationId }: { email: string; inviterName: string; organizationName: string; role: string; invitationId: string; }): Promise<void> {
+export async function sendInvitationEmail({
+  email,
+  inviter,
+  organizationName,
+  role,
+  invitationId,
+}: {
+  email: string;
+  inviter: string;
+  organizationName: string;
+  role: string;
+  invitationId: string;
+}): Promise<void> {
+  const url = `${getApiBaseUrl()}/api/internal/accept-invitation?invitationId=${invitationId}`;
   if (!resend) {
-    logger.info(`Invitation link for ${email}: ${envVars.BASE_URL}/accept-invitation/${invitationId}`);
+    logger.warn({ email, url }, `Resend not configured, not sending link`);
     return;
   }
 
-  const url = `${getApiBaseUrl()}/api/internal/accept-invitation?invitationId=${invitationId}`;
   logger.info({ email, url }, `Sending invitation link to ${email}: ${url}`);
   const emailHtml = await render(
     InvitationEmail({
       url,
-      inviterName,
+      inviter,
       organizationName,
       role,
     }),
@@ -33,6 +45,11 @@ export async function sendInvitationEmail({ email, inviterName, organizationName
 }
 
 export async function sendPasswordResetEmail(targetEmail: string, targetUsername: string, resetUrl: string) {
+  if (!resend) {
+    logger.warn(`Resend not configured, password reset link:  ${targetEmail}: ${resetUrl}`);
+    return;
+  }
+
   logger.info(`Sending password reset link to ${targetEmail}: ${resetUrl}`);
 
   const emailHtml = await render(ResetPasswordEmailTemplate({ resetUrl: resetUrl, username: targetUsername }));
@@ -56,7 +73,7 @@ async function sendEmailHandler({
   replyTo?: string;
 }) {
   if (!resend) {
-    logger.info(`Resend is disabled, not sending email to ${Array.isArray(to) ? to[0] : to}`);
+    logger.info(`Resend is disabled, not sending email`);
     return;
   }
 
