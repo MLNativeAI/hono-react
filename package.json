@@ -35,15 +35,11 @@
     "catalog": {
       "better-auth": "^1.4.7",
       "hono": "^4.9.10",
-      "react": "^19.0.0",
-      "react-dom": "^19.0.0",
+      "react": "^19.2.3",
+      "react-dom": "^19.2.3",
       "drizzle-orm": "^0.44.5",
       "zod": "^4.0.0"
     }
   },
-  "version": "1.7.0",
-  "dependencies": {
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3"
-  }
+  "version": "1.7.0"
 }
