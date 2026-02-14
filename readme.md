@@ -19,14 +19,10 @@ This template bridges the gap between using a do-it-all framework and having to 
 ### Key Benefits
 
 - Lightning fast for developing SPAs with Turborepo's caching
-- Zero cloud-based vendor dependencies
 - Self-hostable with ease
 - Highly configurable monorepo structure
-- Pre-configured essentials without bloat
-- Re-deploys in < 1 minute
-- Shared code between packages
 
-## ⚡ Technical Features
+## Technical Features
 
 - Fullstack type safety with [Hono RPC](https://hono.dev/guides/rpc)
 - Unified Docker image build for simple deployments
@@ -55,8 +51,7 @@ The app handles multi-tenancy by default, including:
 - Role support
 - Automatic org creation based on domain
 
-
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Monorepo
 
@@ -120,22 +115,22 @@ docker compose up -d
 bun install
 ```
 
-3. Set up environment variables:
+3. Init env vars: 
 ```bash
-cd apps/backend
-cp .env.example .env  # No modifications required
-```
+```bun run init
+
+You'll need to configure either RESEND_API_KEY or GOOGLE_* credentials for either auth method to work
+
 
 4. Run migrations:
 ```bash
-cd apps/backend
-bunx drizzle-kit migrate
+bun db:migrate
 ```
 
 5. Start the development environment:
 ```bash
 # From project root
-bun turbo dev
+bun dev
 ```
 
 Your application will be available at:
@@ -146,15 +141,7 @@ Your application will be available at:
 
 ## 🚢 Deployment
 
-The project can be deployed to any platform that supports Docker containers ([Coolify](https://coolify.io/), [DigitalOcean](https://www.digitalocean.com/), [Fly.io](https://fly.io/), etc.).
-
-### Building the Docker Image
-
-```bash
-docker build -t hono-spa .
-```
-
-The application runs on port 3000 by default. The Docker build contains both frontend and backend, with automatic DB migrations on startup.
+TODO needs update after we move to separate docker images
 
 ## Remote Caching
 
