@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # Install turbo globally with cache mount
 RUN --mount=type=cache,target=/root/.bun/install/cache \
-  bun install -g turbo@2.8.3
+  bun install -g turbo@2.8.8
 
 # Pruner stage - create minimal workspace for dashboard only
 FROM base AS pruner
