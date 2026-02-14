@@ -3,7 +3,7 @@ export const getApiUrl = (): string => {
     return "http://localhost:3000";
   }
 
-  const url = import.meta.env.VITE_API_URL;
+  const url = import.meta.env.VITE_PUBLIC_API_URL;
 
   console.log(`URL: ${url}`);
 
