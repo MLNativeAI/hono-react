@@ -1,11 +1,5 @@
 name: Main Branch Build & Deploy
 
-# Parameters
-env:
-  DOCKER_REGISTRY: docker.io
-  DASHBOARD_APP_IMAGE: mlnative/hono-react-dashboard
-  API_APP_IMAGE: mlnative/hono-react-api
-
 permissions:
   packages: write
   id-token: write
@@ -53,8 +47,8 @@ jobs:
     uses: ./.github/workflows/build-docker.yml
     with:
       dockerfile: apps/dashboard/Dockerfile
-      registry: ${{ env.DOCKER_REGISTRY }}
-      image_name: ${{ env.DASHBOARD_APP_IMAGE }}
+      registry: docker.io
+      image_name: mlnative/hono-react-dashboard
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets: inherit
 
@@ -62,7 +56,7 @@ jobs:
     uses: ./.github/workflows/build-docker.yml
     with:
       dockerfile: apps/api/Dockerfile
-      registry: ${{ env.DOCKER_REGISTRY }}
-      image_name: ${{ env.API_APP_IMAGE }}
+      registry: docker.io
+      image_name: mlnative/hono-react-api
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets: inherit
