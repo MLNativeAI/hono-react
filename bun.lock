@@ -184,6 +184,7 @@
       "name": "@repo/queue",
       "dependencies": {
         "@repo/db": "workspace:*",
+        "@repo/email": "workspace:*",
         "@repo/engine": "workspace:*",
         "@repo/shared": "workspace:*",
         "bullmq": "^5.56.9",

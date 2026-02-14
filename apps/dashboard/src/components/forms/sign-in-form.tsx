@@ -1,4 +1,4 @@
-import { Link, useRouteContext } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import MagicLinkForm from "@/components/forms/magic-link-form";
 import { SocialForm } from "@/components/forms/social-form";
@@ -10,10 +10,9 @@ export function SignInForm({
   invitationId,
   ...props
 }: React.ComponentProps<"div"> & { invitationId?: string }) {
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<{ message: string; status?: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
-  const { serverInfo } = useRouteContext({ from: "/auth/sign-in" });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -38,7 +37,7 @@ export function SignInForm({
               setIsLoading={setIsLoading}
               invitationId={invitationId}
             />
-            ){error && <div className="text-sm text-red-500">{error}</div>}
+            {error && <div className="text-sm text-red-500">{error}</div>}
           </div>
 
           <div className="flex flex-col mt-6 text-center text-sm gap-2">
@@ -48,11 +47,6 @@ export function SignInForm({
                 Sign up
               </Link>
             </div>
-            {serverInfo?.authMode === "password" && (
-              <Link from="/auth/sign-in" to="/auth/reset-password" className="underline underline-offset-4">
-                Reset password
-              </Link>
-            )}
           </div>
         </CardContent>
       </Card>

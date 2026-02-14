@@ -1,14 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
-    },
-    "@repo/dashboard#build": {
-      "dependsOn": ["^build"],
-      "outputs": []
     },
     "lint": {},
     "typecheck": {},

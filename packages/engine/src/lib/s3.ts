@@ -1,4 +1,4 @@
-import { envVars } from "@repo/shared";
+import { envVars } from "@repo/shared/env";
 import { S3Client } from "bun";
 
 export const s3Client = new S3Client({

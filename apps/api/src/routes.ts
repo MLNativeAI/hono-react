@@ -1,8 +1,7 @@
 import { otel } from "@hono/otel";
 import { adminAuthMiddleware, type auth, authHandler, userAuthMiddleware } from "@repo/auth";
-import { envVars, logger } from "@repo/shared";
+import { logger } from "@repo/shared";
 import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
 import { logger as honoLogger } from "hono/logger";
 import { poweredBy } from "hono/powered-by";
 import { openAPIRouteHandler } from "hono-openapi";
@@ -72,18 +71,6 @@ app.get(
     },
   }),
 );
-
-if (process.env.NODE_ENV === "production") {
-  // Serve all static files from the dist directory
-  app.use("*", serveStatic({ root: "./dist" }));
-
-  // Serve index.html for all other routes (SPA fallback)
-  app.get("*", serveStatic({ path: "./dist/index.html" }));
-} else {
-  app.get("*", (c) => {
-    return c.redirect(envVars.BASE_URL);
-  });
-}
 
 export type { InternalRoutes };
 export type { ApiKeysRoutes };

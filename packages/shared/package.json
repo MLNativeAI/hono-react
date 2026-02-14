@@ -2,7 +2,9 @@
   "name": "@repo/shared",
   "exports": {
     ".": "./src/index.ts",
+    "./env": "./src/env.ts",
     "./id": "./src/id.ts",
+    "./const": "./src/const.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {

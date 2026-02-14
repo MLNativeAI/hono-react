@@ -1,5 +1,6 @@
-import { getOrganizationsByIds, getUserByEmail, getUserInvitations } from "@repo/db";
-import { envVars, logger } from "@repo/shared";
+import { getOrganizationsByIds } from "@repo/db";
+import { logger } from "@repo/shared";
+import { envVars } from "@repo/shared/env";
 import type { Context } from "hono";
 import type { BlankEnv, BlankInput } from "hono/types";
 import { auth } from "../index";
@@ -36,37 +37,24 @@ export async function listUserInvitations(c: Context<BlankEnv, "/invitations", B
 
 export async function handleOrganizationInvite(c: Context<BlankEnv, "/accept-invitation", BlankInput>) {
   logger.debug(`Handling invitation ${c.req.query("invitationId")}`);
-
   const invitationId = c.req.query("invitationId");
+
   if (!invitationId) {
-    return c.redirect(`${envVars.BASE_URL}/auth/sign-in`);
+    return c.redirect(`${envVars.DASHBOARD_BASE_URL}/auth/sign-in`);
   }
 
   try {
-    const invitationResponse = await getUserInvitations({
-      invitationId: invitationId,
+    const headers = c.req.header();
+    const data = await auth.api.acceptInvitation({
+      body: {
+        invitationId: invitationId,
+      },
+      headers: headers,
     });
-
-    if (!invitationResponse) {
-      return c.redirect(`${envVars.BASE_URL}/auth/sign-up?notFound=true`);
-    }
-    const email = invitationResponse?.email;
-    const userData = await getUserByEmail({ email: email });
-    if (!userData) {
-      logger.debug(`User not found, redirecting to sign up`);
-      return c.redirect(`${envVars.BASE_URL}/auth/sign-up?invitationId=${invitationId}`);
-    } else {
-      const session = await auth.api.getSession({ headers: c.req.raw.headers });
-      if (!session) {
-        logger.debug("User exists but not signed in, redirecting to sign-in");
-        return c.redirect(`${envVars.BASE_URL}/auth/sign-in?invitationId=${invitationId}`);
-      } else {
-        logger.debug("User exists and signed in, redirecting to org settings page");
-        return c.redirect(`${envVars.BASE_URL}/settings/organization`);
-      }
-    }
+    logger.info(data);
+    return c.redirect(`${envVars.DASHBOARD_BASE_URL}/settings/organization`);
   } catch (error) {
     logger.error(error, "Unknown invitation error, redirecting to sign-up");
-    return c.redirect(`${envVars.BASE_URL}/auth/sign-up`);
+    return c.redirect(`${envVars.DASHBOARD_BASE_URL}/auth/sign-up`);
   }
 }

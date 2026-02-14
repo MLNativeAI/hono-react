@@ -1,0 +1,147 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: api
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/app
+      - S3_ENDPOINT=http://minio:9000
+      - S3_ACCESS_KEY=minioadmin
+      - S3_SECRET_KEY=minioadmin
+      - S3_BUCKET=files
+      - ENVIRONMENT=prod
+      - DASHBOARD_BASE_URL=http://localhost
+      - BETTER_AUTH_SECRET=change-this-to-a-secure-random-secret-in-production
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: apps/dashboard/Dockerfile
+    container_name: dashboard
+    ports:
+      - "80:80"
+    environment:
+      - VITE_PUBLIC_API_URL=http://localhost:3000
+    depends_on:
+      - api
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:8-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  minio-setup:
+    image: minio/mc
+    depends_on:
+      - minio
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      mc alias set local http://minio:9000 minioadmin minioadmin &&
+      mc mb local/files &&
+      mc admin user add local app-user app-secret &&
+      echo '
+      {
+        \"Version\": \"2012-10-17\",
+        \"Statement\": [
+          {
+            \"Action\": [
+              \"s3:GetBucketLocation\",
+              \"s3:ListBucket\"
+            ],
+            \"Effect\": \"Allow\",
+            \"Resource\": \"arn:aws:s3:::files\"
+          },
+          {
+            \"Action\": [
+              \"s3:PutObject\",
+              \"s3:GetObject\",
+              \"s3:DeleteObject\"
+            ],
+            \"Effect\": \"Allow\",
+            \"Resource\": \"arn:aws:s3:::files/*\"
+          }
+        ]
+      }
+      ' > /tmp/files-full-access.json &&
+      mc admin policy create local files-full-access /tmp/files-full-access.json &&
+      mc admin policy attach local --user app-user --policy files-full-access &&
+      echo '✅ MinIO setup completed';
+      "
+    networks:
+      - app-network
+    restart: "no"
+
+volumes:
+  postgres_data:
+  minio_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,7 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import z from "zod";
 import { AppSidebar } from "@/components/app-sidebar";
-import { OnboardingProvider } from "@/components/onboarding-provider";
 import TelemetryProvider from "@/components/providers/telemetry-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useQueryNotifications } from "@/hooks/use-query-notifications";
@@ -37,18 +36,16 @@ function PathlessLayoutComponent() {
 
   return (
     <TelemetryProvider>
-      <OnboardingProvider>
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-              <div className="max-w-7xl mx-auto w-full">
-                <Outlet />
-              </div>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+            <div className="max-w-7xl mx-auto w-full">
+              <Outlet />
             </div>
-          </SidebarInset>
-        </SidebarProvider>
-      </OnboardingProvider>
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
     </TelemetryProvider>
   );
 }

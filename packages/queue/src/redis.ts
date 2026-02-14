@@ -1,16 +1,13 @@
 import { logger } from "@repo/shared";
-import { Redis } from "ioredis";
+import { envVars } from "@repo/shared/env";
+import IORedis from "ioredis";
 
-export const redisConnection = new Redis({
-  host: process.env.REDIS_HOST || "localhost",
-  port: parseInt(process.env.REDIS_PORT || "6379", 10),
-  password: process.env.REDIS_PASSWORD,
+export const redisConnection = new IORedis(envVars.REDIS_URL, {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
   lazyConnect: true,
 });
 
-// Connection event handlers
 redisConnection.on("connect", () => {
   logger.info("Redis connected");
 });

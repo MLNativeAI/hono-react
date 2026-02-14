@@ -7,8 +7,6 @@ import { toast } from "sonner";
 import { useOrganization } from "@/hooks/use-organization";
 import { authClient } from "@/lib/auth-client";
 
-const internalClient = hc<InternalRoutes>("/api/internal");
-
 export function useUserInvitations() {
   const { setActiveOrganization } = useOrganization();
   const queryClient = useQueryClient();

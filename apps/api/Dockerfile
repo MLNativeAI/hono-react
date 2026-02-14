@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY --from=installer --chown=bun:bun /usr/src/app/node_modules ./node_modules
 
 # Copy built API (only what's needed - not full source)
-COPY --from=builder --chown=bun:bun /usr/src/app/apps/api/dist ./apps/api/dist
+COPY --from=builder --chown=bun:bun /usr/src/app/apps/api/dist/index.js ./apps/api/dist/index.js
 
 # Copy required packages
 COPY --from=builder --chown=bun:bun /usr/src/app/packages ./packages

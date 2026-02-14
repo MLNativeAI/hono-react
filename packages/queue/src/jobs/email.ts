@@ -1,4 +1,4 @@
-import { sendFeedbackEmail } from "@repo/engine";
+import { sendFeedbackEmail } from "@repo/email";
 import { logger } from "@repo/shared";
 import { type Job, Queue, Worker } from "bullmq";
 import { redisConnection } from "../redis";

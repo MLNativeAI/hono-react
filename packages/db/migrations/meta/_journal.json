@@ -8,6 +8,13 @@
       "when": 1765656772769,
       "tag": "0000_deep_sprite",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771088791223,
+      "tag": "0001_normal_snowbird",
+      "breakpoints": true
     }
   ]
 }
