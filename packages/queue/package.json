@@ -10,11 +10,10 @@
   },
   "dependencies": {
     "@repo/db": "workspace:*",
-    "@repo/engine": "workspace:*",
     "@repo/email": "workspace:*",
+    "@repo/engine": "workspace:*",
     "@repo/shared": "workspace:*",
-    "bullmq": "^5.56.9",
-    "ioredis": "^5.7.0",
+    "bullmq": "5.67.3",
     "zod": "catalog:"
   }
 }
