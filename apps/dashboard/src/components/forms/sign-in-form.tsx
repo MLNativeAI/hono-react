@@ -1,6 +1,5 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
-import { EmailPasswordForm } from "@/components/forms/email-password-form";
 import MagicLinkForm from "@/components/forms/magic-link-form";
 import { SocialForm } from "@/components/forms/social-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,27 +30,15 @@ export function SignInForm({
               isLoading={isLoading}
               setIsLoading={setIsLoading}
             />
-            {serverInfo?.authMode === "magic-link" && (
-              <MagicLinkForm
-                magicLinkSent={magicLinkSent}
-                setMagicLinkSent={setMagicLinkSent}
-                setError={setError}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                invitationId={invitationId}
-              />
-            )}
-            {serverInfo?.authMode === "password" && (
-              <EmailPasswordForm
-                formMode="sign-in"
-                setError={setError}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                invitationId={invitationId}
-              />
-            )}
-
-            {error && <div className="text-sm text-red-500">{error}</div>}
+            <MagicLinkForm
+              magicLinkSent={magicLinkSent}
+              setMagicLinkSent={setMagicLinkSent}
+              setError={setError}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              invitationId={invitationId}
+            />
+            ){error && <div className="text-sm text-red-500">{error}</div>}
           </div>
 
           <div className="flex flex-col mt-6 text-center text-sm gap-2">

@@ -32,11 +32,11 @@
       "!**/.wrangler",
       "!**/node_modules",
       "!**/dist",
-      "!**/dist/**",
-      "!**/node_modules/**",
+      "!**/dist",
+      "!**/node_modules",
       "!**/.turbo",
       "!**/.next",
-      "!**/.next/**",
+      "!**/.next",
       "!**/ml"
     ]
   }

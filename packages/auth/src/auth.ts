@@ -1,17 +1,11 @@
 import { db } from "@repo/db/db";
 import * as schema from "@repo/db/schema";
-import {
-  scheduleFeedbackEmail,
-  sendInvitationEmail,
-  sendMagicLink,
-  sendPasswordResetEmail,
-  sendWelcomeEmail,
-} from "@repo/engine";
+import { scheduleFeedbackEmail, sendInvitationEmail, sendMagicLink, sendWelcomeEmail } from "@repo/engine";
 import { envVars, logger } from "@repo/shared";
 import { generateId, ID_PREFIXES } from "@repo/shared/id";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, apiKey, magicLink, organization } from "better-auth/plugins";
+import { apiKey, magicLink, organization } from "better-auth/plugins";
 import { getDefaultOrgOrCreate } from "./handlers/session";
 
 export const auth = betterAuth({
@@ -19,13 +13,6 @@ export const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60, // Cache duration in seconds
-    },
-  },
-  emailAndPassword: {
-    enabled: true,
-    sendResetPassword: sendPasswordResetEmail,
-    onPasswordReset: async ({ user }, _) => {
-      logger.info(`Password for user ${user.email} has been reset.`);
     },
   },
   database: drizzleAdapter(db, {
