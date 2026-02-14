@@ -117,7 +117,7 @@ bun install
 
 3. Init env vars: 
 ```bash
-```bun run init
+bun run init
 
 You'll need to configure either RESEND_API_KEY or GOOGLE_* credentials for either auth method to work
 

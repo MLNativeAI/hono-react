@@ -1,4 +1,4 @@
-import { Section, Text } from "@react-email/components";
+import { Text } from "@react-email/components";
 import { emailConfig } from "../email-config";
 import { ActionButton, EmailHeading, EmailLayout, FooterSection, LogoSection } from "./shared-components";
 
@@ -23,8 +23,8 @@ export const InvitationEmail = ({ url, inviter, organizationName, role }: Invita
       <Text className="text-black text-[14px] leading-[24px]">Hi there,</Text>
 
       <Text className="text-black text-[14px] leading-[24px]">
-        <strong>{inviter}</strong> has invited you to join <strong>{organizationName}</strong> on {emailConfig.serviceName} as a{" "}
-        <strong>{role}</strong>.
+        <strong>{inviter}</strong> has invited you to join <strong>{organizationName}</strong> on{" "}
+        {emailConfig.serviceName} as a <strong>{role}</strong>.
       </Text>
 
       <Text className="text-black text-[14px] leading-[24px]">

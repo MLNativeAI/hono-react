@@ -1,4 +1,4 @@
-import { ApiKeysRoutes, InternalRoutes } from "@repo/api/routes";
+import type { ApiKeysRoutes, InternalRoutes } from "@repo/api/routes";
 import { hc } from "hono/client";
 import { getApiUrl } from "./url";
 

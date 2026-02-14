@@ -22,7 +22,6 @@ const router = createRouter({
     queryClient,
     session: undefined,
     user: undefined,
-    serverInfo: undefined,
   },
   scrollRestoration: true,
   defaultPreload: "intent",

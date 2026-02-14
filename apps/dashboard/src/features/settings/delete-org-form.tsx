@@ -1,4 +1,3 @@
-import { useNavigate } from "@tanstack/react-router";
 import type { Member } from "better-auth/plugins";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -20,7 +19,6 @@ interface DeleteOrgFormProps {
 }
 
 export default function DeleteOrgForm({ member }: DeleteOrgFormProps) {
-  const _navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 

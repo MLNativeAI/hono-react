@@ -5,8 +5,8 @@ import { SocialForm } from "@/components/forms/social-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export function SignUpForm({ invitationId }: { invitationId?: string }) {
-  const [error, setError] = useState<string>("");
+export function SignUpForm() {
+  const [error, setError] = useState<{ message: string; status?: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
 
@@ -19,21 +19,15 @@ export function SignUpForm({ invitationId }: { invitationId?: string }) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <SocialForm
-              invitationId={invitationId}
-              setError={setError}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-            />
+            <SocialForm setError={setError} isLoading={isLoading} setIsLoading={setIsLoading} />
             <MagicLinkForm
               magicLinkSent={magicLinkSent}
               setMagicLinkSent={setMagicLinkSent}
               setError={setError}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
-              invitationId={invitationId}
             />
-            {error && <div className="text-sm text-red-500">{error}</div>}
+            {error && <div className="text-sm text-red-500">{error.message}</div>}
           </div>
 
           <div className="mt-6 text-center text-sm">

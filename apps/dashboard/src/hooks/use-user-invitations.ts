@@ -1,8 +1,5 @@
 import { usePostHog } from "@posthog/react";
-import type { InternalRoutes } from "@repo/api/routes";
-import type { UserInvitation } from "@repo/auth/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { hc } from "hono/client";
 import { toast } from "sonner";
 import { useOrganization } from "@/hooks/use-organization";
 import { authClient } from "@/lib/auth-client";
@@ -18,14 +15,8 @@ export function useUserInvitations() {
   } = useQuery({
     queryKey: ["user-invitations"],
     queryFn: async () => {
-      const response = await internalClient.invitations.$get({});
-
-      if (!response.ok) {
-        console.log("Failed to fetch invitations");
-        throw new Error("Failed to fetch invitations");
-      }
-
-      return response.json() as unknown as UserInvitation[];
+      const result = await authClient.organization.listUserInvitations();
+      return result.data;
     },
   });
 
