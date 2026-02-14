@@ -23,7 +23,7 @@ on:
 
 jobs:
   build:
-    name: Build API
+    name: Build & Push Docker Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
