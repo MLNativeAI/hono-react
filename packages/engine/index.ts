@@ -1,1 +1,1 @@
-export * from "./src/services/email-service";
+export * from "./src/lib/posthog";

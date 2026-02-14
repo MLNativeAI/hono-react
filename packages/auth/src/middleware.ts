@@ -1,4 +1,4 @@
-import { getAuthFromApiKey, getOrganizationActivePlan } from "@repo/db";
+import { getAuthFromApiKey } from "@repo/db";
 import { logger } from "@repo/shared";
 import type { AuthContext } from "@repo/shared/types";
 import type { Context, Next } from "hono";
@@ -35,13 +35,9 @@ export const userAuthMiddleware = async (c: Context, next: Next) => {
       return c.json({ message: "Unauthorized" }, 401);
     }
 
-    const activePlan = await getOrganizationActivePlan({ organizationId });
-
-    logger.debug;
     const authContext: AuthContext = {
       userId,
       organizationId,
-      activePlan,
       scope: "user",
     };
     c.set("context", authContext);
@@ -60,14 +56,9 @@ export const userAuthMiddleware = async (c: Context, next: Next) => {
       return c.json({ message: "Unauthorized" }, 401);
     }
 
-    const activePlan = await getOrganizationActivePlan({
-      organizationId: session.session.activeOrganizationId,
-    });
-
     const authContext: AuthContext = {
       userId: session.user.id,
       organizationId: session.session.activeOrganizationId,
-      activePlan,
       scope: "user",
     };
     c.set("context", authContext);
@@ -93,14 +84,9 @@ export const adminAuthMiddleware = async (c: Context, next: Next) => {
     return c.json({ message: "Forbidden" }, 403);
   }
 
-  const activePlan = await getOrganizationActivePlan({
-    organizationId: session.session.activeOrganizationId,
-  });
-
   const authContext: AuthContext = {
     userId: session.user.id,
     organizationId: session.session.activeOrganizationId,
-    activePlan,
     scope: "superadmin",
   };
   c.set("context", authContext);

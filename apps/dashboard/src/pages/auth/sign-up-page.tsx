@@ -1,5 +1,5 @@
 import { CircleX, Info } from "lucide-react";
-import { SignUpForm } from "@/components/sign-up-form";
+import { SignUpForm } from "@/components/forms/sign-up-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Route } from "@/routes/auth/sign-up";
 

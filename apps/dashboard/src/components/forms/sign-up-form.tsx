@@ -1,6 +1,5 @@
-import { Link, useRouteContext } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { EmailPasswordForm } from "@/components/forms/email-password-form";
 import MagicLinkForm from "@/components/forms/magic-link-form";
 import { SocialForm } from "@/components/forms/social-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +9,6 @@ export function SignUpForm({ invitationId }: { invitationId?: string }) {
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
-  const { serverInfo } = useRouteContext({ from: "/auth/sign-up" });
 
   return (
     <div className={cn("flex flex-col gap-6")}>
@@ -27,25 +25,14 @@ export function SignUpForm({ invitationId }: { invitationId?: string }) {
               isLoading={isLoading}
               setIsLoading={setIsLoading}
             />
-            {serverInfo?.authMode === "magic-link" && (
-              <MagicLinkForm
-                magicLinkSent={magicLinkSent}
-                setMagicLinkSent={setMagicLinkSent}
-                setError={setError}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                invitationId={invitationId}
-              />
-            )}
-            {serverInfo?.authMode === "password" && (
-              <EmailPasswordForm
-                formMode="sign-up"
-                setError={setError}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                invitationId={invitationId}
-              />
-            )}
+            <MagicLinkForm
+              magicLinkSent={magicLinkSent}
+              setMagicLinkSent={setMagicLinkSent}
+              setError={setError}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              invitationId={invitationId}
+            />
             {error && <div className="text-sm text-red-500">{error}</div>}
           </div>
 

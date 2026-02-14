@@ -1,17 +1,13 @@
 import { db } from "@repo/db/db";
 import * as schema from "@repo/db/schema";
-import {
-  scheduleFeedbackEmail,
-  sendInvitationEmail,
-  sendMagicLink,
-  sendPasswordResetEmail,
-  sendWelcomeEmail,
-} from "@repo/engine";
-import { envVars, logger } from "@repo/shared";
+import { sendInvitationEmail, sendMagicLink, sendWelcomeEmail } from "@repo/email";
+import { logger } from "@repo/shared";
+import { envVars } from "@repo/shared/env";
 import { generateId, ID_PREFIXES } from "@repo/shared/id";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, apiKey, magicLink, organization } from "better-auth/plugins";
+import { apiKey, magicLink, organization } from "better-auth/plugins";
+import { scheduleFeedbackEmail } from "./handlers/email";
 import { getDefaultOrgOrCreate } from "./handlers/session";
 
 export const auth = betterAuth({
@@ -19,13 +15,6 @@ export const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60, // Cache duration in seconds
-    },
-  },
-  emailAndPassword: {
-    enabled: true,
-    sendResetPassword: sendPasswordResetEmail,
-    onPasswordReset: async ({ user }, _) => {
-      logger.info(`Password for user ${user.email} has been reset.`);
     },
   },
   database: drizzleAdapter(db, {
@@ -40,10 +29,6 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: "string",
-        input: false,
-      },
-      onboardingCompleted: {
-        type: "boolean",
         input: false,
       },
     },
@@ -109,7 +94,15 @@ export const auth = betterAuth({
       },
     }),
     organization({
-      sendInvitationEmail: sendInvitationEmail,
+      sendInvitationEmail: (data) => {
+        return sendInvitationEmail({
+          email: data.email,
+          role: data.role,
+          id: data.id,
+          organizationName: data.organization.name,
+          inviter: data.inviter.user.name,
+        });
+      },
       cancelPendingInvitationsOnReInvite: true,
       organizationHooks: {
         afterCreateOrganization: async ({ organization, member, user }) => {
@@ -135,5 +128,5 @@ export const auth = betterAuth({
       clientId: envVars.MICROSOFT_CLIENT_ID || "",
     },
   },
-  trustedOrigins: [envVars.BASE_URL],
+  trustedOrigins: [envVars.DASHBOARD_BASE_URL],
 });

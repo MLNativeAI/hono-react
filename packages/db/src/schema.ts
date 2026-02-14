@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -12,7 +13,6 @@ export const user = pgTable("user", {
   banned: boolean("banned"),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
-  onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
 });
 
 export const session = pgTable("session", {
@@ -93,8 +93,6 @@ export const organization = pgTable("organization", {
   slug: text("slug").unique(),
   logo: text("logo"),
   createdAt: timestamp("created_at").notNull(),
-  metadata: text("metadata"),
-  activePlan: text("active_plan").default("free").notNull(),
 });
 
 export const member = pgTable("member", {
@@ -108,7 +106,6 @@ export const member = pgTable("member", {
   role: text("role").default("member").notNull(),
   createdAt: timestamp("created_at").notNull(),
 });
-
 export const invitation = pgTable("invitation", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")
@@ -117,6 +114,7 @@ export const invitation = pgTable("invitation", {
   email: text("email").notNull(),
   role: text("role"),
   status: text("status").default("pending").notNull(),
+  createdAt: timestamp("created_at").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   inviterId: text("inviter_id")
     .notNull()

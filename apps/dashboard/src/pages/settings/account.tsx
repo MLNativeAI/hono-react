@@ -1,5 +1,5 @@
-import AccountInfo from "@/components/settings/account-info";
-import DeleteAccountForm from "@/components/settings/delete-account-form";
+import AccountInfo from "@/features/settings/account-info";
+import DeleteAccountForm from "@/features/settings/delete-account-form";
 
 export default function AccountPage() {
   return (

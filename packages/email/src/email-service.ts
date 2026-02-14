@@ -1,32 +1,38 @@
 import { render } from "@react-email/render";
-import { envVars, logger } from "@repo/shared";
+import { logger } from "@repo/shared";
+import { envVars } from "@repo/shared/env";
 import { Resend } from "resend";
 import { emailConfig } from "./email-config";
+import FeedbackEmail from "./emails/feedback";
 import InvitationEmail from "./emails/invitation";
-import ResetPasswordEmailTemplate from "./emails/password-reset";
-import { getApiBaseUrl } from "./util";
+import { MagicLinkEmail } from "./emails/magic-link";
+import WelcomeEmail from "./emails/welcome";
 
 const resend = envVars.RESEND_API_KEY ? new Resend(envVars.RESEND_API_KEY) : null;
 
+type Attachement = {
+  filename: string;
+  content: Buffer;
+};
 export async function sendInvitationEmail({
   email,
+  role,
+  id,
   inviter,
   organizationName,
-  role,
-  invitationId,
 }: {
+  id: string;
+  role: string;
   email: string;
   inviter: string;
   organizationName: string;
-  role: string;
-  invitationId: string;
 }): Promise<void> {
-  const url = `${getApiBaseUrl()}/api/internal/accept-invitation?invitationId=${invitationId}`;
   if (!resend) {
-    logger.warn({ email, url }, `Resend not configured, not sending link`);
+    logger.info(`Invitation link for ${email}: ${envVars.API_BASE_URL}/accept-invitation/${id}`);
     return;
   }
 
+  const url = `${envVars.API_BASE_URL}/api/internal/accept-invitation?invitationId=${id}`;
   logger.info({ email, url }, `Sending invitation link to ${email}: ${url}`);
   const emailHtml = await render(
     InvitationEmail({
@@ -44,19 +50,38 @@ export async function sendInvitationEmail({
   });
 }
 
-export async function sendPasswordResetEmail(targetEmail: string, targetUsername: string, resetUrl: string) {
+export async function sendFeedbackEmail(email: string) {
+  const emailHtml = await render(FeedbackEmail());
+  await sendEmailHandler({
+    to: [email],
+    subject: "How's your Hono-React experience so far?",
+    html: emailHtml,
+    replyTo: "lukasz@mlnative.com",
+  });
+}
+
+export async function sendWelcomeEmail(email: string) {
+  const emailHtml = await render(WelcomeEmail());
+  await sendEmailHandler({
+    to: [email],
+    subject: "Welcome to Hono-React!",
+    html: emailHtml,
+    replyTo: "contact@mlnative.com",
+  });
+}
+
+export async function sendMagicLink({ email, url }: { email: string; url: string }) {
   if (!resend) {
-    logger.warn(`Resend not configured, password reset link:  ${targetEmail}: ${resetUrl}`);
+    logger.info(`Magic link for ${email}: ${url}`);
     return;
   }
 
-  logger.info(`Sending password reset link to ${targetEmail}: ${resetUrl}`);
-
-  const emailHtml = await render(ResetPasswordEmailTemplate({ resetUrl: resetUrl, username: targetUsername }));
+  logger.info({ email, url }, `Sending magic link to ${email}: ${url}`);
+  const emailHtml = await render(MagicLinkEmail({ url }));
 
   await sendEmailHandler({
-    to: targetEmail,
-    subject: "Password reset",
+    to: email,
+    subject: "Sign in to Hono-React",
     html: emailHtml,
   });
 }
@@ -66,11 +91,13 @@ async function sendEmailHandler({
   subject,
   html,
   replyTo,
+  attachments,
 }: {
   to: string | string[];
   subject: string;
   html: string;
   replyTo?: string;
+  attachments?: Attachement[];
 }) {
   if (!resend) {
     logger.info(`Resend is disabled, not sending email`);
@@ -82,8 +109,9 @@ async function sendEmailHandler({
       from: emailConfig.fromEmail,
       to,
       subject,
-      replyTo: replyTo,
+      reply_to: replyTo,
       html,
+      attachments,
     });
   } catch (error) {
     logger.error(error, "Failed to send email");

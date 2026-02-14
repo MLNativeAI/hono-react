@@ -1,7 +1,7 @@
 import type { Member } from "better-auth/plugins";
-import InviteDialog from "@/components/settings/invite-dialog";
-import { OrgMembersTable } from "@/components/settings/org-members-table";
-import { useOrgMembers } from "@/hooks/use-org-members";
+import { useOrgMembers } from "@/features/organization/hooks/use-org-members";
+import InviteDialog from "@/features/settings/invite-dialog";
+import { OrgMembersTable } from "@/features/settings/org-members-table";
 
 export default function OrgMembers({ member }: { member: Member | undefined }) {
   const { orgMemberInvitations, isLoading } = useOrgMembers();

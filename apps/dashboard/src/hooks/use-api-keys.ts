@@ -1,9 +1,6 @@
-import type { ApiKeysRoutes } from "@repo/api/routes";
 import type { ApiKey } from "@repo/db/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { hc } from "hono/client";
-
-const apiKeyClient = hc<ApiKeysRoutes>("/api/v1/api-keys");
+import { apiKeysV1Client } from "@/lib/api-clients";
 
 export function useApiKeys() {
   const {
@@ -13,7 +10,7 @@ export function useApiKeys() {
   } = useQuery({
     queryKey: ["apiKeys"],
     queryFn: async (): Promise<ApiKey[]> => {
-      const response = await apiKeyClient.index.$get();
+      const response = await apiKeysV1Client.index.$get();
       if (!response.ok) {
         console.error("API Key fetch failed");
         return [];
@@ -34,7 +31,7 @@ export function useCreateApiKey() {
 
   return useMutation({
     mutationFn: async (name: string) => {
-      const response = await apiKeyClient.index.$post({
+      const response = await apiKeysV1Client.index.$post({
         json: { name },
       });
 
@@ -55,7 +52,7 @@ export function useRevokeApiKey() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const response = await apiKeyClient[":id"].$delete({
+      const response = await apiKeysV1Client[":id"].$delete({
         param: { id },
       });
 

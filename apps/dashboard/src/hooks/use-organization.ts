@@ -1,5 +1,6 @@
 import { usePostHog } from "@posthog/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { organizationQueries } from "@/features/organization/queries/organization";
 import { authClient } from "@/lib/auth-client";
 
 export function useOrganization() {
@@ -20,7 +21,7 @@ export function useOrganization() {
       });
     }
 
-    queryClient.invalidateQueries();
+    queryClient.invalidateQueries({ queryKey: organizationQueries.all() });
   };
 
   return {

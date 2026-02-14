@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { getDashboardUrl } from "@/lib/url";
 import { Button } from "../ui/button";
 
 const GoogleIcon = () => (
@@ -36,34 +37,23 @@ export function SocialForm({
   setError,
   isLoading,
   setIsLoading,
-  invitationId,
 }: {
-  setError: (_: string) => void;
+  setError: (_: { message: string; status?: number } | null) => void;
   isLoading: boolean;
   setIsLoading: (_: boolean) => void;
-  invitationId: string | undefined;
 }) {
   const handleSocialSignIn = async (provider: "google" | "microsoft") => {
-    setError("");
+    setError(null);
     setIsLoading(true);
-
-    const invitationParam = invitationId ? `&invitationId=${invitationId}` : "";
-    const callbackUrl = `/api/internal/auth-callback?signedIn=true${invitationParam}`;
-    const newUserCallbackURL = `/api/internal/auth-callback?newUser=true${invitationParam}`;
 
     const { error } = await authClient.signIn.social({
       provider,
-      callbackURL: callbackUrl,
-      newUserCallbackURL: newUserCallbackURL,
+      callbackURL: `${getDashboardUrl()}`,
     });
 
     if (error) {
       setIsLoading(false);
-      if (error.code === "PROVIDER_NOT_FOUND") {
-        setError("Social provider not configured.");
-      } else {
-        setError(error.message || "Failed to sign in");
-      }
+      setError({ message: error.message || "Failed to sign in" });
     }
   };
 

@@ -1,6 +1,5 @@
-import { Link, useRouteContext } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { EmailPasswordForm } from "@/components/forms/email-password-form";
 import MagicLinkForm from "@/components/forms/magic-link-form";
 import { SocialForm } from "@/components/forms/social-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,10 +10,9 @@ export function SignInForm({
   invitationId,
   ...props
 }: React.ComponentProps<"div"> & { invitationId?: string }) {
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<{ message: string; status?: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
-  const { serverInfo } = useRouteContext({ from: "/auth/sign-in" });
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -25,33 +23,15 @@ export function SignInForm({
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <SocialForm
-              invitationId={invitationId}
+            <SocialForm setError={setError} isLoading={isLoading} setIsLoading={setIsLoading} />
+            <MagicLinkForm
+              magicLinkSent={magicLinkSent}
+              setMagicLinkSent={setMagicLinkSent}
               setError={setError}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
             />
-            {serverInfo?.authMode === "magic-link" && (
-              <MagicLinkForm
-                magicLinkSent={magicLinkSent}
-                setMagicLinkSent={setMagicLinkSent}
-                setError={setError}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                invitationId={invitationId}
-              />
-            )}
-            {serverInfo?.authMode === "password" && (
-              <EmailPasswordForm
-                formMode="sign-in"
-                setError={setError}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                invitationId={invitationId}
-              />
-            )}
-
-            {error && <div className="text-sm text-red-500">{error}</div>}
+            {error && <div className="text-sm text-red-500">{error.message}</div>}
           </div>
 
           <div className="flex flex-col mt-6 text-center text-sm gap-2">
@@ -61,11 +41,6 @@ export function SignInForm({
                 Sign up
               </Link>
             </div>
-            {serverInfo?.authMode === "password" && (
-              <Link from="/auth/sign-in" to="/auth/reset-password" className="underline underline-offset-4">
-                Reset password
-              </Link>
-            )}
           </div>
         </CardContent>
       </Card>

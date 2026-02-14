@@ -1,6 +1,7 @@
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import { getDashboardUrl } from "@/lib/url";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
@@ -10,43 +11,36 @@ export default function MagicLinkForm({
   setError,
   isLoading,
   setIsLoading,
-  invitationId,
 }: {
   magicLinkSent: boolean;
   setMagicLinkSent: (_: boolean) => void;
-  setError: (_: string) => void;
+  setError: (_: { message: string; status?: number } | null) => void;
   isLoading: boolean;
   setIsLoading: (_: boolean) => void;
-  invitationId?: string;
 }) {
   const handleMagicLinkSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
 
-    const invitationParam = invitationId ? `&invitationId=${invitationId}` : "";
-    const callbackUrl = `/api/internal/auth-callback?signedIn=true${invitationParam}`;
-    const newUserCallbackURL = `/api/internal/auth-callback?newUser=true${invitationParam}`;
-
     try {
       const { error } = await authClient.signIn.magicLink({
         email,
-        callbackURL: callbackUrl,
-        newUserCallbackURL: newUserCallbackURL,
+        callbackURL: `${getDashboardUrl()}`,
       });
 
       if (error) {
-        setError(error.message || "An error occurred sending the magic link");
+        setError({ message: "Failed to send magic link ", status: 500 });
         return;
       }
 
       setMagicLinkSent(true);
       toast.success("Magic link sent! Check your email.");
     } catch (_err) {
-      setError("An unexpected error occurred");
+      setError({ message: "Failed to send magic link ", status: 500 });
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +70,7 @@ export default function MagicLinkForm({
             className="w-full"
             onClick={() => {
               setMagicLinkSent(false);
-              setError("");
+              setError({ message: "Failed to send magic link ", status: 500 });
             }}
           >
             Send another link

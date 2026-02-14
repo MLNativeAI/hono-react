@@ -1,5 +1,7 @@
+import { flushPosthog } from "@repo/engine";
 import { allWorkers } from "@repo/queue";
-import { envVars, flushPosthog, logger } from "@repo/shared";
+import { logger } from "@repo/shared";
+import { envVars } from "@repo/shared/env";
 import { app } from "./routes";
 
 const server = Bun.serve({
@@ -9,17 +11,27 @@ const server = Bun.serve({
   idleTimeout: 60,
 });
 
-process.on("SIGINT", async () => {
-  await flushPosthog();
-  process.exit(0);
-});
-process.on("SIGTERM", async () => {
-  await flushPosthog();
-  process.exit(0);
-});
+const gracefulShutdown = async (signal: string) => {
+  logger.info({ signal }, `Received ${signal}, initiating graceful shutdown...`);
+
+  try {
+    await flushPosthog();
+
+    logger.info("Closing workers, waiting for active jobs to complete...");
+    await Promise.all(allWorkers.map((worker) => worker.close()));
+
+    logger.info("All workers closed successfully");
+  } catch (error) {
+    logger.error(error, "Error during graceful shutdown");
+  } finally {
+    process.exit(0);
+  }
+};
+
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 
 logger.info(`Started ${allWorkers.length} job workers`);
-
 logger.info(
   {
     port: server.port,

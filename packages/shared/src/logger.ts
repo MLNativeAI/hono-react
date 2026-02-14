@@ -1,4 +1,5 @@
 import pino from "pino";
+import z from "zod";
 import { type EnvVars, envSchema } from "./env-schema";
 
 const createLogger = () => {
@@ -51,12 +52,13 @@ const createLogger = () => {
 };
 
 export const logger = createLogger();
-
-// a small with putting this here to make sure that logger is initialized for env validation
+// a small workaround with putting this here to make sure that logger is initialized for env validation
 export const validateEnv = (): EnvVars => {
   const env = envSchema.safeParse(process.env);
   if (!env.success) {
-    logger.error(`❌ Invalid environment configuration: ${JSON.stringify(env.error.format())}`);
+    logger.error(`❌ Invalid environment configuration: ${JSON.stringify(z.treeifyError(env.error))}`);
+    // logger might not be initialized correctly with transports
+    console.error(`❌ Invalid environment configuration: ${JSON.stringify(z.treeifyError(env.error))}`);
     throw new Error("Invalid environment variables");
   }
   logger.info("✅ Environment configuration is valid");

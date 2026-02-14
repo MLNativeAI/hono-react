@@ -3,10 +3,15 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+# Print environment variables for debugging
+echo "=== Environment Variables ==="
+env | sort
+echo "============================="
+
 # Run database migrations from the packages/db directory
 cd /usr/src/app/packages/db
 bunx drizzle-kit migrate
 
 # Start the application with correct path to node_modules
 cd /usr/src/app/apps/api
-NODE_PATH=/usr/src/app/node_modules exec bun src/index.ts
+NODE_PATH=/usr/src/app/node_modules exec bun dist/index.js

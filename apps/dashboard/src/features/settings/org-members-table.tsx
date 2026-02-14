@@ -20,8 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { isOrgInvitation, isOrgMember, type OrgMemberInvitation } from "@/hooks/use-org-members";
 import { authClient } from "@/lib/auth-client";
+import { isOrgInvitation, isOrgMember, type OrgMemberInvitation } from "../organization/hooks/use-org-members";
 
 function InviteOrJoinDate({ invOrMember }: { invOrMember: OrgMemberInvitation }) {
   if (isOrgMember(invOrMember)) {
@@ -72,7 +72,7 @@ export function OrgMembersTable({
       } else {
         toast.success(`Removed ${memberEmail} from organization`);
         // Invalidate the query to refetch the data
-        queryClient.invalidateQueries({ queryKey: ["organization-members"] });
+        queryClient.invalidateQueries({ queryKey: ["organization"] });
       }
     } catch (err) {
       toast.error("Failed to remove member");
@@ -92,7 +92,7 @@ export function OrgMembersTable({
       } else {
         toast.success(`Cancelled invitation for ${inviteeEmail}`);
         // Invalidate the query to refetch the data
-        queryClient.invalidateQueries({ queryKey: ["organization-members"] });
+        queryClient.invalidateQueries({ queryKey: ["organization"] });
       }
     } catch (err) {
       toast.error("Failed to cancel invitation");
