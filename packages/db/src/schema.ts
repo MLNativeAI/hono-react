@@ -106,22 +106,6 @@ export const member = pgTable("member", {
   role: text("role").default("member").notNull(),
   createdAt: timestamp("created_at").notNull(),
 });
-
-export const memberRelations = relations(member, ({ one }) => ({
-  user: one(user, {
-    fields: [member.userId],
-    references: [user.id],
-  }),
-  organization: one(organization, {
-    fields: [member.organizationId],
-    references: [organization.id],
-  }),
-}));
-
-export const userRelations = relations(user, ({ many }) => ({
-  members: many(member),
-}));
-
 export const invitation = pgTable("invitation", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")
