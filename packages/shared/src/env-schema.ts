@@ -22,7 +22,7 @@ export const envSchema = z.object({
   MICROSOFT_CLIENT_SECRET: z.string().optional(),
   BETTER_AUTH_SECRET: z.string().min(32, "BETTER_AUTH_SECRET is required"),
 
-  RESEND_API_KEY: z.string().optional(),
+  RESEND_API_KEY: z.string("RESEND_API_KEY is required"),
   FROM_EMAIL: z.email("FROM_EMAIL must be a valid email address").default("noreply@getrepo.com"),
 
   AXIOM_TOKEN: z.string().optional(),
