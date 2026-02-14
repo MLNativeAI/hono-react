@@ -1,5 +1,5 @@
 # Use the official Bun image
-FROM oven/bun:1.3.4 AS base
+FROM oven/bun:1.3.9 AS base
 WORKDIR /usr/src/app
 
 # Install turbo globally with cache mount
