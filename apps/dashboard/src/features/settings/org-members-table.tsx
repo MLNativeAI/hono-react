@@ -20,8 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { isOrgInvitation, isOrgMember, type OrgMemberInvitation } from "@/hooks/use-org-members";
 import { authClient } from "@/lib/auth-client";
+import { isOrgInvitation, isOrgMember, type OrgMemberInvitation } from "../organization/hooks/use-org-members";
 
 function InviteOrJoinDate({ invOrMember }: { invOrMember: OrgMemberInvitation }) {
   if (isOrgMember(invOrMember)) {
