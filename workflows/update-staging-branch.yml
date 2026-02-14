@@ -1,0 +1,87 @@
+name: Deploy to Staging
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+
+permissions:
+  pull-requests: read
+
+env:
+  DOKPLOY_HOST: ${{ secrets.DOKPLOY_HOST }}
+  DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+
+jobs:
+  check-pr:
+    name: Check PR status
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check if PR is draft
+        id: check
+        env:
+          IS_DRAFT: ${{ github.event.pull_request.draft }}
+        run: |
+          if [ "$IS_DRAFT" = "true" ]; then
+            echo "PR is draft, skipping"
+            echo "should-run=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "should-run=true" >> $GITHUB_OUTPUT
+
+  deploy-api:
+    name: Deploy API to Staging
+    runs-on: ubuntu-latest
+    needs: check-pr
+    if: needs.check-pr.outputs.should-run == 'true'
+    steps:
+      - name: Install HTTPie
+        run: |
+          pip install httpie
+      - name: Deploy API
+        run: |
+          set -e pipefail
+          http --ignore-stdin POST ${{ env.DOKPLOY_HOST }}/api/application-deploy \
+            x-api-key:${{ env.DOKPLOY_API_KEY }} \
+            applicationId=VSLE_FpNKpeAXvhxHH-Et \
+            title="PR #${{ github.event.pull_request.number }}" \
+            description="${{ github.event.pull_request.title }}"
+
+  deploy-dashboard:
+    name: Deploy Dashboard to Staging
+    runs-on: ubuntu-latest
+    needs: check-pr
+    if: needs.check-pr.outputs.should-run == 'true'
+    steps:
+      - name: Install HTTPie
+        run: |
+          pip install httpie
+      - name: Deploy Dashboard
+        run: |
+          set -e pipefail
+          http --ignore-stdin POST ${{ env.DOKPLOY_HOST }}/api/application-deploy \
+            x-api-key:${{ env.DOKPLOY_API_KEY }} \
+            applicationId=M69ee7BIJzQXSiANmERRq \
+            title="PR #${{ github.event.pull_request.number }}" \
+            description="${{ github.event.pull_request.title }}"
+
+  deploy-docx-py:
+    name: Deploy Docx-py to Staging
+    runs-on: ubuntu-latest
+    needs: check-pr
+    if: needs.check-pr.outputs.should-run == 'true'
+    steps:
+      - name: Install HTTPie
+        run: |
+          pip install httpie
+      - name: Deploy Docx-py
+        run: |
+          set -e pipefail
+          http --ignore-stdin POST ${{ env.DOKPLOY_HOST }}/api/application-deploy \
+            x-api-key:${{ env.DOKPLOY_API_KEY }} \
+            applicationId=Mapfhj5NruYPbn3nFUWNx \
+            title="PR #${{ github.event.pull_request.number }}" \
+            description="${{ github.event.pull_request.title }}"

@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "cv2b",
+      "name": "hono-react",
       "devDependencies": {
         "@biomejs/biome": "^2.3.8",
         "@commitlint/cli": "^20.2.0",

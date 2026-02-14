@@ -3,7 +3,8 @@ name: Main Branch Build & Deploy
 # Parameters
 env:
   DOCKER_REGISTRY: docker.io
-  CORE_PROD_IMAGE: mlnative/hono-react
+  DASHBOARD_APP_IMAGE: mlnative/hono-react-dashboard
+  API_APP_IMAGE: mlnative/hono-react-api
 
 permissions:
   packages: write
@@ -37,7 +38,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 22 
+          node-version: 24
 
       - name: Install dependencies
         run: bun install
@@ -48,12 +49,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  build-core:
+  build-dashboard:
     needs: release
-    uses: ./.github/workflows/build-core.yml
+    uses: ./.github/workflows/build-docker.yml
     with:
+      dockerfile: apps/dashboard/Dockerfile
       registry: ${{ env.DOCKER_REGISTRY }}
-      image_name: ${{ env.CORE_PROD_IMAGE }}
+      image_name: ${{ env.DASHBOARD_APP_IMAGE }}
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets: inherit
 
+  build-api:
+    needs: release
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      dockerfile: apps/api/Dockerfile
+      registry: ${{ env.DOCKER_REGISTRY }}
+      image_name: ${{ env.API_APP_IMAGE }}
+      image_tag: ${{ needs.release.outputs.new_release_version }}
+    secrets: inherit

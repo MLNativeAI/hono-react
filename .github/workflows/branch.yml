@@ -2,7 +2,6 @@ name: Branch Build & Deploy
 
 env:
   DOCKER_REGISTRY: docker.io
-  CORE_DEV_IMAGE: mlnative/paperjet-dev
 
 permissions:
   packages: write

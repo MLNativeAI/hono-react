@@ -1,0 +1,63 @@
+name: Test
+
+on:
+  workflow_call:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js and Bun
+      uses: ./.github/actions/setup-node-bun
+      with:
+        node-version: 22
+        bun-version: latest
+
+    - name: Setup UV
+      uses: ./.github/actions/setup-uv
+      with:
+        enable-cache: true
+        working-directory: apps/docx-py
+    - uses: astral-sh/ruff-action@v3
+    - name: Install Python dependencies
+      run: uv sync
+      working-directory: apps/docx-py
+
+    - name: Install dependencies
+      run: bun install
+
+    - name: Unit test
+      run: bun test:unit
+
+    - name: Debug env vars
+      run: |
+        echo "OPENAI_API_KEY present: ${OPENAI_API_KEY:+yes}"
+        echo "GOOGLE_GENERATIVE_AI_API_KEY present: ${GOOGLE_GENERATIVE_AI_API_KEY:+yes}"
+        echo "LANGFUSE_SECRET_KEY present: ${LANGFUSE_SECRET_KEY:+yes}"
+        echo "LANGFUSE_PUBLIC_KEY present: ${LANGFUSE_PUBLIC_KEY:+yes}"
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
+        LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+        LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+
+    - name: Integration test
+      run: bun test:integration
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
+        LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+        LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
