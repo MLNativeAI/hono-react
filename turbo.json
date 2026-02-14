@@ -1,5 +1,5 @@
 {
-  "$schema": "https://turbo.build/schema.json",
+  "$schema": "https://v2-8-3.turborepo.dev/schema.json",
   "globalDependencies": ["**/.env.*local"],
   "ui": "tui",
   "tasks": {
@@ -30,6 +30,9 @@
     "db:generate": {
       "cache": false,
       "outputs": ["drizzle/**"]
+    },
+    "api:start": {
+      "cache": false
     },
     "db:migrate": {
       "cache": false

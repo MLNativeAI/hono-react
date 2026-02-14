@@ -2,7 +2,6 @@ import { queryOptions } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
 
 export const organizationQueries = {
-  // A root key helper (useful for invalidating all org data at once)
   all: () => ["organization"],
 
   current: () =>
@@ -20,14 +19,17 @@ export const organizationQueries = {
       },
     }),
 
-  // // (Optional) You can easily extend this later for other lists
-  // members: () =>
-  //   queryOptions({
-  //     queryKey: ["organization", "members"],
-  //     queryFn: async () => {
-  //       const { data, error } = await authClient.organization.getMembers();
-  //       if (error) throw error;
-  //       return data;
-  //     },
-  //   }),
+  activeMember: () =>
+    queryOptions({
+      queryKey: ["organization", "activeMember"],
+      queryFn: async () => {
+        const { data, error } = await authClient.organization.getActiveMember();
+
+        if (error) {
+          throw error;
+        }
+
+        return data;
+      },
+    }),
 };

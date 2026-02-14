@@ -72,11 +72,11 @@ const AppSettingsApiKeysRoute = AppSettingsApiKeysRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
+  '/': typeof AppIndexRoute
   '/account': typeof AppAccountRoute
   '/settings': typeof AppSettingsRouteWithChildren
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/': typeof AppIndexRoute
   '/settings/api-keys': typeof AppSettingsApiKeysRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
   '/settings/': typeof AppSettingsIndexRoute
@@ -108,11 +108,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/auth'
+    | '/'
     | '/account'
     | '/settings'
     | '/auth/sign-in'
     | '/auth/sign-up'
-    | '/'
     | '/settings/api-keys'
     | '/settings/organization'
     | '/settings/'
@@ -150,7 +150,7 @@ declare module '@tanstack/react-router' {
     '/_app': {
       id: '/_app'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }

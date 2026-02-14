@@ -21,7 +21,7 @@ COPY --from=pruner /usr/src/app/out/bun.lock ./bun.lock
 
 # Install all dependencies (including devDependencies for build)
 RUN --mount=type=cache,target=/root/.bun/install/cache \
-  bun install
+  bun install 
 
 # Builder stage - build dashboard
 FROM base AS builder

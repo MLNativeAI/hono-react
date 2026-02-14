@@ -72,7 +72,7 @@ export function OrgMembersTable({
       } else {
         toast.success(`Removed ${memberEmail} from organization`);
         // Invalidate the query to refetch the data
-        queryClient.invalidateQueries({ queryKey: ["organization-members"] });
+        queryClient.invalidateQueries({ queryKey: ["organization"] });
       }
     } catch (err) {
       toast.error("Failed to remove member");
@@ -92,7 +92,7 @@ export function OrgMembersTable({
       } else {
         toast.success(`Cancelled invitation for ${inviteeEmail}`);
         // Invalidate the query to refetch the data
-        queryClient.invalidateQueries({ queryKey: ["organization-members"] });
+        queryClient.invalidateQueries({ queryKey: ["organization"] });
       }
     } catch (err) {
       toast.error("Failed to cancel invitation");
