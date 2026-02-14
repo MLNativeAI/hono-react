@@ -76,19 +76,13 @@ export const ActionButton = ({
 export const FooterSection = () => (
   <>
     <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
-    <div className="flex justify-between w-full items-center">
+    <div className="flex justify-between w-full items-center gap-4">
       <div className="flex flex-col gap-2">
         <div className="text-md">{emailConfig.serviceName}</div>
         <div className="text-sm text-[#999999]">{emailConfig.tagLine}</div>
       </div>
       <a href={emailConfig.landingUrl} target="_blank" rel="noopener">
-        <Img
-          width={40}
-          height={40}
-          src={emailConfig.logo}
-          alt={`${emailConfig.serviceName} logo`}
-          className=""
-        />
+        <Img width={40} height={40} src={emailConfig.icon} alt={`${emailConfig.serviceName} logo`} className="" />
       </a>
     </div>
     <Section className="mt-[12px]">

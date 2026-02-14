@@ -23,21 +23,15 @@ export function SignInForm({
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <SocialForm
-              invitationId={invitationId}
-              setError={setError}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-            />
+            <SocialForm setError={setError} isLoading={isLoading} setIsLoading={setIsLoading} />
             <MagicLinkForm
               magicLinkSent={magicLinkSent}
               setMagicLinkSent={setMagicLinkSent}
               setError={setError}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
-              invitationId={invitationId}
             />
-            {error && <div className="text-sm text-red-500">{error}</div>}
+            {error && <div className="text-sm text-red-500">{error.message}</div>}
           </div>
 
           <div className="flex flex-col mt-6 text-center text-sm gap-2">

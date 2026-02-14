@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { getDashboardUrl } from "@/lib/url";
 import { Button } from "../ui/button";
 
 const GoogleIcon = () => (
@@ -36,12 +37,10 @@ export function SocialForm({
   setError,
   isLoading,
   setIsLoading,
-  invitationId,
 }: {
   setError: (_: { message: string; status?: number } | null) => void;
   isLoading: boolean;
   setIsLoading: (_: boolean) => void;
-  invitationId: string | undefined;
 }) {
   const handleSocialSignIn = async (provider: "google" | "microsoft") => {
     setError(null);
@@ -49,8 +48,7 @@ export function SocialForm({
 
     const { error } = await authClient.signIn.social({
       provider,
-      callbackURL: `${window.location.origin}/?signedIn=true`,
-      newUserCallbackURL: `${window.location.origin}?newUser=true`,
+      callbackURL: `${getDashboardUrl()}`,
     });
 
     if (error) {
