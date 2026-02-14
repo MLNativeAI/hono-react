@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { BookOpen, FileText, Settings } from "lucide-react";
 import type * as React from "react";
-import { OrgSwitcher } from "@/components/org-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { OrgSwitcher } from "@/features/organization/components/org-switcher";
 import { NavUser } from "./nav-user";
 
 const data = {

@@ -14,8 +14,6 @@ import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
-import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
-import { Route as AuthFinishPasswordResetRouteImport } from './routes/auth/finish-password-reset'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppAccountRouteImport } from './routes/_app/account'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
@@ -44,16 +42,6 @@ const AuthSignUpRoute = AuthSignUpRouteImport.update({
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthFinishPasswordResetRoute = AuthFinishPasswordResetRouteImport.update({
-  id: '/finish-password-reset',
-  path: '/finish-password-reset',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
@@ -86,8 +74,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/account': typeof AppAccountRoute
   '/settings': typeof AppSettingsRouteWithChildren
-  '/auth/finish-password-reset': typeof AuthFinishPasswordResetRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/': typeof AppIndexRoute
@@ -98,8 +84,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/account': typeof AppAccountRoute
-  '/auth/finish-password-reset': typeof AuthFinishPasswordResetRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/': typeof AppIndexRoute
@@ -113,8 +97,6 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/_app/account': typeof AppAccountRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
-  '/auth/finish-password-reset': typeof AuthFinishPasswordResetRoute
-  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/_app/': typeof AppIndexRoute
@@ -128,8 +110,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/account'
     | '/settings'
-    | '/auth/finish-password-reset'
-    | '/auth/reset-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/'
@@ -140,8 +120,6 @@ export interface FileRouteTypes {
   to:
     | '/auth'
     | '/account'
-    | '/auth/finish-password-reset'
-    | '/auth/reset-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/'
@@ -154,8 +132,6 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_app/account'
     | '/_app/settings'
-    | '/auth/finish-password-reset'
-    | '/auth/reset-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/_app/'
@@ -206,20 +182,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/auth/reset-password': {
-      id: '/auth/reset-password'
-      path: '/reset-password'
-      fullPath: '/auth/reset-password'
-      preLoaderRoute: typeof AuthResetPasswordRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/auth/finish-password-reset': {
-      id: '/auth/finish-password-reset'
-      path: '/finish-password-reset'
-      fullPath: '/auth/finish-password-reset'
-      preLoaderRoute: typeof AuthFinishPasswordResetRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -259,15 +221,11 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthRouteRouteChildren {
-  AuthFinishPasswordResetRoute: typeof AuthFinishPasswordResetRoute
-  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthFinishPasswordResetRoute: AuthFinishPasswordResetRoute,
-  AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
 }

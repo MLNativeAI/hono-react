@@ -29,7 +29,6 @@
     "@opentelemetry/sdk-node": "^0.202.0",
     "@repo/shared": "workspace:*",
     "@repo/auth": "workspace:*",
-    "@repo/billing": "workspace:*",
     "@repo/email": "workspace:*",
     "@repo/queue": "workspace:*",
     "better-auth": "catalog:",

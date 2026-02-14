@@ -1,7 +1,7 @@
-import DeleteOrgForm from "@/components/settings/delete-org-form";
-import OrgMembers from "@/components/settings/org-members";
-import OrgNameForm from "@/components/settings/org-name-form";
-import UserInvitations from "@/components/settings/user-invitations";
+import DeleteOrgForm from "@/features/settings/delete-org-form";
+import OrgMembers from "@/features/settings/org-members";
+import OrgNameForm from "@/features/settings/org-name-form";
+import UserInvitations from "@/features/settings/user-invitations";
 import { useRole } from "@/hooks/use-role";
 
 export default function OrganizationPage() {
