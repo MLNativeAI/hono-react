@@ -38,17 +38,23 @@ RUN turbo build --filter=@repo/dashboard
 # Final production image - use Caddy to serve static files
 FROM caddy:alpine AS release
 
-# Install curl
-RUN apk add --no-cache curl
-
 # Copy Caddyfile
 COPY apps/dashboard/Caddyfile /etc/caddy/Caddyfile
 
 # Copy built dashboard assets to Caddy html directory
 COPY --from=builder /usr/src/app/apps/dashboard/dist /usr/share/caddy/html
 
+# Copy entrypoint script
+COPY apps/dashboard/docker-entrypoint.sh /docker-entrypoint.sh
+
+# Make script executable
+RUN chmod +x /docker-entrypoint.sh
+
 # Expose HTTP port
 EXPOSE 80
+
+# Set entrypoint to our script
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Run Caddy
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
