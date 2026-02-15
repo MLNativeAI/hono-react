@@ -1,0 +1,72 @@
+name: Notify Slack
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      repository:
+        required: true
+        type: string
+      actor:
+        required: true
+        type: string
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
+
+jobs:
+  notify:
+    name: Notify Slack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack
+        run: |
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
+            -H 'Content-type: application/json' \
+            --data '{
+              "channel": "C08EX2N54ET",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "🚀 Deployment Complete"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Version:*\n${{ inputs.version }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Triggered by:*\n${{ inputs.actor }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Docker Images:*\n• `mlnative/hono-react-api:${{ inputs.version }}`\n• `mlnative/hono-react-dashboard:${{ inputs.version }}`"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Release"
+                      },
+                      "url": "https://github.com/${{ inputs.repository }}/releases/tag/v${{ inputs.version }}"
+                    }
+                  ]
+                }
+              ]
+            }'

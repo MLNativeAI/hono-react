@@ -82,3 +82,13 @@ jobs:
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets:
       DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+
+  notify-slack:
+    needs: [release, deploy-api, deploy-dashboard]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      version: ${{ needs.release.outputs.new_release_version }}
+      repository: ${{ github.repository }}
+      actor: ${{ github.actor }}
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
