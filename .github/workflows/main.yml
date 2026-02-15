@@ -65,7 +65,7 @@ jobs:
 
   deploy-api:
     needs: [release, build-api]
-    uses: ./.github/workflows/deploy-dokploy.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       application_id: Vzh1hKRPwt-KyHNMXwABU
       image_name: mlnative/hono-react-api
@@ -75,7 +75,7 @@ jobs:
 
   deploy-dashboard:
     needs: [release, build-dashboard]
-    uses: ./.github/workflows/deploy-dokploy.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       application_id: EJZMIW1n9eTDO1SOGBUhB
       image_name: mlnative/hono-react-dashboard
