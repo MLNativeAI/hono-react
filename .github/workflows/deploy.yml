@@ -1,0 +1,39 @@
+name: Deploy 
+
+on:
+  workflow_call:
+    inputs:
+      application_id:
+        required: true
+        type: string
+      image_name:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+    secrets:
+      DOKPLOY_API_KEY:
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install httpie
+        run: sudo apt-get install -y httpie
+
+      - name: Update docker image in Dokploy
+        run: |
+          http POST https://app.dokploy.com/api/application.saveDockerProvider \
+            x-api-key:${{ secrets.DOKPLOY_API_KEY }} \
+            applicationId="${{ inputs.application_id }}" \
+            dockerImage="${{ inputs.image_name }}:${{ inputs.image_tag }}"
+
+      - name: Deploy to Dokploy
+        run: |
+          http POST https://app.dokploy.com/api/application.deploy \
+            x-api-key:${{ secrets.DOKPLOY_API_KEY }} \
+            applicationId="${{ inputs.application_id }}"
