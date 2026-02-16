@@ -45,6 +45,7 @@ jobs:
 
   build-api:
     needs: release
+    if: needs.release.outputs.new_release_published == 'true'
     uses: ./.github/workflows/build-docker.yml
     with:
       dockerfile: apps/api/Dockerfile
@@ -55,6 +56,7 @@ jobs:
 
   build-dashboard:
     needs: release
+    if: needs.release.outputs.new_release_published == 'true'
     uses: ./.github/workflows/build-docker.yml
     with:
       dockerfile: apps/dashboard/Dockerfile
