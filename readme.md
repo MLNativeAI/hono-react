@@ -141,6 +141,14 @@ Your application will be available at:
 
 ## 🚢 Deployment
 
+You can easily verify whether the production build will work locally with `docker-compose.prod.yml`:
+
+```
+docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.prod.yml up -d
+
+```
+
 TODO needs update after we move to separate docker images
 
 ## Remote Caching
