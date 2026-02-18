@@ -11,6 +11,7 @@ import { scheduleFeedbackEmail } from "./handlers/email";
 import { getDefaultOrgOrCreate } from "./handlers/session";
 
 export const auth = betterAuth({
+  baseURL: envVars.API_BASE_URL,
   session: {
     cookieCache: {
       enabled: true,
