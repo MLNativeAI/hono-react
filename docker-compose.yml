@@ -29,74 +29,20 @@ services:
       timeout: 3s
       retries: 5
 
-  minio:
-    image: minio/minio:latest
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+  seaweedfs:
+    image: chrislusf/seaweedfs
     ports:
-      - "9000:9000"  # API port
-      - "9001:9001"  # Console port
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
+      - "8333:8333"
+    environment:
+      AWS_ACCESS_KEY_ID: s3_admin
+      AWS_SECRET_ACCESS_KEY: s3_secret_key
+      S3_BUCKET: files
     networks:
       - app-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
-  minio-setup:
-    image: minio/mc
-    depends_on:
-      - minio
-    environment:
-      MINIO_ACCESS_KEY: minioadmin
-      MINIO_SECRET_KEY: minioadmin
-    entrypoint: >
-      /bin/sh -c "
-      sleep 10;
-      mc alias set local http://minio:9000 minioadmin minioadmin &&
-      mc mb local/files &&
-      mc admin user add local app-user app-secret &&
-      echo '
-      {
-        \"Version\": \"2012-10-17\",
-        \"Statement\": [
-          {
-            \"Action\": [
-              \"s3:GetBucketLocation\",
-              \"s3:ListBucket\"
-            ],
-            \"Effect\": \"Allow\",
-            \"Resource\": \"arn:aws:s3:::files\"
-          },
-          {
-            \"Action\": [
-              \"s3:PutObject\",
-              \"s3:GetObject\",
-              \"s3:DeleteObject\"
-            ],
-            \"Effect\": \"Allow\",
-            \"Resource\": \"arn:aws:s3:::files/*\"
-          }
-        ]
-      }
-      ' > /tmp/files-full-access.json &&
-      mc admin policy create local files-full-access /tmp/files-full-access.json &&
-      mc admin policy attach local --user app-user --policy files-full-access &&
-      echo '✅ MinIO setup completed';
-      "
-    networks:
-      - app-network
-    restart: "no"
 
 volumes:
   postgres_data:
-  minio_data:
   redis_data:
 
 networks:
