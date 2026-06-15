@@ -51,3 +51,12 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # IntelliJ based IDEs
 .idea
+
+# AI assistant configs
+.claude
+
+# Playwright CLI
+.playwright-cli
+
+# local scratch data
+.tmp/

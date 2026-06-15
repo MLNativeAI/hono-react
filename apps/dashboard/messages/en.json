@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "common_welcome": "Welcome",
+  "common_cancel": "Cancel",
+  "common_save": "Save",
+  "common_delete": "Delete",
+  "common_edit": "Edit",
+  "common_search": "Search",
+  "common_loading": "Loading...",
+  "common_error": "An error occurred",
+  "nav_dashboard": "Dashboard",
+  "nav_settings": "Settings",
+  "nav_profile": "Profile",
+  "nav_feedback": "Feedback",
+  "theme_light": "Light",
+  "theme_dark": "Dark",
+  "theme_system": "System"
+}

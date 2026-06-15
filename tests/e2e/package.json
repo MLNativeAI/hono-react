@@ -1,0 +1,16 @@
+{
+  "name": "@repo/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:e2e": "bun test --max-concurrency 4 src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/bun": "^1.2.11"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

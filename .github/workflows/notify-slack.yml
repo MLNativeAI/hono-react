@@ -12,6 +12,12 @@ on:
       actor:
         required: true
         type: string
+      api_image:
+        required: true
+        type: string
+      dashboard_image:
+        required: true
+        type: string
     secrets:
       SLACK_WEBHOOK_URL:
         required: true
@@ -52,7 +58,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Docker Images:*\n• `mlnative/hono-react-api:${{ inputs.version }}`\n• `mlnative/hono-react-dashboard:${{ inputs.version }}`"
+                    "text": "*Docker Images:*\n• `${{ inputs.api_image }}:${{ inputs.version }}`\n• `${{ inputs.dashboard_image }}:${{ inputs.version }}`"
                   }
                 },
                 {

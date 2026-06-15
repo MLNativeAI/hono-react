@@ -6,7 +6,9 @@
   },
   "scripts": {
     "lint": "biome check --write",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:unit": "bun test --preload ./test-setup.ts src",
+    "test:integration": "BUN_INTEGRATION_TESTS=1 bun test --timeout 60000 --concurrent --max-concurrency 4 src/services/*.integration.test.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

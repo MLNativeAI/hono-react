@@ -4,25 +4,40 @@ permissions:
   packages: write
   id-token: write
   contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
       - master
 
 jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      api_image: mlnative/hono-react-api
+      api_application_id: Vzh1hKRPwt-KyHNMXwABU
+      dashboard_image: mlnative/hono-react-dashboard
+      dashboard_application_id: EJZMIW1n9eTDO1SOGBUhB
+    steps:
+      - run: echo "Config loaded"
+
   lint-typecheck:
+    needs: config
     uses: ./.github/workflows/lint-typecheck.yml
 
   release:
     name: Semantic Release
-    needs: lint-typecheck
+    needs: [config, lint-typecheck]
     runs-on: ubuntu-latest
     outputs:
       new_release_version: ${{ steps.release.outputs.new_release_version }}
       new_release_published: ${{ steps.release.outputs.new_release_published }} 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup bun
         uses: oven-sh/setup-bun@v2
@@ -30,7 +45,7 @@ jobs:
           bun-version: latest
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
 
@@ -41,56 +56,60 @@ jobs:
         id: release
         uses: cycjimmy/semantic-release-action@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   build-api:
-    needs: release
+    needs: [config, release]
     if: needs.release.outputs.new_release_published == 'true'
     uses: ./.github/workflows/build-docker.yml
     with:
+      context: .
       dockerfile: apps/api/Dockerfile
       registry: docker.io
-      image_name: mlnative/hono-react-api
+      image_name: ${{ needs.config.outputs.api_image }}
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets: inherit
 
   build-dashboard:
-    needs: release
+    needs: [config, release]
     if: needs.release.outputs.new_release_published == 'true'
     uses: ./.github/workflows/build-docker.yml
     with:
+      context: .
       dockerfile: apps/dashboard/Dockerfile
       registry: docker.io
-      image_name: mlnative/hono-react-dashboard
+      image_name: ${{ needs.config.outputs.dashboard_image }}
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets: inherit
 
   deploy-api:
-    needs: [release, build-api]
+    needs: [config, release, build-api]
     uses: ./.github/workflows/deploy.yml
     with:
-      application_id: Vzh1hKRPwt-KyHNMXwABU
-      image_name: mlnative/hono-react-api
+      application_id: ${{ needs.config.outputs.api_application_id }}
+      image_name: ${{ needs.config.outputs.api_image }}
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets:
       DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
 
   deploy-dashboard:
-    needs: [release, build-dashboard]
+    needs: [config, release, build-dashboard]
     uses: ./.github/workflows/deploy.yml
     with:
-      application_id: EJZMIW1n9eTDO1SOGBUhB
-      image_name: mlnative/hono-react-dashboard
+      application_id: ${{ needs.config.outputs.dashboard_application_id }}
+      image_name: ${{ needs.config.outputs.dashboard_image }}
       image_tag: ${{ needs.release.outputs.new_release_version }}
     secrets:
       DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
 
   notify-slack:
-    needs: [release, deploy-api, deploy-dashboard]
+    needs: [config, release, deploy-api, deploy-dashboard]
     uses: ./.github/workflows/notify-slack.yml
     with:
       version: ${{ needs.release.outputs.new_release_version }}
       repository: ${{ github.repository }}
       actor: ${{ github.actor }}
+      api_image: ${{ needs.config.outputs.api_image }}
+      dashboard_image: ${{ needs.config.outputs.dashboard_image }}
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

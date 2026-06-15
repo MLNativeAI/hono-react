@@ -1,21 +1,8 @@
 import { sendFeedbackEmail } from "@repo/email";
 import { logger } from "@repo/shared";
-import { type Job, Queue, Worker } from "bullmq";
+import { type Job, Worker } from "bullmq";
 import { redisConnection } from "../redis";
 import { QUEUE_NAMES } from "../types";
-
-export const emailQueue = new Queue(QUEUE_NAMES.EMAIL, {
-  connection: redisConnection,
-  defaultJobOptions: {
-    removeOnComplete: 10,
-    removeOnFail: 5,
-    attempts: 2,
-    backoff: {
-      type: "exponential" as const,
-      delay: 2000,
-    },
-  },
-});
 
 export type EmailType = "feedback";
 export type EmailData = {

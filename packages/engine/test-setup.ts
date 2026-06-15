@@ -1,0 +1,10 @@
+process.env.API_BASE_URL = "http://localhost:3000";
+process.env.DASHBOARD_BASE_URL = "http://localhost:5173";
+process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
+process.env.REDIS_URL = "redis://localhost:6379";
+process.env.S3_ENDPOINT = "http://localhost:9000";
+process.env.S3_ACCESS_KEY = "test-access-key";
+process.env.S3_SECRET_KEY = "test-secret-key";
+process.env.S3_BUCKET = "test-bucket";
+process.env.BETTER_AUTH_SECRET = "test-secret-that-is-at-least-32-chars";
+process.env.ENVIRONMENT = "dev";

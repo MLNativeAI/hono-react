@@ -1,7 +1,7 @@
 import { logger } from "@repo/shared";
 import { emailWorker } from "./jobs/email";
 
-export { emailQueue } from "./jobs/email";
+export { emailQueue } from "./queues";
 
 export const allWorkers = [emailWorker];
 

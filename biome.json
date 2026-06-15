@@ -32,12 +32,11 @@
       "!**/.wrangler",
       "!**/node_modules",
       "!**/dist",
-      "!**/dist",
-      "!**/node_modules",
       "!**/.turbo",
       "!**/.next",
-      "!**/.next",
-      "!**/ml"
+      "!**/ml",
+      "!**/paraglide",
+      "!apps/dashboard/src/routeTree.gen.ts"
     ]
   }
 }

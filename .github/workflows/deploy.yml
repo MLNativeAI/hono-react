@@ -1,4 +1,4 @@
-name: Deploy 
+name: Deploy
 
 on:
   workflow_call:
@@ -11,6 +11,12 @@ on:
         type: string
       image_tag:
         required: true
+        type: string
+      verify_url:
+        required: false
+        type: string
+      expected_version:
+        required: false
         type: string
     secrets:
       DOKPLOY_API_KEY:
@@ -27,7 +33,7 @@ jobs:
 
       - name: Update docker image in Dokploy
         run: |
-          http --ignore-stdin POST https://app.dokploy.com/api/application.saveDockerProvider \
+          http --ignore-stdin POST https://app.dokploy.com/api/application.update \
             "x-api-key:${{ secrets.DOKPLOY_API_KEY }}" \
             --raw '{"applicationId": "${{ inputs.application_id }}", "dockerImage": "${{ inputs.image_name }}:${{ inputs.image_tag }}"}'
 
@@ -36,3 +42,18 @@ jobs:
           http --ignore-stdin POST https://app.dokploy.com/api/application.deploy \
             "x-api-key:${{ secrets.DOKPLOY_API_KEY }}" \
             --raw '{"applicationId": "${{ inputs.application_id }}"}'
+
+      - name: Verify deployment is live
+        if: inputs.verify_url != '' && inputs.expected_version != ''
+        run: |
+          for i in $(seq 1 20); do
+            VERSION=$(curl -sf "${{ inputs.verify_url }}" | jq -r '.version')
+            if [ "$VERSION" = "${{ inputs.expected_version }}" ]; then
+              echo "Deployed version $VERSION is live!"
+              exit 0
+            fi
+            echo "Got $VERSION, retrying in 15s... ($i/20)"
+            sleep 15
+          done
+          echo "Timed out waiting for version ${{ inputs.expected_version }}"
+          exit 1

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://v2-8-3.turborepo.dev/schema.json",
+  "$schema": "https://v2-9-6.turborepo.dev/schema.json",
   "globalDependencies": ["**/.env.*local"],
   "ui": "tui",
   "tasks": {
@@ -27,6 +27,13 @@
       "cache": false,
       "outputs": ["playwright-report/**", "test-results/**"]
     },
+    "test:unit": {
+      "cache": false
+    },
+    "test:integration": {
+      "cache": false
+    },
+    "paraglide:compile": {},
     "db:generate": {
       "cache": false,
       "outputs": ["drizzle/**"]

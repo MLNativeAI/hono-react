@@ -9,6 +9,9 @@
     "test:e2e": "turbo test:e2e",
     "test:e2e:smoke": "turbo test:e2e:smoke",
     "test:e2e:acc": "turbo test:e2e:acc",
+    "test:unit": "turbo test:unit",
+    "test:integration": "turbo test:integration",
+    "docker": "docker compose -f docker-compose.prod.yml build  && docker compose -f docker-compose.prod.yml up -d",
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:push": "turbo db:push",
@@ -21,7 +24,7 @@
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
-    "turbo": "^2.8.3"
+    "turbo": "^2.9.6"
   },
   "config": {
     "commitizen": {
@@ -31,15 +34,16 @@
   "workspaces": {
     "packages": [
       "apps/*",
-      "packages/*"
+      "packages/*",
+      "tests/*"
     ],
     "catalog": {
       "better-auth": "^1.4.13",
       "hono": "^4.9.10",
       "react": "^19.2.4",
       "react-dom": "^19.2.4",
-      "drizzle-kit": "^0.31.8",
-      "drizzle-orm": "^0.45.1",
+      "drizzle-kit": "^0.31.10",
+      "drizzle-orm": "^0.45.2",
       "zod": "^4.0.0"
     }
   },

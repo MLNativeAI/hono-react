@@ -1,0 +1,60 @@
+name: PR Build & Deploy
+
+permissions:
+  packages: write
+  id-token: write
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      api_image: mlnative/hono-react-api
+      dashboard_image: mlnative/hono-react-dashboard
+    steps:
+      - run: echo "Config loaded"
+
+  lint-typecheck:
+    uses: ./.github/workflows/lint-typecheck.yml
+
+  build-api:
+    needs: [config, lint-typecheck]
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      registry: docker.io
+      image_name: ${{ needs.config.outputs.api_image }}
+    secrets: inherit
+
+  build-dashboard:
+    needs: [config, lint-typecheck]
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      context: .
+      dockerfile: apps/dashboard/Dockerfile
+      registry: docker.io
+      image_name: ${{ needs.config.outputs.dashboard_image }}
+    secrets: inherit
+
+  echo-image-tags:
+    needs: [config, build-api, build-dashboard]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo API tags
+        run: |
+          API_TAGS="${{ needs.build-api.outputs.image_tags }}"
+          echo "API Image Tags: ${API_TAGS}"
+      - name: Echo Dashboard tags
+        run: |
+          DASHBOARD_TAGS="${{ needs.build-dashboard.outputs.image_tags }}"
+          echo "Dashboard Image Tags: ${DASHBOARD_TAGS}"
