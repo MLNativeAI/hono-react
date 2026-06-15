@@ -11,6 +11,7 @@
     "test:e2e:acc": "turbo test:e2e:acc",
     "test:unit": "turbo test:unit",
     "test:integration": "turbo test:integration",
+    "paraglide:compile": "turbo paraglide:compile",
     "docker": "docker compose -f docker-compose.prod.yml build  && docker compose -f docker-compose.prod.yml up -d",
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
