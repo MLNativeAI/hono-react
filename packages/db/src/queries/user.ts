@@ -22,3 +22,29 @@ export async function getUserInvitations({ invitationId }: { invitationId: strin
   });
   return invitationResponse;
 }
+
+/**
+ * Returns the user's remembered last-active organization id (a per-user
+ * preference, independent of any single session). Used to restore the active
+ * org on new sessions.
+ */
+export async function getUserLastActiveOrg({ userId }: { userId: string }) {
+  const userData = await db.query.user.findFirst({
+    where: eq(user.id, userId),
+    columns: { lastActiveOrganizationId: true },
+  });
+  return userData?.lastActiveOrganizationId ?? null;
+}
+
+/**
+ * Persist the user's active-org choice so it can be restored on future sessions.
+ */
+export async function setUserLastActiveOrg({
+  userId,
+  organizationId,
+}: {
+  userId: string;
+  organizationId: string | null;
+}) {
+  await db.update(user).set({ lastActiveOrganizationId: organizationId }).where(eq(user.id, userId));
+}

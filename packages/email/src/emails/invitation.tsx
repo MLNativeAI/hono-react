@@ -47,7 +47,7 @@ export const InvitationEmail = ({ url, inviter, organizationName, role }: Invita
 };
 
 InvitationEmail.PreviewProps = {
-  url: `https://${emailConfig.appUrl}/invite/abc123`,
+  url: `https://example.com/api/internal/accept-invitation?invitationId=abc123`,
   inviter: "John Doe",
   organizationName: "Acme Corp",
   role: "admin",

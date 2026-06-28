@@ -17,6 +17,7 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppAccountRouteImport } from './routes/_app/account'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
+import { Route as AppProjectsIndexRouteImport } from './routes/_app/projects/index'
 import { Route as AppSettingsOrganizationRouteImport } from './routes/_app/settings/organization'
 import { Route as AppSettingsApiKeysRouteImport } from './routes/_app/settings/api-keys'
 
@@ -59,6 +60,11 @@ const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppSettingsRoute,
 } as any)
+const AppProjectsIndexRoute = AppProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsOrganizationRoute = AppSettingsOrganizationRouteImport.update({
   id: '/organization',
   path: '/organization',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/settings/api-keys': typeof AppSettingsApiKeysRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
+  '/projects/': typeof AppProjectsIndexRoute
   '/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/settings/api-keys': typeof AppSettingsApiKeysRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
+  '/projects': typeof AppProjectsIndexRoute
   '/settings': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/_app/': typeof AppIndexRoute
   '/_app/settings/api-keys': typeof AppSettingsApiKeysRoute
   '/_app/settings/organization': typeof AppSettingsOrganizationRoute
+  '/_app/projects/': typeof AppProjectsIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/settings/api-keys'
     | '/settings/organization'
+    | '/projects/'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
     | '/'
     | '/settings/api-keys'
     | '/settings/organization'
+    | '/projects'
     | '/settings'
   id:
     | '__root__'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '/_app/'
     | '/_app/settings/api-keys'
     | '/_app/settings/organization'
+    | '/_app/projects/'
     | '/_app/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -203,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsIndexRouteImport
       parentRoute: typeof AppSettingsRoute
     }
+    '/_app/projects/': {
+      id: '/_app/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof AppProjectsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings/organization': {
       id: '/_app/settings/organization'
       path: '/organization'
@@ -254,12 +273,14 @@ interface AppRouteChildren {
   AppAccountRoute: typeof AppAccountRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppIndexRoute: typeof AppIndexRoute
+  AppProjectsIndexRoute: typeof AppProjectsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAccountRoute: AppAccountRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
+  AppProjectsIndexRoute: AppProjectsIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

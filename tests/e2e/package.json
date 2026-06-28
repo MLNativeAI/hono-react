@@ -8,9 +8,10 @@
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@types/bun": "^1.2.11"
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^6.0.3"
   }
 }

@@ -7,21 +7,26 @@
     "./db": "./src/db.ts"
   },
   "scripts": {
-    "db:migrate": "drizzle-kit migrate ",
-    "db:studio": "drizzle-kit studio",
-    "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push",
+    "db:migrate": "bun --env-file=../../.env drizzle-kit migrate",
+    "db:studio": "bun --env-file=../../.env drizzle-kit studio",
+    "db:generate": "bun --env-file=../../.env drizzle-kit generate",
+    "db:push": "bun --env-file=../../.env drizzle-kit push",
     "lint": "biome check --write",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "typescript": "~5.7.2"
+    "@repo/tsconfig": "workspace:*",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
-    "drizzle-kit": "^0.31.4",
+    "@repo/env": "workspace:*",
+    "@repo/shared": "workspace:*",
+    "drizzle-kit": "catalog:",
     "drizzle-orm": "catalog:",
-    "pg": "^8.15.6",
-    "postgres": "^3.4.5",
+    "pg": "^8.21.0",
+    "postgres": "^3.4.9",
     "zod": "catalog:"
   }
 }

@@ -8,48 +8,23 @@
 
 A lightning-fast, self-hostable template for building modern Single Page Applications with Hono and React, powered by Turborepo for efficient monorepo management.
 
-## 🚀 Demo
+## Demo
 
 Check it out for yourself: [hono-react.mlnative.com](https://hono-react.mlnative.com)
 
-## 💡 Why?
-****
-This template bridges the gap between using a do-it-all framework and having to configure everything on your own. Despite the SSR/ISR/RSC trends, sometimes what you really need is a simple, efficient way to build SPA + backend applications.
+## Why?
 
-### Key Benefits
-
-- Lightning fast for developing SPAs with Turborepo's caching
-- Self-hostable with ease
-- Highly configurable monorepo structure
+We run plenty of applications. Some are cloud-only, some are on-premise only. We needed a setup that would work for us and allow us to not worry about infra or compatibility. 
 
 ## Technical Features
 
 - Fullstack type safety with [Hono RPC](https://hono.dev/guides/rpc)
-- Unified Docker image build for simple deployments
+- Separate production Docker images for the API and dashboard
 - Built-in auth handling with [BetterAuth](https://github.com/betterstack-community/better-auth) (fully local)
 - Type-safe environment variables (not needed at build time)
 - Type-safe client-side navigation
 - Efficient dependencies management with Turborepo
 - [Semantic release](https://github.com/semantic-release/semantic-release) pipeline with pull request support
-
-### Built-in job processor
-
-This template uses [BullMQ](https://docs.bullmq.io/) and [Redis](https://redis.io/) for handling long-running and scheduled operations. You  can use this for any workflows, long running tasks or scheduled tasks (ex. sending delayed emails)
-
-## Other features
-
-- Pre-configured telemetry with Posthog and internal proxy for maximum delivarability
-- Linting & Typechecking
-
-### Organization support
-
-The app handles multi-tenancy by default, including:
-
-- Org-level API Keys
-- Automatic invite handling
-- Invitation emails
-- Role support
-- Automatic org creation based on domain
 
 ## Tech Stack
 
@@ -81,50 +56,64 @@ The project is organized as a Turborepo monorepo with the following structure:
 
 ```
 ├── apps/
-│   ├── dashboard/  # React Vite application
-│   └── api/   # Hono API server
+│   ├── api/        # Hono API server
+│   └── dashboard/  # React Vite application served by Caddy in production
 ├── packages/
-│   └── shared/    # Shared types and utilities
+│   ├── auth/       # BetterAuth setup, handlers, and RBAC helpers
+│   ├── db/         # Drizzle schema, migrations, and database client
+│   ├── email/      # Email rendering and delivery service
+│   ├── engine/     # Background workflow engine
+│   ├── env/        # Type-safe environment validation
+│   ├── queue/      # BullMQ workers and Redis integration
+│   ├── shared/     # Shared logger, IDs, errors, and constants
+│   ├── tsconfig/   # Shared TypeScript configs
+│   └── ui/         # Shared React UI components
+├── tests/
+│   ├── e2e/
+│   └── integration/
 └── package.json   # Root workspace configuration
 ```
 
 - In development mode, run them concurrently with Turborepo
-- In production, frontend gets bundled and served by the backend
+- In production, the API runs on Bun and the dashboard is served as static assets by Caddy
 
 ### Runtime Dependencies
 
-1. **[PostgreSQL](https://www.postgresql.org/)** - easily swappable with another DB provider (see [Drizzle docs](https://orm.drizzle.team/docs/installation-and-db-connection))
-2. **[MinIO](https://min.io/)** - for file storage (self-hostable on [Coolify](https://coolify.io/) or use any S3 provider like [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/))
+1. **[PostgreSQL](https://www.postgresql.org/)** - primary relational database
+2. **[Redis](https://redis.io/)** - queue backend for BullMQ workers
+3. **S3-compatible storage** - local development uses SeaweedFS; production can use any S3 provider like Cloudflare R2, MinIO, or AWS S3
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
 - [Docker](https://www.docker.com/) or similar OCI runtime (e.g., [Orbstack](https://orbstack.dev/))
-- [Bun](https://bun.sh) (v1.2.0 or later)
+- [Bun](https://bun.sh) 1.3.14
 
 ### Local Development
 
-1. Start the DB and Minio instance:
+1. Start the local runtime services:
 ```bash
 docker compose up -d
 ```
+
+This starts PostgreSQL, a separate integration-test PostgreSQL database, Redis, and SeaweedFS for S3-compatible storage.
 
 2. Install dependencies:
 ```bash
 bun install
 ```
 
-3. Init env vars: 
+3. Init env vars:
 ```bash
 bun run init
+```
 
 You'll need to configure either RESEND_API_KEY or GOOGLE_* credentials for either auth method to work
 
-
 4. Run migrations:
 ```bash
-bun db:migrate
+bun run db:migrate
 ```
 
 5. Start the development environment:
@@ -141,15 +130,130 @@ Your application will be available at:
 
 ## 🚢 Deployment
 
-You can easily verify whether the production build will work locally with `docker-compose.prod.yml`:
+Production is designed around two Dokploy applications/images:
 
+- API: `apps/api/Dockerfile`
+- Dashboard: `apps/dashboard/Dockerfile`
+
+There is no production Docker Compose file in this repo. Dokploy owns production service wiring, domains, environment variables, healthchecks, and rolling deployment behavior.
+
+You can verify both Docker images locally with:
+
+```bash
+bun run docker
 ```
-docker compose -f docker-compose.prod.yml build
-docker compose -f docker-compose.prod.yml up -d
 
+This builds:
+
+- `hono-react-api`
+- `hono-react-dashboard`
+
+To deploy the current branch to staging, run:
+
+```bash
+bun run deploy:staging
 ```
 
-TODO needs update after we move to separate docker images
+This uses the GitHub CLI to trigger `.github/workflows/deploy-staging.yml` on the current branch. The workflow builds both Docker images with a `staging-<sha>` tag, deploys them through Dokploy, and verifies the API deployment against `/api/info`.
+
+### Dokploy API Deployment
+
+The API container entrypoint is `apps/api/start.sh`. It runs database migrations first, then starts the compiled API bundle:
+
+```sh
+bun run db:migrate
+exec bun dist/index.js
+```
+
+Use Dokploy's rolling deployment strategy for the API. The intended flow is:
+
+1. The old API container keeps serving traffic.
+2. Dokploy starts the new API container.
+3. The new container runs migrations before starting the app.
+4. The new container should not receive traffic until its healthcheck passes.
+5. After migrations complete and the app starts, `/api/health` returns success.
+6. Dokploy routes traffic to the new container and stops the old one.
+
+The API also exposes deployment metadata at `/api/info`:
+
+```json
+{
+  "version": "staging-<sha>",
+  "gitSha": "<sha>",
+  "environment": "staging"
+}
+```
+
+Configure the API healthcheck in Dokploy rather than in the Dockerfile. This keeps migration timing environment-specific and avoids rebuilding the image just to tune healthcheck behavior.
+
+Suggested Dokploy healthcheck:
+
+```json
+{
+  "Test": [
+    "CMD",
+    "bun",
+    "-e",
+    "fetch('http://localhost:3000/api/health').then((res) => process.exit(res.ok ? 0 : 1)).catch(() => process.exit(1))"
+  ],
+  "Interval": 30000000000,
+  "Timeout": 10000000000,
+  "StartPeriod": 60000000000,
+  "Retries": 3
+}
+```
+
+Increase `StartPeriod` if migrations can take longer than 60 seconds.
+
+### Migration Safety
+
+Rolling deployments do not make backward-incompatible migrations safe by themselves. During deployment, the old container may still serve traffic after the new container has migrated the database.
+
+Production migrations should be backward-compatible across at least one rolling deploy:
+
+- Add columns as nullable or with safe defaults before making code depend on them.
+- Deploy code that can read/write both old and new shapes when needed.
+- Backfill data separately when needed.
+- Drop old columns or add strict constraints in a later deployment.
+
+### Required API Environment Variables
+
+Set these in Dokploy for the API app:
+
+```txt
+DATABASE_URL=postgresql://...
+REDIS_URL=redis://...
+S3_ENDPOINT=https://...
+S3_ACCESS_KEY=...
+S3_SECRET_KEY=...
+S3_BUCKET=...
+API_BASE_URL=https://api.example.com
+DASHBOARD_BASE_URL=https://app.example.com
+BETTER_AUTH_SECRET=at-least-32-characters
+RESEND_API_KEY=
+FROM_EMAIL=noreply@example.com
+ENVIRONMENT=prod
+LOG_LEVEL=info
+```
+
+Optional auth provider variables:
+
+```txt
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+MICROSOFT_CLIENT_ID=...
+MICROSOFT_CLIENT_SECRET=...
+```
+
+### Required Dashboard Environment Variables
+
+Set this in Dokploy for the dashboard app:
+
+```txt
+VITE_PUBLIC_API_URL=https://api.example.com
+```
+
+The dashboard image uses `apps/dashboard/docker-entrypoint.sh` to replace the build-time placeholder with `VITE_PUBLIC_API_URL` at container startup.
 
 ## Remote Caching
 

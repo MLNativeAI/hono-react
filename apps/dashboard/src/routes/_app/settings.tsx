@@ -6,7 +6,7 @@ export const Route = createFileRoute("/_app/settings")({
 
 function RouteComponent() {
   return (
-    <div className="w-full px-4 py-8 space-y-8 max-w-6xl">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-2">

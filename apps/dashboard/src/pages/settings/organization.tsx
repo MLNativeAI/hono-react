@@ -8,7 +8,7 @@ export default function OrganizationPage() {
   const { member } = useRole();
 
   return (
-    <div className="space-y-17 pt-8">
+    <div className="space-y-8">
       <UserInvitations />
       <OrgNameForm member={member} />
       <OrgMembers member={member} />

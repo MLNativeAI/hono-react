@@ -12,6 +12,9 @@ export const user = pgTable("user", {
   banned: boolean("banned"),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
+  lastActiveOrganizationId: text("last_active_organization_id").references(() => organization.id, {
+    onDelete: "set null",
+  }),
 });
 
 export const session = pgTable("session", {
@@ -62,13 +65,17 @@ export const apikey = pgTable("apikey", {
   start: text("start"),
   prefix: text("prefix"),
   key: text("key").notNull(),
-  userId: text("user_id")
+  // Org-owned keys (references: "organization") record their owner via the
+  // `referenceId` plugin field. We map it onto the existing organization_id
+  // column so the better-auth adapter finds the field it expects without a
+  // column rename. userId is the optional creator (the plugin doesn't set it).
+  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
+  referenceId: text("organization_id")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  organizationId: text("organization_id") // org id must be nullable if we want to use built-in better-auth api key handlers in @api-keys.ts
     .references(() => organization.id, {
       onDelete: "cascade",
     }),
+  configId: text("config_id").notNull().default("default"),
   refillInterval: integer("refill_interval"),
   refillAmount: integer("refill_amount"),
   lastRefillAt: timestamp("last_refill_at"),
@@ -105,6 +112,19 @@ export const member = pgTable("member", {
   role: text("role").default("member").notNull(),
   createdAt: timestamp("created_at").notNull(),
 });
+
+export const project = pgTable("project", {
+  id: text("id").primaryKey(),
+  organizationId: text("organization_id")
+    .notNull()
+    .references(() => organization.id, { onDelete: "cascade" }),
+  createdByUserId: text("created_by_user_id").references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+});
+
 export const invitation = pgTable("invitation", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")

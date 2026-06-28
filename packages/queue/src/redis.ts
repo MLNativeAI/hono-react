@@ -1,8 +1,8 @@
+import { env } from "@repo/env";
 import { logger } from "@repo/shared";
-import { envVars } from "@repo/shared/env";
 import IORedis from "ioredis";
 
-export const redisConnection = new IORedis(envVars.REDIS_URL, {
+export const redisConnection = new IORedis(env.REDIS_URL, {
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
   lazyConnect: true,

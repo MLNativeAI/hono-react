@@ -1,13 +1,12 @@
-import { usePostHog } from "@posthog/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useOrganization } from "@/hooks/use-organization";
+import { internalClient } from "@/lib/api-clients";
 import { authClient } from "@/lib/auth-client";
 
 export function useUserInvitations() {
   const { setActiveOrganization } = useOrganization();
   const queryClient = useQueryClient();
-  const posthog = usePostHog();
   const {
     data: invitations = [],
     isLoading,
@@ -15,8 +14,13 @@ export function useUserInvitations() {
   } = useQuery({
     queryKey: ["user-invitations"],
     queryFn: async () => {
-      const result = await authClient.organization.listUserInvitations();
-      return result.data;
+      // Use the internal route that enriches invitations with org names —
+      // the better-auth client plugin returns raw rows without organizationName.
+      const res = await internalClient.invitations.$get();
+      if (!res.ok) {
+        throw new Error("Failed to load invitations");
+      }
+      return res.json();
     },
   });
 
@@ -28,22 +32,16 @@ export function useUserInvitations() {
       toast.error(`Failed to join ${orgName}`);
       return;
     }
-    setActiveOrganization(invResponse.invitation.organizationId);
-    posthog.capture("invitation_accepted", {
-      invitation_id: invitationId,
-      organization_name: orgName,
-      organization_id: invResponse.invitation.organizationId,
-    });
+    // Make the accepted org active for the current session. This refreshes the
+    // session cookie and persists the preference via the session.update mirror.
+    await setActiveOrganization(invResponse.invitation.organizationId);
     toast.success(`You've joined the ${orgName} Organization`);
+    queryClient.invalidateQueries({ queryKey: ["user-invitations"] });
   };
 
   const rejectInvitation = async (invitationId: string, orgName: string) => {
     await authClient.organization.rejectInvitation({
       invitationId: invitationId,
-    });
-    posthog.capture("invitation_rejected", {
-      invitation_id: invitationId,
-      organization_name: orgName,
     });
     toast.success(`Invitation to ${orgName} rejected`);
     queryClient.invalidateQueries({ queryKey: ["user-invitations"] });

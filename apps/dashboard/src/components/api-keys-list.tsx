@@ -1,4 +1,24 @@
 import type { ApiKey } from "@repo/db/types";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import { Card } from "@repo/ui/components/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@repo/ui/components/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { Label } from "@repo/ui/components/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -21,26 +41,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { ApiKeyDisplayDialog } from "@/components/api-key-display-dialog";
 import { CreateApiKeyDialog } from "@/components/create-api-key-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useRevokeApiKey } from "@/hooks/use-api-keys";
 import { formatDate } from "@/lib/date";
 
@@ -134,15 +134,17 @@ export function ApiKeysList({ apiKeys, onRefresh }: ApiKeysListProps) {
       header: "Actions",
       cell: ({ row }) => (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-              size="icon"
-            >
-              <IconDotsVertical className="h-4 w-4" />
-              <span className="sr-only">Open menu</span>
-            </Button>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="ghost"
+                className="data-open:bg-muted text-muted-foreground flex size-8"
+                size="icon"
+              />
+            }
+          >
+            <IconDotsVertical className="h-4 w-4" />
+            <span className="sr-only">Open menu</span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32">
             <DropdownMenuItem

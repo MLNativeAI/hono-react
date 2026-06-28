@@ -5,6 +5,8 @@
 # Dependencies
 **/node_modules
 **/dist
+.turbo
+**/.turbo
 
 # Environment files
 .env
@@ -16,18 +18,11 @@
 **/*.log
 **/coverage
 **/.nyc_output
+**/playwright-report
+**/test-results
 
 # Build files
 **/build
 **/dist
 **/*.tsbuildinfo
-
-# Backend specific
-backend/node_modules
-backend/dist
-backend/*.log
-
-# Frontend specific
-frontend/node_modules
-frontend/dist
-frontend/.cache 
+**/.cache

@@ -7,4 +7,5 @@ process.env.S3_ACCESS_KEY = "test-access-key";
 process.env.S3_SECRET_KEY = "test-secret-key";
 process.env.S3_BUCKET = "test-bucket";
 process.env.BETTER_AUTH_SECRET = "test-secret-that-is-at-least-32-chars";
+process.env.RESEND_API_KEY = "";
 process.env.ENVIRONMENT = "dev";

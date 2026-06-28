@@ -1,0 +1,69 @@
+name: Deploy Staging
+
+permissions:
+  packages: write
+  id-token: write
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      api_image: mlnative/hono-react-api
+      api_application_id: qWM60z7_-qBB9f-_CXpIu
+      dashboard_image: mlnative/hono-react-dashboard
+      dashboard_application_id: mBjRSDb25apJ_Apm_c16k
+      image_tag: staging-${{ github.sha }}
+      verify_url: https://hono-react.mlnative.com/api/info
+    steps:
+      - run: echo "Config loaded"
+
+  lint-typecheck:
+    uses: ./.github/workflows/lint-typecheck.yml
+
+  build-api:
+    needs: [config, lint-typecheck]
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      registry: docker.io
+      image_name: ${{ needs.config.outputs.api_image }}
+      image_tag: ${{ needs.config.outputs.image_tag }}
+    secrets: inherit
+
+  build-dashboard:
+    needs: [config, lint-typecheck]
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      context: .
+      dockerfile: apps/dashboard/Dockerfile
+      registry: docker.io
+      image_name: ${{ needs.config.outputs.dashboard_image }}
+      image_tag: ${{ needs.config.outputs.image_tag }}
+    secrets: inherit
+
+  deploy-api:
+    needs: [config, build-api]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      application_id: ${{ needs.config.outputs.api_application_id }}
+      image_name: ${{ needs.config.outputs.api_image }}
+      image_tag: ${{ needs.config.outputs.image_tag }}
+      verify_url: ${{ needs.config.outputs.verify_url }}
+      expected_version: ${{ needs.config.outputs.image_tag }}
+    secrets:
+      DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+
+  deploy-dashboard:
+    needs: [config, build-dashboard]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      application_id: ${{ needs.config.outputs.dashboard_application_id }}
+      image_name: ${{ needs.config.outputs.dashboard_image }}
+      image_tag: ${{ needs.config.outputs.image_tag }}
+    secrets:
+      DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}

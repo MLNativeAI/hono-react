@@ -1,6 +1,7 @@
 import { getOrganizationsByIds } from "@repo/db";
+import { env } from "@repo/env";
 import { logger } from "@repo/shared";
-import { envVars } from "@repo/shared/env";
+import type { Invitation } from "better-auth/plugins";
 import type { Context } from "hono";
 import type { BlankEnv, BlankInput } from "hono/types";
 import { auth } from "../index";
@@ -12,7 +13,7 @@ export async function listUserInvitations(c: Context<BlankEnv, "/invitations", B
     return c.redirect("/auth/sign-in");
   }
 
-  const invitations = await auth.api.listUserInvitations({
+  const invitations: Invitation[] = await auth.api.listUserInvitations({
     query: {
       email: session.user.email,
     },
@@ -28,6 +29,7 @@ export async function listUserInvitations(c: Context<BlankEnv, "/invitations", B
 
   const invitationsWithOrgNames: UserInvitation[] = pendingInvitations.map((invitation) => ({
     ...invitation,
+    role: invitation.role as UserInvitation["role"],
     organizationName: organizationMap.get(invitation.organizationId)?.name || "Unknown",
     expiresAt: invitation.expiresAt.toISOString(),
   }));
@@ -40,7 +42,7 @@ export async function handleOrganizationInvite(c: Context<BlankEnv, "/accept-inv
   const invitationId = c.req.query("invitationId");
 
   if (!invitationId) {
-    return c.redirect(`${envVars.DASHBOARD_BASE_URL}/auth/sign-in`);
+    return c.redirect(`${env.DASHBOARD_BASE_URL}/auth/sign-in`);
   }
 
   try {
@@ -51,10 +53,24 @@ export async function handleOrganizationInvite(c: Context<BlankEnv, "/accept-inv
       },
       headers: headers,
     });
+    // Make the accepted org active for the current session (refreshes the
+    // session cookie, avoiding stale cookie-cache) and persist it as the
+    // user's last-active-org preference via the session.update mirror hook.
+    if (data?.invitation?.organizationId) {
+      try {
+        await auth.api.setActiveOrganization({
+          headers,
+          body: { organizationId: data.invitation.organizationId },
+        });
+      } catch (err) {
+        // Non-fatal: the user is now a member; active org will resolve on next session.
+        logger.warn({ err }, "Failed to set active organization after accepting invitation");
+      }
+    }
     logger.info(data);
-    return c.redirect(`${envVars.DASHBOARD_BASE_URL}/settings/organization`);
+    return c.redirect(`${env.DASHBOARD_BASE_URL}/settings/organization`);
   } catch (error) {
     logger.error(error, "Unknown invitation error, redirecting to sign-up");
-    return c.redirect(`${envVars.DASHBOARD_BASE_URL}/auth/sign-up`);
+    return c.redirect(`${env.DASHBOARD_BASE_URL}/auth/sign-up`);
   }
 }

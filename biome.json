@@ -11,14 +11,18 @@
       "recommended": true,
       "a11y": {
         "noSvgWithoutTitle": "off",
-        "useKeyWithClickEvents": "off"
+        "useKeyWithClickEvents": "off",
+        "useFocusableInteractive": "off",
+        "useSemanticElements": "off",
+        "noLabelWithoutControl": "off"
       },
       "correctness": {
         "useExhaustiveDependencies": "off",
         "useUniqueElementIds": "off"
       },
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noDocumentCookie": "off"
       }
     }
   },

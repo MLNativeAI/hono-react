@@ -1,9 +1,9 @@
+import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { getDashboardUrl } from "@/lib/url";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 export default function MagicLinkForm({
   magicLinkSent,

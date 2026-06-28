@@ -1,5 +1,5 @@
 export type AuthContext = {
-  userId: string;
+  userId: string | null;
   organizationId: string;
-  scope: "user" | "superadmin";
+  scope: "user";
 };

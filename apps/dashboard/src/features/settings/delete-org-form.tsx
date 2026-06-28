@@ -1,7 +1,4 @@
-import type { Member } from "better-auth/plugins";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@repo/ui/components/dialog";
+import type { Member } from "better-auth/plugins";
+import { useState } from "react";
+import { toast } from "sonner";
 import { useOrganization } from "@/hooks/use-organization";
 import { authClient } from "@/lib/auth-client";
 
@@ -82,10 +82,8 @@ export default function DeleteOrgForm({ member }: DeleteOrgFormProps) {
           <p className="text-muted-foreground">Permanently delete this organization and all associated data</p>
         </div>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button variant="destructive" size="sm" disabled={!canDelete}>
-              Delete Organization
-            </Button>
+          <DialogTrigger render={<Button variant="destructive" size="sm" disabled={!canDelete} />}>
+            Delete Organization
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

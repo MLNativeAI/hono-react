@@ -1,173 +1,67 @@
-import { auth } from "@repo/auth";
+import { zValidator } from "@hono/zod-validator";
+import { auth, requirePermission } from "@repo/auth";
 import { getAuthContext } from "@repo/auth/session";
-import { getApiKey, getApiKeys, updateApiKeyOwner } from "@repo/db";
-import { logger } from "@repo/shared";
+import { getApiKey, getApiKeys } from "@repo/db";
+import { ApiError, ApiErrorCode } from "@repo/shared";
 import { Hono } from "hono";
-import { describeRoute, resolver, validator as zValidator } from "hono-openapi";
 import { z } from "zod";
 
 const app = new Hono();
 
 const router = app
-  .get(
-    "/",
-    describeRoute({
-      description: "Get all API keys for the organization",
-      responses: {
-        200: {
-          description: "List of API keys",
-          content: {
-            "application/json": {
-              schema: resolver(
-                z.array(
-                  z.object({
-                    id: z.string(),
-                    name: z.string().nullable(),
-                    key: z.string(),
-                    userId: z.string(),
-                    enabled: z.boolean(),
-                    createdAt: z.string(),
-                    lastRequest: z.string().nullable(),
-                  }),
-                ),
-              ),
-            },
-          },
-        },
-        500: {
-          description: "Error response",
-          content: {
-            "application/json": {
-              schema: resolver(z.object({ error: z.string() })),
-            },
-          },
-        },
-      },
-    }),
-    async (c) => {
-      try {
-        const { organizationId } = await getAuthContext(c);
-        const apiKeys = await getApiKeys({
-          organizationId,
-        });
-        return c.json(apiKeys);
-      } catch (error) {
-        logger.error(error, "Failed to get api keys");
-        return c.json({ error: "Internal server error" }, 500);
-      }
-    },
-  )
+  .get("/", requirePermission("apiKey", "read"), async (c) => {
+    const { organizationId } = await getAuthContext(c);
+    const apiKeys = await getApiKeys({
+      organizationId,
+    });
+    return c.json(apiKeys);
+  })
   .post(
     "/",
-    describeRoute({
-      description: "Create a new API key",
-      responses: {
-        200: {
-          description: "API key created",
-          content: {
-            "application/json": {
-              schema: resolver(
-                z.object({
-                  id: z.string(),
-                  name: z.string(),
-                  key: z.string(),
-                }),
-              ),
-            },
-          },
-        },
-        500: {
-          description: "Error response",
-          content: {
-            "application/json": {
-              schema: resolver(z.object({ error: z.string() })),
-            },
-          },
-        },
-      },
-    }),
     zValidator("json", z.object({ name: z.string().min(1) })),
+    requirePermission("apiKey", "create"),
     async (c) => {
-      try {
-        const { name } = c.req.valid("json");
-        const { organizationId } = await getAuthContext(c);
-        const newKey = await auth.api.createApiKey({
-          body: {
-            name,
-          },
-          headers: c.req.raw.headers,
-        });
-
-        await updateApiKeyOwner({
-          apiKeyId: newKey.id,
+      const { name } = c.req.valid("json");
+      const { organizationId } = await getAuthContext(c);
+      // Org-owned key: the organization is the key owner in a single write,
+      // and the key inherits the creating member's permissions.
+      const newKey = await auth.api.createApiKey({
+        body: {
+          name,
           organizationId,
-        });
+        },
+        headers: c.req.raw.headers,
+      });
 
-        return c.json({
-          id: newKey.id,
-          name: newKey.name,
-          key: newKey.key,
-        });
-      } catch (error) {
-        logger.error(error, "Failed to create api key");
-        return c.json({ error: "Internal server error" }, 500);
-      }
+      return c.json({
+        id: newKey.id,
+        name: newKey.name,
+        key: newKey.key,
+      });
     },
   )
   .delete(
     "/:id",
-    describeRoute({
-      description: "Revoke an API key",
-      responses: {
-        200: {
-          description: "API key revoked",
-          content: {
-            "application/json": {
-              schema: resolver(z.object({ message: z.string() })),
-            },
-          },
-        },
-        404: {
-          description: "Key not found",
-          content: {
-            "application/json": {
-              schema: resolver(z.object({ error: z.string() })),
-            },
-          },
-        },
-        500: {
-          description: "Error response",
-          content: {
-            "application/json": {
-              schema: resolver(z.object({ error: z.string() })),
-            },
-          },
-        },
-      },
-    }),
+    requirePermission("apiKey", "delete"),
+    zValidator("param", z.object({ id: z.string() })),
     async (c) => {
+      const { id } = c.req.valid("param");
+      const { organizationId } = await getAuthContext(c);
+
       try {
-        const { id } = c.req.param();
-        const { organizationId } = await getAuthContext(c);
-
-        try {
-          await getApiKey({ organizationId, apiKeyId: id });
-        } catch (_) {
-          return c.json({ error: "Key not found" }, 404);
-        }
-        await auth.api.updateApiKey({
-          body: {
-            keyId: id,
-            enabled: false,
-          },
-          headers: c.req.raw.headers,
-        });
-
-        return c.json({ message: "API key revoked successfully" });
-      } catch (error) {
-        logger.error(error, "Failed to revoke api key");
-        return c.json({ error: "Internal server error" }, 500);
+        await getApiKey({ organizationId, apiKeyId: id });
+      } catch (_) {
+        throw new ApiError("Key not found", 404, ApiErrorCode.NOT_FOUND, c.req.path);
       }
+      await auth.api.updateApiKey({
+        body: {
+          keyId: id,
+          enabled: false,
+        },
+        headers: c.req.raw.headers,
+      });
+
+      return c.json({ message: "API key revoked successfully" });
     },
   );
 

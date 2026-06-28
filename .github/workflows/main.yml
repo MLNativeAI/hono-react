@@ -28,9 +28,13 @@ jobs:
     needs: config
     uses: ./.github/workflows/lint-typecheck.yml
 
+  test:
+    needs: config
+    uses: ./.github/workflows/test.yml
+
   release:
     name: Semantic Release
-    needs: [config, lint-typecheck]
+    needs: [config, lint-typecheck, test]
     runs-on: ubuntu-latest
     outputs:
       new_release_version: ${{ steps.release.outputs.new_release_version }}

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui/components/button";
 import { useUserInvitations } from "@/hooks/use-user-invitations";
 import { renderTimestamp } from "@/lib/date";
 

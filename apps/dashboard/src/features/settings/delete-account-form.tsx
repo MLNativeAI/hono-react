@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +7,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@repo/ui/components/dialog";
+import { useState } from "react";
+import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 
 export default function DeleteAccountForm() {
@@ -45,10 +45,8 @@ export default function DeleteAccountForm() {
           <p className="text-muted-foreground">Permanently delete your account and all associated data</p>
         </div>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button variant="destructive" size="sm">
-              Delete Account
-            </Button>
+          <DialogTrigger render={<Button variant="destructive" size="sm" />}>
+            Delete Account
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

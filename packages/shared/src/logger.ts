@@ -1,25 +1,24 @@
+import { env } from "@repo/env";
 import pino from "pino";
-import z from "zod";
-import { type EnvVars, envSchema } from "./env-schema";
 
 const createLogger = () => {
   const transports = [];
 
-  if (process.env.AXIOM_TOKEN && process.env.AXIOM_DATASET) {
+  if (env.AXIOM_TOKEN && env.AXIOM_DATASET) {
     transports.push({
       target: "@axiomhq/pino",
-      level: process.env.LOG_LEVEL || "debug",
+      level: env.LOG_LEVEL,
       options: {
-        dataset: process.env.AXIOM_DATASET,
-        token: process.env.AXIOM_TOKEN,
+        dataset: env.AXIOM_DATASET,
+        token: env.AXIOM_TOKEN,
       },
     });
   }
 
-  if (process.env.ENVIRONMENT === "dev") {
+  if (env.ENVIRONMENT === "dev") {
     transports.push({
       target: "pino-pretty",
-      level: process.env.LOG_LEVEL || "debug",
+      level: env.LOG_LEVEL,
       options: {
         colorize: true,
         ignore: "pid,hostname,env",
@@ -29,13 +28,12 @@ const createLogger = () => {
   }
 
   const injectContext = () => {
-    // TODO restore this one day
     return {};
   };
 
   const rootLogger = pino(
     {
-      level: process.env.LOG_LEVEL || "debug",
+      level: env.LOG_LEVEL,
       mixin: injectContext,
     },
     transports.length > 0
@@ -46,21 +44,8 @@ const createLogger = () => {
   );
 
   return rootLogger.child({
-    env: process.env.ENVIRONMENT,
-    baseUrl: process.env.BASE_URL,
+    env: env.ENVIRONMENT,
   });
 };
 
 export const logger = createLogger();
-// a small workaround with putting this here to make sure that logger is initialized for env validation
-export const validateEnv = (): EnvVars => {
-  const env = envSchema.safeParse(process.env);
-  if (!env.success) {
-    logger.error(`❌ Invalid environment configuration: ${JSON.stringify(z.treeifyError(env.error))}`);
-    // logger might not be initialized correctly with transports
-    console.error(`❌ Invalid environment configuration: ${JSON.stringify(z.treeifyError(env.error))}`);
-    throw new Error("Invalid environment variables");
-  }
-  logger.info("✅ Environment configuration is valid");
-  return env.data;
-};

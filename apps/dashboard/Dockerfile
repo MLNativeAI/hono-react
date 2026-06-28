@@ -1,15 +1,12 @@
-# Use the official Bun image
-FROM oven/bun:1.3.9 AS base
+FROM oven/bun:1.3.14 AS base
 WORKDIR /usr/src/app
-
-# Install turbo globally with cache mount
-RUN --mount=type=cache,target=/root/.bun/install/cache \
-  bun install -g turbo@2.8.8
+ENV TURBO_TELEMETRY_DISABLED=1
 
 # Pruner stage - create minimal workspace for dashboard only
 FROM base AS pruner
 COPY . .
-RUN turbo prune @repo/dashboard --docker
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+  bunx turbo@2.9.18 prune @repo/dashboard --docker
 
 # Installer stage - install ONLY production dependencies
 FROM base AS installer
@@ -21,7 +18,7 @@ COPY --from=pruner /usr/src/app/out/bun.lock ./bun.lock
 
 # Install all dependencies (including devDependencies for build)
 RUN --mount=type=cache,target=/root/.bun/install/cache \
-  bun install
+  bun install --frozen-lockfile
 
 # Builder stage - build dashboard
 FROM base AS builder
@@ -33,7 +30,8 @@ COPY --from=pruner /usr/src/app/out/full/ .
 COPY --from=installer /usr/src/app/ .
 
 # Build the dashboard using turbo
-RUN turbo build --filter=@repo/dashboard
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
+  bunx turbo build --filter=@repo/dashboard
 
 # Final production image - use Caddy to serve static files
 FROM caddy:alpine AS release

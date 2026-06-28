@@ -1,6 +1,6 @@
+import { Button } from "@repo/ui/components/button";
 import { formatDistance } from "date-fns";
 import { ArrowUpDown } from "lucide-react";
-import { Button } from "./ui/button";
 
 export const renderMonetaryValue = (value: number, precision: number = 2): string => {
   return `$${value.toFixed(precision)}`;

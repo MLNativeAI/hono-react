@@ -8,19 +8,22 @@
   },
   "scripts": {
     "lint": "biome check --write",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:unit": "bun test src/permissions.test.ts"
   },
   "dependencies": {
+    "@better-auth/api-key": "^1.6.18",
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
-    "@repo/queue": "workspace:*",
+    "@repo/env": "workspace:*",
     "@repo/shared": "workspace:*",
     "better-auth": "catalog:",
-    "hono": "catalog:",
-    "resend": "^3.2.0"
+    "hono": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^20.14.10",
-    "typescript": "^5.5.3"
+    "@repo/tsconfig": "workspace:*",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   }
 }

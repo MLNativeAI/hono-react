@@ -5,38 +5,36 @@
     "./routes": "./src/routes.ts"
   },
   "scripts": {
-    "dev": "bun --watch src/index.ts",
-    "start": "bun src/index.ts",
-    "openapi": "http localhost:3000/openapi > ../docs/api-reference/openapi.json",
+    "dev": "bun --env-file=../../.env --watch src/index.ts",
+    "start": "bun --env-file=../../.env src/index.ts",
     "lint": "biome check --write",
     "typecheck": "tsc --noEmit",
-    "build": "bun build --target=bun ./src/index.ts --outdir=dist"
+    "build": "bun build --target=bun --external=msgpackr-extract ./src/index.ts --outdir=dist"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.11",
-    "@types/pg": "^8.11.14",
-    "drizzle-kit": "^0.31.0",
-    "tsx": "^4.19.3"
+    "@repo/tsconfig": "workspace:*",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/pg": "^8.20.0",
+    "drizzle-kit": "catalog:",
+    "tsx": "^4.22.4"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@hono/otel": "^0.2.2",
-    "@hono/standard-validator": "^0.1.5",
-    "@opentelemetry/auto-instrumentations-node": "^0.60.1",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.202.0",
-    "@opentelemetry/sdk-node": "^0.202.0",
-    "@repo/shared": "workspace:*",
+    "@hono/zod-validator": "^0.8.0",
     "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
+    "@repo/engine": "workspace:*",
+    "@repo/env": "workspace:*",
     "@repo/queue": "workspace:*",
+    "@repo/shared": "workspace:*",
     "better-auth": "catalog:",
-    "date-fns": "^4.1.0",
+    "date-fns": "catalog:",
     "drizzle-orm": "catalog:",
     "hono": "catalog:",
-    "hono-openapi": "1.1.0",
-    "zod": "catalog:",
-    "zod-openapi": "4"
+    "zod": "catalog:"
   }
 }

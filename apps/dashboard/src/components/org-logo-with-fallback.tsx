@@ -1,5 +1,5 @@
+import { AvatarFallback, AvatarImage } from "@repo/ui/components/avatar";
 import type { Organization } from "better-auth/plugins";
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function OrgLogoWithFallback({ activeOrganization }: { activeOrganization: Organization }) {
   return activeOrganization.logo ? (

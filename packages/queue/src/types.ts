@@ -1,4 +1,5 @@
-// Queue names as constants
 export const QUEUE_NAMES = {
-  EMAIL: "email",
+  DEFAULT: "default",
 } as const;
+
+export type QueueName = (typeof QUEUE_NAMES)[keyof typeof QUEUE_NAMES];

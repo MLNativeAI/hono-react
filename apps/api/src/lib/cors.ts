@@ -1,13 +1,12 @@
-import { envVars } from "@repo/shared/env";
+import { env } from "@repo/env";
 import type { MiddlewareHandler } from "hono";
 import { cors } from "hono/cors";
 
 const isAllowedOrigin = (origin: string): boolean => {
   if (!origin) return false;
 
-  const allowedOrigins = [envVars.DASHBOARD_BASE_URL];
+  const allowedOrigins = [env.DASHBOARD_BASE_URL];
 
-  // Check exact matches
   if (allowedOrigins.includes(origin)) {
     return true;
   }
@@ -15,7 +14,6 @@ const isAllowedOrigin = (origin: string): boolean => {
   return false;
 };
 
-// Cors middleware
 export const corsMiddleware: MiddlewareHandler = (c, next) => {
   const origin = c.req.header("Origin");
 

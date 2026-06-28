@@ -1,9 +1,4 @@
-import { IconPlus } from "@tabler/icons-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +7,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+} from "@repo/ui/components/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui/components/form";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+import { IconPlus } from "@tabler/icons-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 
 type InviteFormValues = {
@@ -63,11 +63,9 @@ export default function InviteDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <IconPlus className="mr-2 h-4 w-4" />
-          Invite Member
-        </Button>
+      <DialogTrigger render={<Button />}>
+        <IconPlus className="mr-2 h-4 w-4" />
+        Invite Member
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

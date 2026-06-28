@@ -1,8 +1,8 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import MagicLinkForm from "@/components/forms/magic-link-form";
 import { SocialForm } from "@/components/forms/social-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export function SignInForm({

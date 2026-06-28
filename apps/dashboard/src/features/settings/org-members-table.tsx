@@ -1,3 +1,12 @@
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
 import { IconDotsVertical, IconMail, IconTrash, IconUserMinus, IconUserX } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
@@ -8,19 +17,10 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { capitalizeFirstLetter } from "better-auth";
 import { formatRelative } from "date-fns";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { authClient } from "@/lib/auth-client";
+import { capitalizeFirstLetter } from "@/lib/utils";
 import { isOrgInvitation, isOrgMember, type OrgMemberInvitation } from "../organization/hooks/use-org-members";
 
 function InviteOrJoinDate({ invOrMember }: { invOrMember: OrgMemberInvitation }) {
@@ -180,15 +180,17 @@ export function OrgMembersTable({
           return (
             <div className="flex justify-end">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-                    size="icon"
-                  >
-                    <IconDotsVertical className="h-4 w-4" />
-                    <span className="sr-only">Open menu</span>
-                  </Button>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      className="data-open:bg-muted text-muted-foreground flex size-8"
+                      size="icon"
+                    />
+                  }
+                >
+                  <IconDotsVertical className="h-4 w-4" />
+                  <span className="sr-only">Open menu</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   {isCurrentUser ? (
@@ -218,15 +220,17 @@ export function OrgMembersTable({
           return (
             <div className="flex justify-end">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-                    size="icon"
-                  >
-                    <IconDotsVertical className="h-4 w-4" />
-                    <span className="sr-only">Open menu</span>
-                  </Button>
+                <DropdownMenuTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      className="data-open:bg-muted text-muted-foreground flex size-8"
+                      size="icon"
+                    />
+                  }
+                >
+                  <IconDotsVertical className="h-4 w-4" />
+                  <span className="sr-only">Open menu</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem onClick={() => handleCancelInvitation(row.original.id, row.original.email)}>

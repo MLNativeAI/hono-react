@@ -1,7 +1,7 @@
+import { Button } from "@repo/ui/components/button";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { getDashboardUrl } from "@/lib/url";
-import { Button } from "../ui/button";
 
 const GoogleIcon = () => (
   <svg className="h-4 w-4" viewBox="0 0 24 24" role="img" aria-label="Google logo">

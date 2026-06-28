@@ -1,29 +1,23 @@
 import { logger } from "@repo/shared";
-import { emailWorker } from "./jobs/email";
+import { sampleWorker } from "./jobs/sample-job";
 
-export { emailQueue } from "./queues";
+export { defaultQueue } from "./jobs/sample-job";
+export { redisConnection } from "./redis";
+export { QUEUE_NAMES, type QueueName } from "./types";
 
-export const allWorkers = [emailWorker];
+export const allWorkers = [sampleWorker] as const;
 
-allWorkers.forEach((worker) => {
-  worker.on("completed", (job: any, result: any) => {
-    logger.trace(
-      {
-        jobId: job.id,
-        jobName: job.name,
-        specId: job.data.specId,
-        result,
-      },
-      "Worker job completed",
-    );
+for (const worker of allWorkers) {
+  worker.on("completed", (job, result) => {
+    logger.trace({ jobId: job?.id, jobName: job?.name, result }, "Worker job completed");
   });
-  worker.on("failed", (job: any, err: Error) => {
-    logger.error({ error: err.message, jobName: job.jobName }, "Worker job failed");
+  worker.on("failed", (job, err) => {
+    logger.error({ jobId: job?.id, jobName: job?.name, error: err.message }, "Worker job failed");
   });
-  worker.on("stalled", (jobId: any) => {
+  worker.on("stalled", (jobId) => {
     logger.warn({ jobId }, "Worker job stalled");
   });
-  worker.on("error", (err: Error) => {
+  worker.on("error", (err) => {
     logger.error(err, "Worker error");
   });
-});
+}

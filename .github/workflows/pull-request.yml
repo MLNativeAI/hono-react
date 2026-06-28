@@ -26,8 +26,11 @@ jobs:
   lint-typecheck:
     uses: ./.github/workflows/lint-typecheck.yml
 
+  test:
+    uses: ./.github/workflows/test.yml
+
   build-api:
-    needs: [config, lint-typecheck]
+    needs: [config, lint-typecheck, test]
     uses: ./.github/workflows/build-docker.yml
     with:
       context: .
@@ -37,7 +40,7 @@ jobs:
     secrets: inherit
 
   build-dashboard:
-    needs: [config, lint-typecheck]
+    needs: [config, lint-typecheck, test]
     uses: ./.github/workflows/build-docker.yml
     with:
       context: .

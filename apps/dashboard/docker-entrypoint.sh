@@ -16,8 +16,6 @@ replace_placeholder() {
 }
 
 replace_placeholder "VITE_PUBLIC_API_URL_PLACEHOLDER" "$VITE_PUBLIC_API_URL"
-replace_placeholder "VITE_PUBLIC_POSTHOG_KEY_PLACEHOLDER" "$VITE_PUBLIC_POSTHOG_KEY"
-replace_placeholder "VITE_PUBLIC_POSTHOG_HOST_PLACEHOLDER" "$VITE_PUBLIC_POSTHOG_HOST"
 
 echo "Configuration complete."
 

@@ -1,0 +1,25 @@
+{
+  "name": "@repo/integration-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:integration": "bun test --preload ./test-setup.ts src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:"
+  },
+  "dependencies": {
+    "@repo/api": "workspace:*",
+    "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

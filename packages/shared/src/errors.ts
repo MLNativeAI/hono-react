@@ -21,11 +21,9 @@ export class ApiError extends Error {
 
   toJSON() {
     return {
-      error: {
-        message: this.message,
-        code: this.code,
-        path: this.path,
-      },
+      error: this.message,
+      code: this.code,
+      path: this.path,
     };
   }
 }

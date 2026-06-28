@@ -1,10 +1,3 @@
-export function generateOrgSlug() {
-  const uuid = crypto.randomUUID();
-  const shortId = uuid.replace(/-/g, "").substring(0, 4);
-  const fullId = uuid.replace(/-/g, "").substring(0, 12);
-  return { slug: `org_${shortId}`, id: fullId };
-}
-
 export function generateId(prefix: string): string {
   const uuid = crypto.randomUUID();
   const shortId = uuid.replace(/-/g, "").substring(0, 12);
@@ -26,4 +19,21 @@ export const ID_PREFIXES = {
   field: "fld",
   table: "tbl",
   column: "col",
+  project: "prj",
 } as const;
+
+/**
+ * Build a URL-safe, unique-ish slug from a display name.
+ * A short random suffix is appended so slugs stay unique without
+ * forcing the user to supply one.
+ */
+export function slugify(text: string): string {
+  const baseSlug = text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  const randomSuffix = Math.random().toString(36).substring(2, 8);
+  return `${baseSlug}-${randomSuffix}`;
+}
