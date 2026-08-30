@@ -7,7 +7,8 @@
   "scripts": {
     "lint": "biome check --write",
     "typecheck": "tsc --noEmit",
-    "test:unit": "bun test --preload ./test-setup.ts src"
+    "test:unit": "bun test --preload ./test-setup.ts src",
+    "test:coverage": "bun test --coverage --coverage-reporter=text --coverage-reporter=lcov --coverage-dir=coverage --preload ./test-setup.ts src"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",

@@ -1,6 +1,3 @@
 export function getBaseUrl(): string {
-  if (!process.env.E2E_API_BASE_URL) {
-    throw new Error("E2E_API_BASE_URL is not set");
-  }
-  return process.env.E2E_API_BASE_URL;
+  return process.env.E2E_API_BASE_URL ?? process.env.API_BASE_URL ?? "http://127.0.0.1:3000";
 }

@@ -7,6 +7,8 @@
     "build": "vite build",
     "lint": "biome check --write",
     "typecheck": "tsc -b",
+    "test:unit": "bun test --preload ./test-setup.ts src",
+    "test:coverage": "bun test --coverage --coverage-reporter=text --coverage-reporter=lcov --coverage-dir=coverage --preload ./test-setup.ts src",
     "paraglide:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide"
   },
   "dependencies": {
@@ -42,9 +44,14 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^20.11.9",
     "@inlang/paraglide-js": "^2.19.0",
     "@tailwindcss/vite": "^4.3.1",
     "@tanstack/router-plugin": "1.168.18",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.6",
+    "@types/bun": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
