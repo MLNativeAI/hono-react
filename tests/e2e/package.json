@@ -3,10 +3,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test:e2e": "bun test --max-concurrency 4 src/",
+    "test:e2e": "bun src/seed.ts && playwright test",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/shared": "workspace:*",
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:"
+  },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@repo/tsconfig": "workspace:*",
     "@types/bun": "catalog:",
     "@types/node": "catalog:"

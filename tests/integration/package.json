@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test:integration": "bun test --preload ./test-setup.ts src/",
+    "test:integration": "bun test --max-concurrency 1 --preload ./test-setup.ts src/",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

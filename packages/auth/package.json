@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "biome check --write",
     "typecheck": "tsc --noEmit",
-    "test:unit": "bun test src/permissions.test.ts"
+    "test:unit": "bun test src/permissions.test.ts",
+    "test:coverage": "bun test --coverage --coverage-reporter=text --coverage-reporter=lcov --coverage-dir=coverage src/permissions.test.ts"
   },
   "dependencies": {
     "@better-auth/api-key": "^1.6.18",

@@ -10,7 +10,8 @@
   "scripts": {
     "lint": "biome check --write",
     "typecheck": "tsc --noEmit",
-    "test:unit": "bun test src/id.test.ts"
+    "test:unit": "bun test src",
+    "test:coverage": "bun test --coverage --coverage-reporter=text --coverage-reporter=lcov --coverage-dir=coverage src"
   },
   "dependencies": {
     "@axiomhq/pino": "^1.6.1",
